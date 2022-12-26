@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Zahtev_za_priznavanje_patenta xmlns="http://www.ftn.uns.ac.rs/patent"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:./schema/patent.xsd">
+    <Podaci_o_zahtevu>
+        <Broj_prijave>P-0002/22</Broj_prijave>
+        <Datum_prijave>2022-12-01</Datum_prijave>
+        <Priznati_datum_podnosenja>2022-12-01</Priznati_datum_podnosenja>
+    </Podaci_o_zahtevu>
+    <base:Primalac>
+        <base:Adresa>
+            <base:Ulica>Knjegice Ljubice</base:Ulica>
+            <base:Broj>broj 5</base:Broj>
+            <base:Postanski_broj>11000</base:Postanski_broj>
+            <base:Grad>Beograd</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Naziv>Zavod za intelektualnu svojinu</base:Naziv>
+    </base:Primalac>
+    <Naslov jezik="srpski">Ana kanerina</Naslov>
+    <Podnosilac>
+        <Osoba xsi:type="base:TFizicko_lice">
+            <base:Adresa>
+                <base:Ulica>Arse Teodorovića</base:Ulica>
+                <base:Broj>17</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>+38165874</base:Broj_telefona>
+                <base:Broj_faksa>024158728</base:Broj_faksa>
+                <base:E_posta>vv@gmail.com</base:E_posta>
+            </base:Kontakt>
+            <base:Ime>Bane</base:Ime>
+            <base:Prezime>Gerić</base:Prezime>
+            <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
+        </Osoba>
+        <Podnosilac_je_i_pronalazac>DA</Podnosilac_je_i_pronalazac>
+    </Podnosilac>
+    <Pronalazac>
+        <Osoba xsi:type="base:TFizicko_lice">
+            <base:Adresa>
+                <base:Ulica>Subotička</base:Ulica>
+                <base:Broj>114</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>+381654891</base:Broj_telefona>
+                <base:Broj_faksa>024156952</base:Broj_faksa>
+                <base:E_posta>mp@ex.com</base:E_posta>
+            </base:Kontakt>
+            <base:Ime>Milica</base:Ime>
+            <base:Prezime>Petrović</base:Prezime>
+            <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
+        </Osoba>
+        <Hoce_da_bude_naveden>DA</Hoce_da_bude_naveden>
+    </Pronalazac>
+    <Dostavljanje>
+        <base:Adresa>
+            <base:Ulica>Futogorski put</base:Ulica>
+            <base:Broj>202</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <Obavesti_me_elektronskim_putem>DA</Obavesti_me_elektronskim_putem>
+        <Obavesti_me_preko_poste>NE</Obavesti_me_preko_poste>
+    </Dostavljanje>
+    <Dodatna_prijava>
+        <Dopunska_prijava>NE</Dopunska_prijava>
+        <Izdvojena_prijava>DA</Izdvojena_prijava>
+        <Patent>
+            <Broj_prjave>P-0003/22</Broj_prjave>
+            <Datum_podnosenja>2022-11-30</Datum_podnosenja>
+            <Drzava>RS</Drzava>
+        </Patent>
+    </Dodatna_prijava>
+</Zahtev_za_priznavanje_patenta>

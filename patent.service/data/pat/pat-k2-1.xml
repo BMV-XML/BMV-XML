@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Zahtev_za_priznavanje_patenta xmlns="http://www.ftn.uns.ac.rs/patent"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:/D:/fakultet/7.semestar/XML/%D0%9F%D1%80%D0%BE%D1%98%D0%B5%D0%BA%D0%B0%D1%82/patent.xsd">
+    <Podaci_o_zahtevu>
+        <Broj_prijave>P-0001/22</Broj_prijave>
+        <Datum_prijave>2022-11-01</Datum_prijave>
+        <Priznati_datum_podnosenja>2022-11-01</Priznati_datum_podnosenja>
+    </Podaci_o_zahtevu>
+    <base:Primalac>
+        <base:Adresa>
+            <base:Ulica>Knjegice Ljubice</base:Ulica>
+            <base:Broj>broj 5</base:Broj>
+            <base:Postanski_broj>11000</base:Postanski_broj>
+            <base:Grad>Beograd</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Naziv>Zavod za intelektualnu svojinu</base:Naziv>
+    </base:Primalac>
+    <Naslov jezik="sprski"> naslov </Naslov>
+    <Naslov jezik="engleski"> title </Naslov>
+    <Podnosilac>
+        <Osoba xsi:type="base:TFizicko_lice">
+            <base:Adresa>
+                <base:Ulica>Arse Teodorovića</base:Ulica>
+                <base:Broj>17</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>+38165874</base:Broj_telefona>
+                <base:Broj_faksa>024158728</base:Broj_faksa>
+                <base:E_posta>vv@gmail.com</base:E_posta>
+            </base:Kontakt>
+            <base:Ime>Bane</base:Ime>
+            <base:Prezime>Gerić</base:Prezime>
+            <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
+        </Osoba>
+        <Podnosilac_je_i_pronalazac>DA</Podnosilac_je_i_pronalazac>
+    </Podnosilac>
+    <Dostavljanje>
+        <base:Adresa>
+            <base:Ulica>Futogorski put</base:Ulica>
+            <base:Broj>202</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <Obavesti_me_elektronskim_putem>DA</Obavesti_me_elektronskim_putem>
+        <Obavesti_me_preko_poste>NE</Obavesti_me_preko_poste>
+    </Dostavljanje>
+    <Dodatna_prijava>
+        <Dopunska_prijava>NE</Dopunska_prijava>
+        <Izdvojena_prijava>NE</Izdvojena_prijava>
+    </Dodatna_prijava>
+</Zahtev_za_priznavanje_patenta>

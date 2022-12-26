@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/patent" xmlns="http://www.ftn.uns.ac.rs/patent"
+    xmlns:base="http://www.ftn.uns.ac.rs/base-schame">
+    <xs:import namespace="http://www.ftn.uns.ac.rs/base-schame" schemaLocation="base-schame.xsd"/>
+    <xs:element name="Zahtev_za_priznavanje_patenta">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Podaci_o_zahtevu"/>
+                <xs:element ref="base:Primalac"/>
+                <xs:element maxOccurs="unbounded" ref="Naslov"/>
+                <xs:element name="Podnosilac" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Osoba" type="base:TLice"/>
+                            <xs:element name="Podnosilac_je_i_pronalazac" type="base:checkbox"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="Punomocnik" minOccurs="0"/>
+                <xs:element name="Pronalazac" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Osoba" type="base:TLice"/>
+                            <xs:element name="Hoce_da_bude_naveden" type="base:checkbox"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="Dostavljanje"/>
+                <xs:element ref="Dodatna_prijava"/>
+                <xs:element ref="Prava_prvenstva" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Podaci_o_zahtevu">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Broj_prijave">
+                    <xs:simpleType>
+                        <xs:restriction base="broj_patenta"/>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Datum_prijave" type="xs:date"/>
+                <xs:element name="Priznati_datum_podnosenja" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Punomocnik">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Osoba" type="base:TLice"/>
+                <xs:element name="Punomocnik_za_zastupanje" type="base:checkbox"/>
+                <xs:element name="Punomocnik_za_prijem_pismena" type="base:checkbox"/>
+                <xs:element name="Zajednicki_predstavnik" type="base:checkbox"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Dostavljanje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="base:Adresa"/>
+                <xs:element name="Obavesti_me_elektronskim_putem" type="base:checkbox"/>
+                <xs:element name="Obavesti_me_preko_poste" type="base:checkbox"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Dodatna_prijava">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Dopunska_prijava" type="base:checkbox"/>
+                <xs:element name="Izdvojena_prijava" type="base:checkbox"/>
+                <xs:element ref="Patent" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Prava_prvenstva">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="Patent"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Naslov">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="jezik"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Patent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Broj_prjave" type="broj_patenta"/>
+                <xs:element name="Datum_podnosenja" type="xs:date"/>
+                <xs:element name="Drzava" type="oznaka_drzsava"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="forma_za_broj_prijave">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="P-[0-9]+//[0-9]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="broj_patenta">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="P-[0-9]{4,10}/[0-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="oznaka_drzsava">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
