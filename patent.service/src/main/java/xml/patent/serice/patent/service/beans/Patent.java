@@ -24,7 +24,7 @@ public class Patent {
     @XmlElement(name = "Datum_podnosenja", required = true)
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate submissionDate;
-    @XmlElement(name = "Drzava", required = true)
+    @XmlElement(name = "Drzava", required = false)
     private String country;
 
 }
