@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../xsl/grddl.xsl"?>
 <stamp:Zahtev_za_zig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.ftn.uns.ac.rs/stamp stamp.service/data/zig.xsd"
- xmlns="http://www.w3.org/ns/rdfa#" xmlns:pred="http://www.ftn.uns.ac.rs/rdf/stamp/predicate/"
+ xsi:schemaLocation="http://www.ftn.uns.ac.rs/stamp zig.xsd" xmlns="http://www.w3.org/ns/rdfa#"
+ xmlns:pred="http://www.ftn.uns.ac.rs/rdf/stamp/predicate"
  xmlns:stamp="http://www.ftn.uns.ac.rs/stamp" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
-                     about="http://www.ftn.uns.ac.rs/rdf/stamp/Z-1234/22">
+ about="http://www.ftn.uns.ac.rs/rdf/stamp/Z-1234/22">
     <stamp:Podnosioci_prijave xsi:type="base:TFizicko_lice">
         <base:Adresa>
             <base:Ulica>Gogoljeva</base:Ulica>

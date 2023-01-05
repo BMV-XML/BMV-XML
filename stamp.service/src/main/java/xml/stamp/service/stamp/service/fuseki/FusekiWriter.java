@@ -12,7 +12,11 @@ import org.springframework.stereotype.Component;
 import xml.stamp.service.stamp.service.util.AuthenticationUtilities;
 import xml.stamp.service.stamp.service.util.SparqlUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 @Component
 public class FusekiWriter {
@@ -20,27 +24,27 @@ public class FusekiWriter {
     @Autowired
     private AuthenticationUtilities authManager;
 
-    private static final String RDF_FILEPATH = "data/rdf/rdfOutput.rdf";
     private static final String GRAPH_URI = "/stamp/metadata";
 
 
-    public void saveRDF(){
+    public void saveRDF(OutputStream outputStream){
 
         System.out.println("[INFO] Loading triples from an RDF/XML to a model...");
 
         // RDF triples which are to be loaded into the model
 //        String rdfFilePath = "data/rdf/person_metadata.rdf";
 
+        InputStream inputStream = new ByteArrayInputStream(outputStream.toString().getBytes(Charset.forName("UTF-8")));
         // Creates a default model
         Model model = ModelFactory.createDefaultModel();
-        model.read(RDF_FILEPATH);
+        model.read(inputStream, "");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         model.write(out, SparqlUtil.NTRIPLES);
         model.write(System.out, SparqlUtil.NTRIPLES);
 
         System.out.println("[INFO] Rendering model as RDF/XML...");
-      //  model.write(System.out, SparqlUtil.RDF_XML);
+     //   model.write(System.out, SparqlUtil.RDF_XML);
 
 
         // Creating the first named graph and updating it with RDF data
@@ -59,7 +63,6 @@ public class FusekiWriter {
         System.out.println(processor.getContext());
         processor.execute();
 
-
 /*
         processor = UpdateExecutionFactory.createRemote(update, authManager.getUpdateEndpoint());
         processor.execute();
@@ -69,9 +72,5 @@ public class FusekiWriter {
         UpdateRequest request = UpdateFactory.create() ;
         request.add(SparqlUtil.dropAll());
  */
-
-
-
-
     }
 }

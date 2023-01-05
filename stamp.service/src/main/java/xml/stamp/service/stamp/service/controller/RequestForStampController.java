@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
-import xml.stamp.service.stamp.service.dto.RequestForStampDTO;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
 import xml.stamp.service.stamp.service.service.RequestForStampService;
 
@@ -26,7 +25,6 @@ public class RequestForStampController {
 
     @PostMapping(value = "/jaxB", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> saveRequestForStamp(@RequestBody RequestForStamp requestForStamp) throws Exception{
-       // System.out.println(text);
         String response = service.saveRequestForStamp(requestForStamp);
         return new ResponseEntity<String>("radi", HttpStatus.OK);
     }

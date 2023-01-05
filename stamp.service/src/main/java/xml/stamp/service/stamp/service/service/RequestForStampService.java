@@ -36,8 +36,9 @@ public class RequestForStampService {
         OutputStream os = new ByteArrayOutputStream();
         os = this.loader.marshalling(requestForStamp, os);
         requestForStampRepository.saveRequest(os);
-        metadataExtractor.extractMetadata(os.toString());
-        fusekiWriter.saveRDF();
+        OutputStream outputStream = new ByteArrayOutputStream();
+        outputStream = metadataExtractor.extractMetadata(os.toString(), outputStream);
+        fusekiWriter.saveRDF(outputStream);
         return "nestooo";
     }
 
@@ -53,8 +54,9 @@ public class RequestForStampService {
         RequestForStamp requestForStamp = loader.unmarshalling(text);
         OutputStream outputStream = loader.marshalling(requestForStamp, new ByteArrayOutputStream());
         requestForStampRepository.saveRequest(outputStream);
-        metadataExtractor.extractMetadata(text);
-        fusekiWriter.saveRDF();
+        OutputStream out = new ByteArrayOutputStream();
+        out = metadataExtractor.extractMetadata(text, out);
+        fusekiWriter.saveRDF(out);
     }
 
     public ArrayList<String> searchByMetadata(String naziv, String godina) throws IOException {
