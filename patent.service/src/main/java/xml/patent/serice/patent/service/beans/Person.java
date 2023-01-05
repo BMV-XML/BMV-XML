@@ -20,13 +20,13 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person extends GlobalEntity {
 
-    @XmlElement(name = "Ime", required = true)
-    private String name;
-
-    @XmlElement(name = "Prezime", required = true)
-    private String surname;
 
     @XmlElement(name = "Drzavljanstvo", required = true)
     private String citizenship;
+
+    @XmlElement(name = "Ime", required = true)
+    protected Predicate name;
+    @XmlElement(name = "Prezime", required = true)
+    protected Predicate surname;
 
 }

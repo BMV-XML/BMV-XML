@@ -1,4 +1,4 @@
-package xml.patent.serice.patent.service;
+package xml.patent.serice.patent.service.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,8 +7,8 @@ import xml.patent.serice.patent.service.transformer.PDFTransformer;
 import xml.patent.serice.patent.service.transformer.XHTMLTransformer;
 
 @RestController
-@RequestMapping(value = "base")
-public class BaseController {
+@RequestMapping(value = "transform")
+public class TransformController {
 
     @GetMapping(value = "pdf")
     public String transformPDF(){

@@ -1,0 +1,8 @@
+# Retrieves persons and their hobbies, professions and locations.
+
+PREFIX pat: <http://www.ftn.uns.ac.rs/rdf/patent/predicate/>
+
+SELECT * FROM <%s>
+WHERE { 
+	?patent pat:pod_prezime ?pod_prezime .
+}

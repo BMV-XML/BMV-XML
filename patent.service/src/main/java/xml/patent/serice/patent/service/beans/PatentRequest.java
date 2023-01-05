@@ -44,4 +44,12 @@ public class PatentRequest {
     @XmlElement(name = "Prava_prvenstva", required = false)
     private List<Patent> priorityRights;
 
+
+    @XmlAttribute(name="about", required = true)
+    @XmlSchemaType(name="anyURI")
+    private String about;
+
+    @XmlAttribute(name="vocab", required = true)
+    @XmlSchemaType(name="anyURI")
+    private String vocab;
 }

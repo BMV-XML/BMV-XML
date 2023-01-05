@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/grddl.xsl"?>
 <pat:Zahtev_za_priznavanje_patenta
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:pat="http://www.ftn.uns.ac.rs/patent"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:/./data/schema/patent2.xsd">
+        xmlns:pred="http://www.ftn.uns.ac.rs/rdf/patent/predicate/"
+        xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:/./data/schema/patent2.xsd"
+        about="http://www.ftn.uns.ac.rs/rdf/patent/P-0004-22">
+
     <pat:Podaci_o_zahtevu>
         <pat:Broj_prijave>P-0004/22</pat:Broj_prijave>
         <pat:Datum_prijave>2022-11-30</pat:Datum_prijave>
@@ -37,8 +41,8 @@
                 <base:Broj_faksa>024158728</base:Broj_faksa>
                 <base:E_posta>vv@gmail.com</base:E_posta>
             </base:Kontakt>
-            <base:Ime>Bane</base:Ime>
-            <base:Prezime>Gerić</base:Prezime>
+            <base:Ime property="pred:podnosilac_ime" datatype="xs:string">Miladin</base:Ime>
+            <base:Prezime property="pred:podnosilac_prezime" datatype="xs:string">Miško</base:Prezime>
             <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
         </pat:Osoba>
         <pat:Podnosilac_je_i_pronalazac>DA</pat:Podnosilac_je_i_pronalazac>
@@ -57,8 +61,8 @@
                 <base:Broj_faksa>024156952</base:Broj_faksa>
                 <base:E_posta>mp@ex.com</base:E_posta>
             </base:Kontakt>
-            <base:Ime>Milica</base:Ime>
-            <base:Prezime>Petrović</base:Prezime>
+            <base:Ime property="pred:ime" datatype="xs:string">Milica</base:Ime>
+            <base:Prezime property="pred:prezime" datatype="xs:string">Petrović</base:Prezime>
             <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
         </pat:Osoba>
         <pat:Punomocnik_za_zastupanje>DA</pat:Punomocnik_za_zastupanje>
