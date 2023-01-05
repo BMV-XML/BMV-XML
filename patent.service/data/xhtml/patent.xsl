@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:pat="http://www.ftn.uns.ac.rs/patent"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:str="http://exslt.org/strings"
                 xmlns:base="http://www.ftn.uns.ac.rs/base-schame" version="2.0">
 
     <xsl:template match="/">
@@ -239,7 +240,7 @@
                                     <xsl:if test="//pat:Pronalazac/pat:Hoce_da_bude_naveden[text() = 'DA']">
                                         <th>Pronalazač hoće da bude naveden</th>
                                     </xsl:if>
-                                    <xsl:if test="//pat:Pronalazac/pat:Hoce_da_bude_naveden[text() = 'Ne']">
+                                    <xsl:if test="//pat:Pronalazac/pat:Hoce_da_bude_naveden[text() = 'NE']">
                                         <th>Pronalazač ne hoće da bude naveden</th>
                                     </xsl:if>
                                 </tr>
@@ -432,14 +433,14 @@
                                     </p>
                                     <p style="padding-left: 15px;">
                                         <xsl:value-of select="//pat:Dostavljanje/base:Adresa/base:Ulica"/>
-                                        &#160;
+                                        <xsl:value-of select="'&#160;'"/> <!-- SPACE -->
                                         <xsl:value-of select="//pat:Dostavljanje/base:Adresa/base:Broj"/>
-                                        &#160;
+                                        <xsl:value-of select="',&#160;'"/> <!-- SPACE -->
                                         <xsl:value-of
                                                 select="//pat:Dostavljanje/base:Adresa/base:Postanski_broj"/>
-                                        &#160;
+                                        <xsl:value-of select="',&#160;'"/> <!-- SPACE -->
                                         <xsl:value-of select="//pat:Dostavljanje/base:Adresa/base:Grad"/>
-                                        &#160;
+                                        <xsl:value-of select="',&#160;'"/> <!-- SPACE -->
                                         <xsl:value-of select="//pat:Dostavljanje/base:Adresa/base:Drzava"/>
                                     </p>
                                 </td>
@@ -447,7 +448,7 @@
 
 
                             <!-- Nacin dostavljanje -->
-                            <tr  class="title section">
+                            <tr class="title section">
                                 <th colspan="3">Nacin dostavljanja</th>
                             </tr>
                             <tr>
@@ -464,24 +465,24 @@
 
                             <!-- Tip prijave -->
                             <xsl:if test="//pat:Dodatna_prijava/pat:Dopunska_prijava[text() = 'DA'] | //pat:Dodatna_prijava/pat:Izdvojena_prijava[text() = 'DA']">
-                            <tr  class="title section">
-                                <th colspan="3">Tip prijave</th>
-                            </tr>
+                                <tr class="title section">
+                                    <th colspan="3">Tip prijave</th>
+                                </tr>
 
-                            <tr>
-                                <th colspan="1"></th>
-                                <xsl:if test="//pat:Dodatna_prijava/pat:Dopunska_prijava[text() = 'DA']">
-                                    <th>Dopunska prijava</th>
-                                </xsl:if>
-                                <xsl:if test="//pat:Dodatna_prijava/pat:Izdvojena_prijava[text() = 'DA']">
-                                    <th>Izdvojena prijava</th>
-                                </xsl:if>
-                            </tr>
+                                <tr>
+                                    <th colspan="1"></th>
+                                    <xsl:if test="//pat:Dodatna_prijava/pat:Dopunska_prijava[text() = 'DA']">
+                                        <th>Dopunska prijava</th>
+                                    </xsl:if>
+                                    <xsl:if test="//pat:Dodatna_prijava/pat:Izdvojena_prijava[text() = 'DA']">
+                                        <th>Izdvojena prijava</th>
+                                    </xsl:if>
+                                </tr>
                                 <tr>
                                     <td colspan="3">
                                         <p>
                                             Broj osnovne prijave:
-                                            <xsl:value-of select="//pat:Dostavljanje/pat:Broj_prijave"/>
+                                            <xsl:value-of select="//pat:Dodatna_prijava/pat:Broj_prijave"/>
                                         </p>
                                     </td>
                                 </tr>
@@ -489,7 +490,7 @@
                                     <td colspan="3">
                                         <p>
                                             Datum podnošenja osnovne prijave:
-                                            <xsl:value-of select="//pat:Dostavljanje/pat:Datum_podnosenja"/>
+                                            <xsl:value-of select="//pat:Dodatna_prijava/pat:Datum_podnosenja"/>
                                         </p>
                                     </td>
                                 </tr>
@@ -498,7 +499,7 @@
                             <!-- Prava prvenstva -->
 
                             <xsl:if test="count(//pat:Prava_prvenstva) > 0">
-                                <tr  class="title section">
+                                <tr class="title section">
                                     <th colspan="3">Zahtev za prava prvenstva iz ranijih prijava</th>
                                 </tr>
 
@@ -510,11 +511,29 @@
                                 <xsl:for-each select="//pat:Prava_prvenstva">
                                     <tr>
                                         <td>
-                                            <label><xsl:value-of select="position()" />.</label>
-                                            <label><xsl:value-of select="pat:Datum_podnosenja" /></label>
+                                            <label><xsl:value-of select="position()"/>.
+                                            </label>
+                                            <label>
+                                               <!-- <xsl:variable name="date" select=""/>-->
+                                               <!-- <xsl:value-of select="format-date(pat:Datum_podnosenja, 'dd. MM. yyyy.')"/>-->
+                                               <!-- <xsl:value-of select="pat:Datum_podnosenja"/>-->
+
+
+                                                <xsl:variable name="tokens" select="str:tokenize(pat:Datum_podnosenja, '-')"/>
+                                                <xsl:variable name="day" select="$tokens[3]"/>
+                                                <xsl:variable name="month" select="$tokens[2]"/>
+                                                <xsl:variable name="year" select="$tokens[1]"/>
+                                                <xsl:value-of select="$day"></xsl:value-of>.
+                                                <xsl:value-of select="$month"></xsl:value-of>.
+                                                <xsl:value-of select="$year"></xsl:value-of>.
+                                            </label>
                                         </td>
-                                        <td> <xsl:value-of select="pat:Broj_prjave" /></td>
-                                        <td> <xsl:value-of select="pat:Drzava" /></td>
+                                        <td>
+                                            <xsl:value-of select="pat:Broj_prjave"/>
+                                        </td>
+                                        <td>
+                                            <xsl:value-of select="pat:Drzava"/>
+                                        </td>
                                     </tr>
                                 </xsl:for-each>
                             </xsl:if>

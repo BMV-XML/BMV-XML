@@ -22,7 +22,22 @@
   <default-page-settings height="11in" width="8.26in"/>
 
   <!-- Use file name nl_Bel instead of the default nl_BE -->
-  <hyphenation-pattern lang="nl" country="BE">nl_Bel</hyphenation-pattern>
+  <hyphenation-pattern lang="sr" country="RS">nl_Bel</hyphenation-pattern>
 
   <!-- etc. etc..... -->
+
+  <renderers>
+      <renderer mime="application/pdf">
+
+   <fonts>
+          <!-- automatically detect operating system installed fonts -->
+           <auto-detect/>
+         </fonts>
+
+  </renderer>
+
+  </renderers>
+
 </fop>
+
+

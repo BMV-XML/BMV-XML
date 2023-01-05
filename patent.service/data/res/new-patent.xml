@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<pat:Zahtev_za_priznavanje_patenta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pat="http://www.ftn.uns.ac.rs/patent" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://www.ftn.uns.ac.rs/base-schame" xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:/./data/schema/patent2.xsd">
+<pat:Zahtev_za_priznavanje_patenta
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pat="http://www.ftn.uns.ac.rs/patent"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xsi:schemaLocation="http://www.ftn.uns.ac.rs/patent file:/./data/schema/patent2.xsd">
     <pat:Podaci_o_zahtevu>
         <pat:Broj_prijave>P-0004/22</pat:Broj_prijave>
         <pat:Datum_prijave>2022-11-30</pat:Datum_prijave>
@@ -38,26 +44,6 @@
         <pat:Podnosilac_je_i_pronalazac>DA</pat:Podnosilac_je_i_pronalazac>
     </pat:Podnosilac>
     <pat:Punomocnik>
-        <pat:Osoba xsi:type="base:TPoslovno_lice">
-            <base:Adresa>
-                <base:Ulica>Trg Oslobođenje</base:Ulica>
-                <base:Broj>6</base:Broj>
-                <base:Postanski_broj>21000</base:Postanski_broj>
-                <base:Grad>Novi Sad</base:Grad>
-                <base:Drzava>Srbija</base:Drzava>
-            </base:Adresa>
-            <base:Kontakt>
-                <base:Broj_telefona>+3816586562</base:Broj_telefona>
-                <base:Broj_faksa>01453682</base:Broj_faksa>
-                <base:E_posta>ftn@ex.com</base:E_posta>
-            </base:Kontakt>
-            <base:Poslovno_ime>FTN</base:Poslovno_ime>
-        </pat:Osoba>
-        <pat:Punomocnik_za_zastupanje>DA</pat:Punomocnik_za_zastupanje>
-        <pat:Punomocnik_za_prijem_pismena>NE</pat:Punomocnik_za_prijem_pismena>
-        <pat:Zajednicki_predstavnik>NE</pat:Zajednicki_predstavnik>
-    </pat:Punomocnik>
-    <pat:Pronalazac>
         <pat:Osoba xsi:type="base:TFizicko_lice">
             <base:Adresa>
                 <base:Ulica>Subotička</base:Ulica>
@@ -75,7 +61,27 @@
             <base:Prezime>Petrović</base:Prezime>
             <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
         </pat:Osoba>
-        <pat:Hoce_da_bude_naveden>DA</pat:Hoce_da_bude_naveden>
+        <pat:Punomocnik_za_zastupanje>DA</pat:Punomocnik_za_zastupanje>
+        <pat:Punomocnik_za_prijem_pismena>NE</pat:Punomocnik_za_prijem_pismena>
+        <pat:Zajednicki_predstavnik>NE</pat:Zajednicki_predstavnik>
+    </pat:Punomocnik>
+    <pat:Pronalazac>
+        <pat:Osoba xsi:type="base:TPoslovno_lice">
+            <base:Adresa>
+                <base:Ulica>Trg Oslobođenje</base:Ulica>
+                <base:Broj>6</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>+3816586562</base:Broj_telefona>
+                <base:Broj_faksa>01453682</base:Broj_faksa>
+                <base:E_posta>ftn@ex.com</base:E_posta>
+            </base:Kontakt>
+            <base:Poslovno_ime>FTN</base:Poslovno_ime>
+        </pat:Osoba>
+        <pat:Hoce_da_bude_naveden>NE</pat:Hoce_da_bude_naveden>
     </pat:Pronalazac>
     <pat:Dostavljanje>
         <base:Adresa>
