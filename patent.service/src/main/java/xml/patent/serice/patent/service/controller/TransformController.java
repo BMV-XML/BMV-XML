@@ -10,7 +10,7 @@ import xml.patent.serice.patent.service.transformer.XHTMLTransformer;
 @RequestMapping(value = "transform")
 public class TransformController {
 
-    @GetMapping(value = "pdf")
+    @GetMapping(value = "/pdf")
     public String transformPDF(){
         try {
             PDFTransformer PDFTransformer = new PDFTransformer();
@@ -24,7 +24,7 @@ public class TransformController {
         }
     }
 
-    @GetMapping(value = "xhtml")
+    @GetMapping(value = "/xhtml")
     public String transformXHTML(){
         try {
             XHTMLTransformer xhtmlTransformer = new XHTMLTransformer();

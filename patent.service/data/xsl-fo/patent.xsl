@@ -43,8 +43,10 @@
                                             <fo:block font-size="10">
                                                 Datum prijema
                                             </fo:block>
-                                            <xsl:value-of
-                                                    select="pat:Zahtev_za_priznavanje_patenta/pat:Podaci_o_zahtevu/pat:Datum_prijave"/>
+                                            <xsl:variable name="datum_prijema" select="str:tokenize(//pat:Podaci_o_zahtevu/pat:Datum_prijave, '-')"/>
+                                            <xsl:value-of select="$datum_prijema[3]"/>.
+                                            <xsl:value-of select="$datum_prijema[2]"/>.
+                                            <xsl:value-of select="$datum_prijema[1]"/>.
                                         </fo:block>
                                     </fo:table-cell>
                                     <fo:table-cell border="2px solid black" font-family="sans-serif" padding-left="10px"
@@ -53,8 +55,10 @@
                                             <fo:block font-size="10">
                                                 Priznati datum podnosenja
                                             </fo:block>
-                                            <xsl:value-of
-                                                    select="pat:Zahtev_za_priznavanje_patenta/pat:Podaci_o_zahtevu/pat:Priznati_datum_podnosenja"/>
+                                            <xsl:variable name="datum_podnosenja" select="str:tokenize(//pat:Podaci_o_zahtevu/pat:Priznati_datum_podnosenja, '-')"/>
+                                            <xsl:value-of select="$datum_podnosenja[3]"/>.
+                                            <xsl:value-of select="$datum_podnosenja[2]"/>.
+                                            <xsl:value-of select="$datum_podnosenja[1]"/>.
                                         </fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
@@ -122,7 +126,7 @@
                                 <!-- Podnosilac -->
                                 <fo:table-row border-top="2px solid black" border-bottom="1px solid black">
                                     <fo:table-cell number-columns-spanned="1" padding="10px 0px 10px 15px">
-                                        <fo:block font-size="15">
+                                        <fo:block font-size="15" font-weight="3">
                                             Podnosilac prijave
                                         </fo:block>
                                     </fo:table-cell>
@@ -139,10 +143,10 @@
                                         <xsl:choose>
                                             <xsl:when
                                                     test="//pat:Podnosilac/pat:Osoba[@xsi:type = 'base:TFizicko_lice']">
-                                                <fo:block padding="5">Ime i prezime</fo:block>
-                                                <fo:block padding="5">
+                                                <fo:block padding="5" font-weight="2">Ime i prezime</fo:block>
+                                                <fo:block padding="5" font-weight="1">
                                                     <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Ime"/>
-                                                    &#160;
+                                                    <xsl:value-of select="'&#160;'"/>
                                                     <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Prezime"/>
                                                 </fo:block>
                                             </xsl:when>
@@ -159,13 +163,13 @@
                                         <fo:block padding="5">Ulica i broj, poštanski broj, mesto i država</fo:block>
                                         <fo:block padding="5">
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Ulica"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Broj"/>
 
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of
                                                     select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Postanski_broj"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Grad"/>
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Drzava"/>
@@ -206,7 +210,6 @@
                                         <fo:table-cell number-columns-spanned="3" padding="10px">
                                             <fo:block>
                                                 Državljanstvo:
-                                                <xsl:value-of select="'&#x2028;'"/> <!-- ENTER -->
                                                 <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Drzavljanstvo"/>
                                             </fo:block>
                                         </fo:table-cell>
@@ -242,7 +245,7 @@
                                                 <fo:block padding="5">Ime i prezime</fo:block>
                                                 <fo:block padding="5">
                                                     <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Ime"/>
-                                                    &#160;
+                                                    <xsl:value-of select="'&#160;'"/>
                                                     <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Prezime"/>
                                                 </fo:block>
                                             </xsl:when>
@@ -259,13 +262,13 @@
                                         <fo:block padding="5">Ulica i broj, poštanski broj, mesto i država</fo:block>
                                         <fo:block padding="5">
                                             <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Adresa/base:Ulica"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Adresa/base:Broj"/>
 
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of
                                                     select="//pat:Pronalazac/pat:Osoba/base:Adresa/base:Postanski_broj"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Adresa/base:Grad"/>
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Adresa/base:Drzava"/>
@@ -306,7 +309,6 @@
                                         <fo:table-cell number-columns-spanned="3" padding="10px">
                                             <fo:block>
                                                 Državljanstvo:
-                                                <xsl:value-of select="'&#x2028;'"/> <!-- ENTER -->
                                                 <xsl:value-of select="//pat:Pronalazac/pat:Osoba/base:Drzavljanstvo"/>
                                             </fo:block>
                                         </fo:table-cell>
@@ -360,7 +362,7 @@
                                                 <fo:block padding="5">Ime i prezime</fo:block>
                                                 <fo:block padding="5">
                                                     <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Ime"/>
-                                                    &#160;
+                                                    <xsl:value-of select="'&#160;'"/>
                                                     <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Prezime"/>
                                                 </fo:block>
                                             </xsl:when>
@@ -377,13 +379,13 @@
                                         <fo:block padding="5">Ulica i broj, poštanski broj, mesto i država</fo:block>
                                         <fo:block padding="5">
                                             <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Adresa/base:Ulica"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Adresa/base:Broj"/>
 
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of
                                                     select="//pat:Punomocnik/pat:Osoba/base:Adresa/base:Postanski_broj"/>
-                                            &#160;
+                                            <xsl:value-of select="'&#160;'"/>
                                             <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Adresa/base:Grad"/>
                                             <xsl:value-of select="'&#x2028;'"/>
                                             <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Adresa/base:Drzava"/>
@@ -424,7 +426,6 @@
                                         <fo:table-cell number-columns-spanned="3" padding="10px">
                                             <fo:block>
                                                 Državljanstvo:
-                                                <xsl:value-of select="'&#x2028;'"/> <!-- ENTER -->
                                                 <xsl:value-of select="//pat:Punomocnik/pat:Osoba/base:Drzavljanstvo"/>
                                             </fo:block>
                                         </fo:table-cell>
@@ -442,13 +443,28 @@
                                     </fo:table-cell>
                                 </fo:table-row>
                                 <fo:table-row>
-                                    <fo:table-cell number-columns-spanned="3">
-                                        <fo:block padding="5">Ulica i broj, poštanski broj, mesto i država</fo:block>
-                                        <fo:block padding="5">
+                                    <fo:table-cell  padding="10px 0px 0px 10px" number-columns-spanned="1">
+                                        <fo:block>
+                                            Ulica i broj
+                                        </fo:block>
+                                    </fo:table-cell>
+                                    <fo:table-cell padding="10px 0px 0px 10px">
+                                        <fo:block>
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Ulica"/>
                                             <xsl:value-of select="'&#160;'"/> <!-- SPACE -->
                                             <xsl:value-of select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Broj"/>,
                                             <xsl:value-of select="'&#160;'"/>  <!-- SPACE -->
+                                        </fo:block>
+                                    </fo:table-cell>
+                                </fo:table-row>
+                                <fo:table-row>
+                                    <fo:table-cell padding="2px 0px 10px 10px">
+                                        <fo:block>
+                                        Poštanski broj, mesto i država
+                                        </fo:block>
+                                    </fo:table-cell>
+                                    <fo:table-cell padding="2px 0px 10px 10px">
+                                        <fo:block>
                                             <xsl:value-of
                                                     select="//pat:Podnosilac/pat:Osoba/base:Adresa/base:Postanski_broj"/>,
                                             <xsl:value-of select="'&#160;'"/> <!-- SPACE -->
@@ -469,7 +485,7 @@
                                     </fo:table-cell>
                                 </fo:table-row>
                                 <fo:table-row>
-                                    <fo:table-cell number-columns-spanned="3" padding="5px">
+                                    <fo:table-cell number-columns-spanned="3" padding="10px">
                                         <fo:block>
                                             <xsl:if test="//pat:Dostavljanje/pat:Obavesti_me_elektronskim_putem[text() = 'DA']">
                                                 Obavesti me elektorskim putem
@@ -513,7 +529,7 @@
                                             <fo:block>
                                                 Proj osnovne prijave:
                                                 <xsl:value-of
-                                                        select="//pat:Dodatna_prijava/pat:Broj_prijave"></xsl:value-of>
+                                                        select="//pat:Dodatna_prijava/pat:Broj_prijave"/>
                                             </fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
@@ -521,8 +537,10 @@
                                         <fo:table-cell>
                                             <fo:block>
                                                 Datum podnošenja osnovne prijave:
-                                                <xsl:value-of
-                                                        select="//pat:Dodatna_prijava/pat:Datum_podnosenja"></xsl:value-of>
+                                                <xsl:variable name="datum_osnovne" select="str:tokenize(//pat:Dodatna_prijava/pat:Dodatna_prijava, '-')"/>
+                                                <xsl:value-of select="$datum_osnovne[3]"/>.
+                                                <xsl:value-of select="$datum_osnovne[2]"/>.
+                                                <xsl:value-of select="$datum_osnovne[1]"/>.
                                             </fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
@@ -561,16 +579,13 @@
                                             <fo:table-cell padding="10px 0px 10px 15px" border="1px solid black">
                                                 <fo:block>
                                                     <xsl:value-of select="position()"/>.
-                                                    <!--<xsl:value-of select="format-date(pat:Datum_podnosenja, 'dd. MM. yyyy.')"/>-->
-
                                                     <xsl:variable name="tokens" select="str:tokenize(pat:Datum_podnosenja, '-')"/>
                                                     <xsl:variable name="day" select="$tokens[3]"/>
                                                     <xsl:variable name="month" select="$tokens[2]"/>
                                                     <xsl:variable name="year" select="$tokens[1]"/>
-                                                    <xsl:value-of select="$day"></xsl:value-of>.
-                                                    <xsl:value-of select="$month"></xsl:value-of>.
-                                                    <xsl:value-of select="$year"></xsl:value-of>.
-<!--                                                    <xsl:value-of select="pat:Datum_podnosenja"/>-->
+                                                    <xsl:value-of select="$day"/>.
+                                                    <xsl:value-of select="$month"/>.
+                                                    <xsl:value-of select="$year"/>.
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell padding="10px 0px 10px 15px" border="1px solid black">

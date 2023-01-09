@@ -82,15 +82,19 @@
                             <td>
                                 <p class="smaller">Datum prijema</p>
                                 <p>
-                                    <xsl:value-of
-                                            select="pat:Zahtev_za_priznavanje_patenta/pat:Podaci_o_zahtevu/pat:Datum_prijave"/>
+                                    <xsl:variable name="datum_prijema" select="str:tokenize(//pat:Podaci_o_zahtevu/pat:Datum_prijave, '-')"/>
+                                    <xsl:value-of select="$datum_prijema[3]"/>.
+                                    <xsl:value-of select="$datum_prijema[2]"/>.
+                                    <xsl:value-of select="$datum_prijema[1]"/>.
                                 </p>
                             </td>
                             <td>
                                 <p class="smaller">Priznati datum podnosenja</p>
                                 <p>
-                                    <xsl:value-of
-                                            select="pat:Zahtev_za_priznavanje_patenta/pat:Podaci_o_zahtevu/pat:Priznati_datum_podnosenja"/>
+                                    <xsl:variable name="datum_podnosenja" select="str:tokenize(//pat:Podaci_o_zahtevu/pat:Priznati_datum_podnosenja, '-')"/>
+                                    <xsl:value-of select="$datum_podnosenja[3]"/>.
+                                    <xsl:value-of select="$datum_podnosenja[2]"/>.
+                                    <xsl:value-of select="$datum_podnosenja[1]"/>.
                                 </p>
                             </td>
                         </tr>
@@ -490,7 +494,10 @@
                                     <td colspan="3">
                                         <p>
                                             Datum podnošenja osnovne prijave:
-                                            <xsl:value-of select="//pat:Dodatna_prijava/pat:Datum_podnosenja"/>
+                                            <xsl:variable name="datum_osnovne" select="str:tokenize(//pat:Dodatna_prijava/pat:Dodatna_prijava, '-')"/>
+                                            <xsl:value-of select="$datum_osnovne[3]"/>.
+                                            <xsl:value-of select="$datum_osnovne[2]"/>.
+                                            <xsl:value-of select="$datum_osnovne[1]"/>.
                                         </p>
                                     </td>
                                 </tr>
