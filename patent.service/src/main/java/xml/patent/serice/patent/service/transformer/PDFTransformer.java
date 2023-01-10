@@ -5,7 +5,10 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.xalan.processor.TransformerFactoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
+import xml.patent.serice.patent.service.db.ExistManager;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -14,28 +17,32 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 
+@Service
 public class PDFTransformer {
 
     private FopFactory fopFactory;
 
     private TransformerFactory transformerFactory;
 
-    private String input_file = "data/res/new-patent.xml";//!!!!!!!!!!!!1
-
     private String xsl_file = "data/xsl-fo/patent.xsl";
 
-    private String output_file = "data/res/patent.pdf";
+    private String output_path = "src/main/resources/static/pdf/";
+
+    @Autowired
+    private ExistManager existManager;
 
     public PDFTransformer() throws IOException, SAXException {
         fopFactory = FopFactory.newInstance(new File("src/fop.xconf"));
         transformerFactory = new TransformerFactoryImpl();
     }
 
-    public void generatePDF() throws Exception {
+    public void generatePDF(String documentId) throws Exception {
+        String retrieved = existManager.retrieveString(documentId);
+
         System.out.println("[INFO] " + PDFTransformer.class.getSimpleName());
 
         StreamSource transformSource = new StreamSource(new File(xsl_file));
-        StreamSource source = new StreamSource(new File(input_file));
+        StreamSource source = new StreamSource(new StringReader(retrieved));
 
         FOUserAgent userAgent = fopFactory.newFOUserAgent();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -46,7 +53,7 @@ public class PDFTransformer {
         Result res = new SAXResult(fop.getDefaultHandler());
         xslFoTransformer.transform(source, res);
 
-        File pdfFile = new File(output_file);
+        File pdfFile = new File((output_path + documentId + ".pdf"));
         if (!pdfFile.getParentFile().exists()) {
             System.out.println("[INFO] A new directory is created: " + pdfFile.getParentFile().getAbsolutePath() + ".");
             pdfFile.getParentFile().mkdir();

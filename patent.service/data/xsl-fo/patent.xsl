@@ -321,6 +321,9 @@
 
                         <fo:table page-break-before="always" font-family="Arial" border="2px solid black"
                                   border-collapse="collapse" margin="50px 0px 50px 0px">
+                            <fo:table-column column-width="33%"/>
+                            <fo:table-column column-width="33%"/>
+                            <fo:table-column column-width="33%"/>
                             <fo:table-body>
                                 <!-- Punomocnik -->
                                 <fo:table-row border-top="2px solid black" border-bottom="1px solid black">

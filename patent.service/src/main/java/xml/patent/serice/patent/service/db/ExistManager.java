@@ -11,8 +11,10 @@ import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.jaxb.LoaderValidation;
+import xml.patent.serice.patent.service.repository.PatentRepository;
 import xml.patent.serice.patent.service.util.AuthenticationUtilities;
 
+import javax.xml.transform.OutputKeys;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
@@ -22,6 +24,8 @@ public class ExistManager {
     private AuthenticationUtilities authManager;
     @Autowired
     private LoaderValidation loader;
+
+    private String collectionId = "/db/request/patent";
 
     public void storeFromPatentRequest(PatentRequest patentRequest) throws Exception {
         String collectionId = "/db/request/patent";
@@ -60,10 +64,9 @@ public class ExistManager {
         }
     }
 
-    public void storeInExist(String collectionId, String documentId, OutputStream outputStream) throws Exception {
+    public void storeInExist(String documentId, OutputStream outputStream) throws Exception {
 
-        collectionId = "/db/request/patent";
-        documentId = "patent.xml";//generate patent xml
+        //documentId = "patent.xml";//generate patent xml
 
         System.out.println("\t- collection ID: " + collectionId);
         System.out.println("\t- document ID: " + documentId);
@@ -98,6 +101,64 @@ public class ExistManager {
         }
     }
 
+    public PatentRequest retrieve(String documentId) throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] Retrieving the document: " + documentId);
+            res = (XMLResource) col.getResource(documentId);
+
+            if (res == null) {
+                System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
+                return null;
+            } else {
+
+                System.out.println("[INFO] Showing the document as XML resource: ");
+                System.out.println(res.getContent());
+
+                PatentRequest request = loader.unmarshalling((String) res.getContent());
+                return request;
+            }
+        } finally {
+            closeConnection(col, res);
+        }
+    }
+
+    public String retrieveString(String documentId) throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] Retrieving the document: " + documentId);
+            res = (XMLResource) col.getResource(documentId);
+
+            if (res == null) {
+                System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
+                return null;
+            } else {
+
+                System.out.println("[INFO] Showing the document as XML resource: ");
+                System.out.println(res.getContent());
+
+                return (String) res.getContent();
+            }
+        } finally {
+            closeConnection(col, res);
+        }
+    }
 
     public void createConnection() throws Exception {
         Class<?> cl = Class.forName(authManager.getDriver());

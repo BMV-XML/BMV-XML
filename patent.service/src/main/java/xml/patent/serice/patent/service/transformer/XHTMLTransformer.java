@@ -1,5 +1,10 @@
 package xml.patent.serice.patent.service.transformer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.xml.sax.InputSource;
+import xml.patent.serice.patent.service.db.ExistManager;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
@@ -7,20 +12,22 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.StringReader;
 
+@Service
 public class XHTMLTransformer {
 
     private static DocumentBuilderFactory documentFactory;
 
     private static TransformerFactory transformerFactory;
 
-    private String inputFile = "data/res/new-patent.xml";
-
     private String xslFile = "data/xhtml/patent.xsl";
 
-    private String htmlFile = "data/res/patent.html";
+    private String output_path = "src/main/resources/static/html/";
+
+    @Autowired
+    private ExistManager existManager;
 
 
     static {
@@ -36,33 +43,14 @@ public class XHTMLTransformer {
 
     }
 
-    public org.w3c.dom.Document buildDocument(String filePath) {
-
-        org.w3c.dom.Document document = null;
-        try {
-
-            DocumentBuilder builder = documentFactory.newDocumentBuilder();
-            document = builder.parse(new File(filePath));
-
-            if (document != null)
-                System.out.println("[INFO] File parsed with no errors.");
-            else
-                System.out.println("[WARN] Document is null.");
-
-        } catch (Exception e) {
-            return null;
-
-        }
-
-        return document;
-    }
-
-    public void generateHTML(String xmlPath, String xslPath) {
+    public void generateHTML(String documentId) {
 
         try {
+            String retrieved = existManager.retrieveString(documentId);
+
 
             // Initialize Transformer instance
-            StreamSource transformSource = new StreamSource(new File(xslPath));
+            StreamSource transformSource = new StreamSource(new File(xslFile));
             Transformer transformer = transformerFactory.newTransformer(transformSource);
             transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -71,10 +59,12 @@ public class XHTMLTransformer {
             transformer.setOutputProperty(OutputKeys.METHOD, "xhtml");
 
             // Transform DOM to HTML
-            DOMSource source = new DOMSource(buildDocument(xmlPath));
-            StreamResult result = new StreamResult(new FileOutputStream(htmlFile));
+            DocumentBuilder builder = documentFactory.newDocumentBuilder();
+            org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(retrieved)));
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new FileOutputStream(output_path + documentId + ".html"));
             transformer.transform(source, result);
-            System.out.println("DONEEEEEEEEEEEe");
+            System.out.println("[INFO] Done");
         } catch (Exception e) {
             System.out.println("EX");
             e.printStackTrace();
@@ -82,7 +72,4 @@ public class XHTMLTransformer {
 
     }
 
-    public void generateMYHTML() throws FileNotFoundException {
-        generateHTML(inputFile, xslFile);
-    }
 }

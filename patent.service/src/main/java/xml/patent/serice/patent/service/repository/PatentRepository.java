@@ -6,6 +6,7 @@ import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.db.ExistManager;
 
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 
 @Repository
 public class PatentRepository {
@@ -14,6 +15,23 @@ public class PatentRepository {
     private ExistManager existManager;
 
     public void saveRequest(OutputStream outputStream) throws Exception {
-        existManager.storeInExist("","1.xml" , outputStream);
+        existManager.storeInExist(generateDocumentId(), outputStream);
+        //"1.xml" -- documentId
+    }
+
+    private String generateDocumentId() {
+        LocalDateTime now = LocalDateTime.now();
+        StringBuilder sb = new StringBuilder();
+        sb.append("P-");
+        /*sb.append(now.getDayOfMonth());
+        sb.append(now.getMonth());*/
+        sb.append(now.getDayOfYear());
+        sb.append(now.getHour());
+        sb.append(now.getMinute());
+        sb.append(now.getSecond());
+        sb.append("-");
+        String year = String.valueOf(now.getYear()).substring(2,4);
+        sb.append(year);
+        return sb.toString();
     }
 }
