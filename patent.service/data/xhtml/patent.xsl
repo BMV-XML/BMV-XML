@@ -14,7 +14,7 @@
                     border-collapse: collapse;
                     margin-top: 30px;
                     margin-bottom: 8px;
-                    margin-left: 10px;
+                    margin-left: 5%;
                     margin-right: 50%;
                     width: 50%;
                     }
@@ -32,7 +32,7 @@
                     display: block; }
                     p { padding-left: 15px; }
                     .primalac {
-                    text-indent: 45px;
+                    text-indent: 8%;
                     }
                     h3{ text-align: center; }
                     .main.table.first{
