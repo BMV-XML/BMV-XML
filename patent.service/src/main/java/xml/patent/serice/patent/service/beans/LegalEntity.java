@@ -19,6 +19,6 @@ import javax.xml.bind.annotation.*;
 public class LegalEntity extends GlobalEntity {
 
     @XmlElement(name = "Poslovno_ime", required = true)
-    private String businessName;
+    private Predicate businessName;
 
 }

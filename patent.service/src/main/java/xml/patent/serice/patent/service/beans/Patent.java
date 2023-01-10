@@ -27,4 +27,8 @@ public class Patent {
     @XmlElement(name = "Drzava", required = false)
     private String country;
 
+    @XmlAttribute(name = "rel", required = true)
+    protected String relation;
+    @XmlAttribute(name = "href", required = true)
+    protected String href;
 }

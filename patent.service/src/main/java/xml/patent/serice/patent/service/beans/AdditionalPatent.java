@@ -23,4 +23,5 @@ public class AdditionalPatent {
     private Checkbox seperatePatent;
     @XmlElement(name = "Patent", required = false)
     private Patent patent;
+
 }

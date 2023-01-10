@@ -20,4 +20,8 @@ public class Title {
     private String language;
     @XmlValue
     private String title;
+    @XmlAttribute(name = "property", required = true)
+    protected String property;
+    @XmlAttribute(name = "datatype", required = true)
+    protected String datatype;
 }

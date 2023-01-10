@@ -20,10 +20,11 @@ import java.time.LocalDate;
 @XmlRootElement(name = "Podaci_o_zahtevu")
 public class PatentData {
     @XmlElement(name = "Broj_prijave", required = true)
-    private String patentId;
+    private Predicate patentId;
+
     @XmlElement(name = "Datum_prijave", required = true)
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    private LocalDate applicationDate;//zasto ovaj tip?
+    private DatePredicate applicationDate;
+
     @XmlElement(name = "Priznati_datum_podnosenja", required = true)
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate acknowladgeDateOfSubmission;
