@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Zahtjev xmlns="http://www.ftn.uns.ac.rs/authorship"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/authorship file:/C:/Users/Korisnik/Desktop/xml/zahtjev.xsd">
+    <Primalac xmlns="http://www.ftn.uns.ac.rs/base-schame">
+        <Adresa>
+            <Ulica>Kneginje Ljubice</Ulica>
+            <Broj>5</Broj>
+            <Postanski_broj>21000</Postanski_broj>
+            <Grad>Beograd</Grad>
+            <Drzava>Srbija</Drzava>
+        </Adresa>
+        <Naziv>Zavod za intelektualnu svojinu</Naziv>
+    </Primalac>
+    <Podnosilac>
+        <Osoba xsi:type="base:TFizicko_lice">
+            <base:Adresa>
+                <base:Ulica>Gogoljeva</base:Ulica>
+                <base:Broj>6</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>0667478399</base:Broj_telefona>
+                <base:Broj_faksa>123123321</base:Broj_faksa>
+                <base:E_posta>ja@email.com</base:E_posta>
+            </base:Kontakt>
+            <base:Ime>Mitar</base:Ime>
+            <base:Prezime>Miric</base:Prezime>
+            <base:Drzavljanstvo>Srbin</base:Drzavljanstvo>
+        </Osoba>
+        <Podnosilac_je_autor>DA</Podnosilac_je_autor>
+    </Podnosilac>
+    <Autorsko_djelo>
+        <Naslov>Kad jaganjci utihnu</Naslov>
+        <Vrsta>MUZICKO_DJELO</Vrsta>
+        <Forma_zapisa>STAMPANI_TEKST</Forma_zapisa>
+        <Stvoreno_u_radnom_odnosu>NE</Stvoreno_u_radnom_odnosu>
+        <Nacin_koriscenja>Pjeva se</Nacin_koriscenja>
+    </Autorsko_djelo>
+    <ID>A-0001/22</ID>
+    <Datum_podnosenja>2022-12-08</Datum_podnosenja>
+    <Prilozi></Prilozi>
+</Zahtjev>

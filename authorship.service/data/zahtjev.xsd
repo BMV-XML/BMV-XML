@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/authorship"
+    xmlns="http://www.ftn.uns.ac.rs/authorship" xmlns:base="http://www.ftn.uns.ac.rs/base-schame">
+    <xs:import namespace="http://www.ftn.uns.ac.rs/base-schame" schemaLocation="base-schema.xsd"/>
+    <xs:element name="Zahtjev">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="base:Primalac"/>
+                <xs:element name="Podnosilac">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Osoba" type="base:TLice"/>
+                            <xs:element name="Podnosilac_je_autor" type="base:checkbox"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" ref="Punomocnik"/>
+                <xs:element ref="Autorsko_djelo"/>
+                <xs:element maxOccurs="unbounded" ref="Autor" minOccurs="0"/>
+                <xs:element name="ID">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="A-[0-9]{4,10}/[0-9]{2}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Datum_podnosenja" type="xs:date"/>
+                <xs:element ref="Prilozi"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Punomocnik">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Ime" type="xs:string"/>
+                <xs:element name="Prezime" type="xs:string"/>
+                <xs:element ref="base:Adresa"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Autorsko_djelo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Naslov" type="xs:string"/>
+                <xs:element name="Alternativni_naslov" type="xs:string" minOccurs="0"/>
+                <xs:element minOccurs="0" ref="Preradjeno_djelo"/>
+                <xs:element name="Vrsta" type="Vrsta_djela"/>
+                <xs:element name="Forma_zapisa" type="Forma_zapisa"/>
+                <xs:element name="Stvoreno_u_radnom_odnosu" type="base:checkbox"/>
+                <xs:element name="Nacin_koriscenja">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="500"/>
+                            <xs:minLength value="1"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Preradjeno_djelo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Naslov" type="xs:string"/>
+                <xs:element name="Ime_autora" type="xs:string"/>
+                <xs:element name="Prezime_autora" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Autor">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="Ime" type="xs:string"/>
+                <xs:element minOccurs="0" name="prezime" type="xs:string"/>
+                <xs:element minOccurs="0" name="Pseudonim" type="xs:string" maxOccurs="1"/>
+                <xs:element minOccurs="0" ref="base:Adresa"/>
+                <xs:element minOccurs="0" name="Drzavljanstvo" type="xs:string"/>
+                <xs:element minOccurs="0" name="Godina_smrti">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:positiveInteger">
+                            <xs:maxInclusive value="2022"/>
+                            <xs:pattern value="[\-+]?[0-9]+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Anonimni_autor" type="base:checkbox"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Prilozi">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="Opis_djela" type="xs:string"/>
+                <xs:element minOccurs="0" name="Primjer_djela" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="Forma_zapisa">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STAMPANI_TEKST"/>
+            <xs:enumeration value="OPTICKI_DISK"/>
+            <xs:enumeration value="DRUGO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Vrsta_djela">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="KNJIZEVNO_DJELO"/>
+            <xs:enumeration value="MUZICKO_DJELO"/>
+            <xs:enumeration value="LIKOVNO_DJELO"/>
+            <xs:enumeration value="RACUNARSKI_PROGRAM"/>
+            <xs:enumeration value="DRUGO"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
