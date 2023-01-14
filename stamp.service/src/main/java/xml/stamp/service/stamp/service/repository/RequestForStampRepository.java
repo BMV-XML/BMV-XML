@@ -6,6 +6,7 @@ import xml.stamp.service.stamp.service.db.ExistManager;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
 
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 
 @Repository
 public class RequestForStampRepository {
@@ -14,21 +15,36 @@ public class RequestForStampRepository {
     @Autowired
     private ExistManager existManager;
 
-    // ID generator
 
     public void saveRequest(OutputStream outputStream) throws Exception {
-        existManager.storeFromText("","1.xml" , outputStream);
+        existManager.storeFromText(collectionId, generateDocumentId(), outputStream);
     }
 
     public void saveRequestFromRequest(RequestForStamp requestForStamp) throws Exception {
         existManager.storeFromRequestForStamp(requestForStamp);
     }
 
-    public String getRequestForStampById(String id) throws Exception {
-        return existManager.retrieve("","111.xml");
+    public String getRequestForStampById(String documentId) throws Exception {
+        return existManager.retrieve(documentId);              /*"111.xml"*/
     }
 
     public String filter() throws Exception {
         return existManager.filter();
+    }
+
+    private String generateDocumentId() {
+        LocalDateTime now = LocalDateTime.now();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ž-");
+        /*sb.append(now.getDayOfMonth());
+        sb.append(now.getMonth());*/
+        sb.append(now.getDayOfYear());
+        sb.append(now.getHour());
+        sb.append(now.getMinute());
+        sb.append(now.getSecond());
+        sb.append("-");
+        String year = String.valueOf(now.getYear()).substring(2, 4);
+        sb.append(year);
+        return sb.toString();
     }
 }

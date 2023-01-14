@@ -52,8 +52,7 @@ public class StampData {
     protected String stampApplicationNumber;
 
     @XmlElement(name="Datum_prijave", required = true)
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    protected LocalDate dateOfApplication;
+    protected DatePredicate dateOfApplication;
 
 
 

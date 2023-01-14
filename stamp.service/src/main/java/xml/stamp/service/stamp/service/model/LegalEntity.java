@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LegalEntity extends GlobalEntity{
     @XmlElement(name="Poslovno_ime", required = true)
-    protected String businessName;
+    protected Predicate businessName;
 
     @Override
     public String toString() {

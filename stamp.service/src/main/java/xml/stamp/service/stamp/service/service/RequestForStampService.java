@@ -59,10 +59,9 @@ public class RequestForStampService {
         fusekiWriter.saveRDF(out);
     }
 
-    public ArrayList<String> searchByMetadata(String naziv, String godina) throws IOException {
+    public ArrayList<String> searchByMetadata(String name) throws IOException {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("naziv", naziv);
-        params.put("godina", godina);
+        params.put("naziv", name);
 
         ArrayList<String> result = fusekiReader.executeQuery(params);
         return  result;

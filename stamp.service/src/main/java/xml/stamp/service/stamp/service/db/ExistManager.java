@@ -27,6 +27,7 @@ public class ExistManager {
     private AuthenticationUtilities authManager;
     @Autowired
     private JaxLoader loader;
+    private String collectionId = "/db/request/stamps";
 
     private final static String TARGET_NAMESPACE = "http://www.ftn.uns.ac.rs/stamp";
 
@@ -93,8 +94,6 @@ public class ExistManager {
 
 
     public void storeFromText(String collectionId, String documentId, OutputStream outputStream) throws Exception {
-        collectionId = "/db/sample/library";
-        documentId = "115.xml";
 
         System.out.println("\t- collection ID: " + collectionId);
         System.out.println("\t- document ID: " + documentId);
@@ -129,9 +128,7 @@ public class ExistManager {
         }
     }
 
-    public String retrieve(String collectionId, String documentId) throws Exception {
-        collectionId = "/db/sample/library";
-        documentId = "111.xml";
+    public String retrieve(String documentId) throws Exception {
         createConnection();
         Collection col = null;
         XMLResource res = null;

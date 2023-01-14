@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
 import xml.stamp.service.stamp.service.service.RequestForStampService;
+import xml.stamp.service.stamp.service.transform.PDFTransformer;
+import xml.stamp.service.stamp.service.transform.XHTMLTransformer;
 
 import javax.websocket.server.PathParam;
 import java.io.IOException;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 
 
 @RestController
-@RequestMapping(value = "api/xml", produces = MediaType.TEXT_PLAIN_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+@RequestMapping(value = "stamp")
 @CrossOrigin
 public class RequestForStampController {
 
@@ -23,7 +25,7 @@ public class RequestForStampController {
     private RequestForStampService service;
 
 
-    @PostMapping(value = "/jaxB", consumes = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/xml", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> saveRequestForStamp(@RequestBody RequestForStamp requestForStamp) throws Exception{
         String response = service.saveRequestForStamp(requestForStamp);
         return new ResponseEntity<String>("radi", HttpStatus.OK);
@@ -43,9 +45,9 @@ public class RequestForStampController {
 
     }
 
-    @GetMapping(value = "fusekiSearch/{naziv}/{godina}")
-    public ResponseEntity<String> searchFromRDF(@PathVariable("naziv") String naziv, @PathParam("godina") String godina) throws IOException {
-        ArrayList<String> result = service.searchByMetadata(naziv, godina);
+    @GetMapping(value = "fusekiSearch/{name}")
+    public ResponseEntity<String> searchFromRDF(@PathVariable("name") String name) throws IOException {
+        ArrayList<String> result = service.searchByMetadata(name);
         String output="";
         for(String s: result){
             output +="\n" + s;

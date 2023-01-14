@@ -128,12 +128,14 @@
             <xs:extension base="base:TLice">
                 <xs:sequence>
                     <xs:element name="Poslovno_ime">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:minLength value="3"/>
-                                <xs:maxLength value="40"/>
-                            </xs:restriction>
-                        </xs:simpleType>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="property"/>
+                                    <xs:attribute name="datatype"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
                     </xs:element>
                 </xs:sequence>
             </xs:extension>

@@ -37,7 +37,7 @@
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="5"/>
-                            <xs:maxLength value="50"/>
+                            <xs:maxLength value="100"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -89,7 +89,16 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="Datum_prijave" type="xs:date"/>
+                <xs:element name="Datum_prijave">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="datatype"/>
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
