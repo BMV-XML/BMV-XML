@@ -15,17 +15,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Zahtjev", propOrder = {
+        "authorshipData",
         "recipient",
         "submitter",
         "commissioner",
         "authorsWork",
         "author",
-        "id",
-        "submissionDate",
         "attachments"
 })
 @XmlRootElement(name = "Zahtjev")
 public class AuthorshipRequest {
+
+    @XmlElement(name = "Podaci_o_zahtjevu", required = true)
+    private AuthorshipData authorshipData;
 
     @XmlElement(name = "Primalac", required = true, namespace = "http://www.ftn.uns.ac.rs/base-schame")
     private Recipient recipient;
@@ -42,14 +44,19 @@ public class AuthorshipRequest {
     @XmlElement(name = "Autor")
     private Author author;
 
-    @XmlElement(name = "ID", required = true)
-    private String id;
-
-    @XmlElement(name = "Datum_podnosenja", required = true)
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    private LocalDate submissionDate;
+//    @XmlElement(name = "ID", required = true)
+//    private String id;
+//
+//    @XmlElement(name = "Datum_podnosenja", required = true)
+//    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+//    private LocalDate submissionDate;
 
     @XmlElement(name = "Prilozi")
     private Attachments attachments;
+
+
+    @XmlAttribute(name="about", required = true)
+    @XmlSchemaType(name="anyURI")
+    private String about;
 
 }

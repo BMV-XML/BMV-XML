@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://www.ftn.uns.ac.rs/base-schame"
-    xmlns:base="http://www.ftn.uns.ac.rs/base-schame">
+           targetNamespace="http://www.ftn.uns.ac.rs/base-schame"
+           xmlns:base="http://www.ftn.uns.ac.rs/base-schame">
 
     <xs:complexType abstract="true" name="TLice">
         <xs:sequence>
@@ -78,7 +78,7 @@
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:pattern
-                                value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"/>
+                                    value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"/>
                             <xs:minLength value="6"/>
                             <xs:maxLength value="50"/>
                         </xs:restriction>
@@ -92,20 +92,24 @@
             <xs:extension base="base:TLice">
                 <xs:sequence>
                     <xs:element name="Ime">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:minLength value="2"/>
-                                <xs:maxLength value="30"/>
-                            </xs:restriction>
-                        </xs:simpleType>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="property"/>
+                                    <xs:attribute name="datatype"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
                     </xs:element>
                     <xs:element name="Prezime">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:minLength value="2"/>
-                                <xs:maxLength value="30"/>
-                            </xs:restriction>
-                        </xs:simpleType>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="property"/>
+                                    <xs:attribute name="datatype"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
                     </xs:element>
                     <xs:element name="Drzavljanstvo">
                         <xs:simpleType>
@@ -124,12 +128,14 @@
             <xs:extension base="base:TLice">
                 <xs:sequence>
                     <xs:element name="Poslovno_ime">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:minLength value="3"/>
-                                <xs:maxLength value="40"/>
-                            </xs:restriction>
-                        </xs:simpleType>
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                    <xs:attribute name="property"/>
+                                    <xs:attribute name="datatype"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
                     </xs:element>
                 </xs:sequence>
             </xs:extension>

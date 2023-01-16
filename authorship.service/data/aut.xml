@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/grddl.xsl"?>
 <Zahtjev xmlns="http://www.ftn.uns.ac.rs/authorship"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
-    xsi:schemaLocation="http://www.ftn.uns.ac.rs/authorship file:/C:/Users/Korisnik/Desktop/xml/zahtjev.xsd">
+         xmlns:pred="http://www.ftn.uns.ac.rs/rdf/authorship/predicate/"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/authorship file:/./data/zahtjev.xsd"
+    about="http://www.ftn.uns.ac.rs/rdf/authorship/A-1234/22">
+    <Podaci_o_zahtjevu>
+        <Broj_prijave>A-0004/22</Broj_prijave>
+        <Datum_prijave property="pred:datum_prijave" datatype="pred:xs:date">2022-11-30</Datum_prijave>
+    </Podaci_o_zahtjevu>
     <Primalac xmlns="http://www.ftn.uns.ac.rs/base-schame">
         <Adresa>
             <Ulica>Kneginje Ljubice</Ulica>
@@ -26,8 +33,8 @@
                 <base:Broj_faksa>123123321</base:Broj_faksa>
                 <base:E_posta>ja@email.com</base:E_posta>
             </base:Kontakt>
-            <base:Ime>Mitar</base:Ime>
-            <base:Prezime>Miric</base:Prezime>
+            <base:Ime property="pred:ime_podnosilac_prijave" datatype="xs:string">Mitar</base:Ime>
+            <base:Prezime property="pred:prezime_podnosilac_prijave" datatype="xs:string">Miric</base:Prezime>
             <base:Drzavljanstvo>Srbin</base:Drzavljanstvo>
         </Osoba>
         <Podnosilac_je_autor>DA</Podnosilac_je_autor>
@@ -39,7 +46,5 @@
         <Stvoreno_u_radnom_odnosu>NE</Stvoreno_u_radnom_odnosu>
         <Nacin_koriscenja>Pjeva se</Nacin_koriscenja>
     </Autorsko_djelo>
-    <ID>A-0001/22</ID>
-    <Datum_podnosenja>2022-12-08</Datum_podnosenja>
     <Prilozi></Prilozi>
 </Zahtjev>

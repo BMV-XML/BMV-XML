@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://www.ftn.uns.ac.rs/authorship"
-    xmlns="http://www.ftn.uns.ac.rs/authorship" xmlns:base="http://www.ftn.uns.ac.rs/base-schame">
+    xmlns="http://www.ftn.uns.ac.rs/authorship" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+    xmlns:rdf="http://www.w3.org/ns/rdfa#">
     <xs:import namespace="http://www.ftn.uns.ac.rs/base-schame" schemaLocation="base-schema.xsd"/>
     <xs:element name="Zahtjev">
         <xs:complexType>
             <xs:sequence>
+                <xs:element ref="Podaci_o_zahtjevu"/>
                 <xs:element ref="base:Primalac"/>
                 <xs:element name="Podnosilac">
                     <xs:complexType>
@@ -18,15 +20,33 @@
                 <xs:element minOccurs="0" ref="Punomocnik"/>
                 <xs:element ref="Autorsko_djelo"/>
                 <xs:element maxOccurs="unbounded" ref="Autor" minOccurs="0"/>
-                <xs:element name="ID">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="A-[0-9]{4,10}/[0-9]{2}"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="Datum_podnosenja" type="xs:date"/>
                 <xs:element ref="Prilozi"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Podaci_o_zahtjevu">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Broj_prijave">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Datum_prijave">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
