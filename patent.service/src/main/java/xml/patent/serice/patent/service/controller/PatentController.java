@@ -6,9 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.beans.PatentRequest;
+import xml.patent.serice.patent.service.dto.LoginDTO;
+import xml.patent.serice.patent.service.service.AuthenticationService;
 import xml.patent.serice.patent.service.service.PatentRequestService;
 
-import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -19,10 +20,16 @@ public class PatentController {
     @Autowired
     private PatentRequestService patentRequestService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
 
-    @PostMapping(value = "/xml", consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> saveRequestForStamp(@RequestBody PatentRequest patentRequest){
+    @PostMapping(value = "/xml/{username}/{password}", consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> saveRequestForStamp(@RequestBody PatentRequest patentRequest,
+                                                      @PathVariable String username,
+                                                      @PathVariable String password){
         try {
+            if (!authenticationService.authenticate(new LoginDTO(username, password)))
+                return new ResponseEntity<>("No AUTH", HttpStatus.UNAUTHORIZED);
             String response = patentRequestService.savePatentRequest(patentRequest);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,6 +37,17 @@ public class PatentController {
         }
         return new ResponseEntity<String>("radi", HttpStatus.OK);
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
