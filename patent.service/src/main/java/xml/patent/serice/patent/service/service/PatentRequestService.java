@@ -36,14 +36,11 @@ public class PatentRequestService {
 
     public String savePatentRequest(PatentRequest patentRequest) throws Exception {
         OutputStream os = new ByteArrayOutputStream();
+        System.out.println(patentRequest);
         os = this.loader.marshalling(patentRequest, os);
+        System.out.println("****************************************************");
+        System.out.println(os);
         patentRepository.saveRequest(os);
-        //metadataExtractor.extractMetadata(os.toString());
-        //fusekiWriter.saveRDF();
-
-
-        //os = this.loader.marshalling(requestForStamp, os);
-        //requestForStampRepository.saveRequest(os);
         OutputStream outputStream = new ByteArrayOutputStream();
         outputStream = metadataExtractor.extractMetadata(os.toString(), outputStream);
         fusekiWriter.saveRDF(outputStream);

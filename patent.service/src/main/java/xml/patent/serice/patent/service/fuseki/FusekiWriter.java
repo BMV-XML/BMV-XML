@@ -56,8 +56,8 @@ public class FusekiWriter {
          * UpdateProcessor sends update request to a remote SPARQL update service.
          */
         UpdateProcessor processor = UpdateExecutionFactory.createRemote(update, authManager.getFulUpdateEndpoint());
-        System.out.println("Context**********");
-        System.out.println(processor.getContext());
+        //System.out.println("Context**********");
+        //System.out.println(processor.getContext());
         processor.execute();
     }
 }

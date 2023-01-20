@@ -9,24 +9,37 @@ import {RegisterDto} from "../models/register-dto";
   providedIn: 'root'
 })
 export class AuthService {
-  private headers = new HttpHeaders();
   private readonly api_path = environment.patent_path;
   private parser: DOMParser
 
   constructor(private readonly httpClient: HttpClient) {
-    this.headers = this.headers.append('Content-Type', 'application/xml');
-    this.headers.set('Accept' , 'application/xml');
     this.parser = new DOMParser();
   }
 
   login(loginObj: LoginDto) {
     const log = JsonToXML.parse("root", loginObj);
-    return this.httpClient.post(this.api_path + "login", log, {headers: this.headers, responseType: 'text'});
+    return this.httpClient.post(this.api_path + "login", log, {responseType: 'text'});
   }
 
   register(registerDto: RegisterDto) {
     const log = JsonToXML.parse("root", registerDto);
-    return this.httpClient.post(this.api_path + "register", log, {headers: this.headers, responseType: 'text'});
+    return this.httpClient.post(this.api_path + "register", log, {responseType: 'text'});
 
   }
+
+  saveCredentialsAndType(loginObj: LoginDto, resultElementElement: any) {
+    if (typeof loginObj.username === "string")
+      localStorage.setItem('username', loginObj.username)
+    else
+      localStorage.removeItem('username')
+    if (typeof loginObj.password === "string")
+      localStorage.setItem('password', loginObj.password)
+    else
+      localStorage.removeItem('password')
+    if (typeof resultElementElement === "string")
+      localStorage.setItem('type', resultElementElement)
+    else
+      localStorage.removeItem('type')
+  }
+
 }

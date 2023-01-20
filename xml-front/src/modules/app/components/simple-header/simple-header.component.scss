@@ -1,0 +1,27 @@
+nav {
+  background: #E5BEEF;
+  height: 50px;
+  width: 100%;
+}
+
+span {
+  padding-top: 8px;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+img {
+  height: 50px;
+  margin-right: 20px;
+}
+
+span:hover {
+  cursor: pointer;
+  color: blueviolet;
+}
+
+p {
+  padding: 6px;
+  font-size: 25px;
+}

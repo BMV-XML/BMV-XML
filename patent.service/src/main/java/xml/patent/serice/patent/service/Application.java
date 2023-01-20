@@ -1,7 +1,9 @@
 package xml.patent.serice.patent.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import xml.patent.serice.patent.service.db.ExistManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,25 +12,12 @@ import java.io.IOException;
 public class Application {
 	public static String IMAGE_DIR;
 
+	//@Autowired
+	//private static ExistManager existManager;
+
 	public static void main(String[] args) throws IOException {
 		IMAGE_DIR = new File(".").getCanonicalPath() + "\\src\\main\\resources\\static\\";
-
 		SpringApplication.run(Application.class, args);
-		/*
-		LoaderValidation l = new LoaderValidation();
-		l.unmarshalling("./data/pat/patent.xml");
-		l.changeRecepient();
-		l.marshalling("./data/res/new-patent.xml");
-		*/
-		try {
-			//PDFTransformer PDFTransformer = new PDFTransformer();
-			//PDFTransformer.generatePDF();
-			//XHTMLTransformer xhtmlTransformer = new XHTMLTransformer();
-			//xhtmlTransformer.generateMYHTML();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 }

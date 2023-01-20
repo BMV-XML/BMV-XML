@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {OFFICIAL, PATENT} from "../../types";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent {
   usernameFormControl = new FormControl('', [Validators.required])
   passwordFormControl = new FormControl('', [Validators.required])
 
-  constructor (
+  constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private router: Router
@@ -27,7 +28,7 @@ export class LoginComponent {
   }
 
 
-  ngOnInit () {
+  ngOnInit() {
 
     this.loginForm.valueChanges.subscribe()
   }
@@ -35,7 +36,7 @@ export class LoginComponent {
   login() {
     if (!this.loginForm)
       return
-    let loginObj : LoginDto = {
+    let loginObj: LoginDto = {
       username: this.usernameFormControl.value,
       password: this.passwordFormControl.value
     }
@@ -44,15 +45,15 @@ export class LoginComponent {
         //var xml = "<config><test>Hello</test><data>SomeData</data></config>";
         console.log("**********************")
         console.log(res)
-        var extractedData = "";
         var parser = new xml2js.Parser();
-        parser.parseString(res, (err,result) =>{
-          //Extract the value from the data element
-         // extractedData = result['config']['data']
-          console.log("**********************")
-          if (result['AuthTypeDTO']['successful'][0] && result['AuthTypeDTO']['type'][0])
-            this.router.navigateByUrl("patent/add")
-          console.log(result['AuthTypeDTO']['type'][0]);
+        parser.parseString(res, (err, result) => {
+          if (result['AuthTypeDTO']['successful'][0]) {
+            this.authService.saveCredentialsAndType(loginObj, result['AuthTypeDTO']['type'][0])
+            if (result['AuthTypeDTO']['type'][0] === PATENT)
+              this.router.navigateByUrl("patent/add")
+            else if (result['AuthTypeDTO']['type'][0] === OFFICIAL)
+              this.router.navigateByUrl("patent/list")
+          }
         });
       },
       (err) => {

@@ -7,9 +7,6 @@ import lombok.Setter;
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Zahtev_za_priznavanje_patenta", propOrder = {
         "patentData",
@@ -52,4 +49,112 @@ public class PatentRequest {
     @XmlAttribute(name="vocab", required = true)
     @XmlSchemaType(name="anyURI")
     private String vocab;
+
+    @Override
+    public String toString() {
+        return "PatentRequest{" +
+                "patentData=" + patentData +
+                ", recepient=" + recepient +
+                ", titleList=" + titleList +
+                ", submitter=" + submitter +
+                ", commissioner=" + commissioner +
+                ", inventor=" + inventor +
+                ", deliveryData=" + deliveryData +
+                ", additionalPatent=" + additionalPatent +
+                ", priorityRights=" + priorityRights +
+                ", about='" + about + '\'' +
+                ", vocab='" + vocab + '\'' +
+                '}';
+    }
+
+    public PatentRequest() {
+    }
+
+    public PatentData getPatentData() {
+        return patentData;
+    }
+
+    public void setPatentData(PatentData patentData) {
+        this.patentData = patentData;
+    }
+
+    public Recepient getRecepient() {
+        return recepient;
+    }
+
+    public void setRecepient(Recepient recepient) {
+        this.recepient = recepient;
+    }
+
+    public List<Title> getTitleList() {
+        return titleList;
+    }
+
+    public void setTitleList(List<Title> titleList) {
+        this.titleList = titleList;
+    }
+
+    public Submitter getSubmitter() {
+        return submitter;
+    }
+
+    public void setSubmitter(Submitter submitter) {
+        this.submitter = submitter;
+    }
+
+    public Commissioner getCommissioner() {
+        return commissioner;
+    }
+
+    public void setCommissioner(Commissioner commissioner) {
+        this.commissioner = commissioner;
+    }
+
+    public Inventor getInventor() {
+        return inventor;
+    }
+
+    public void setInventor(Inventor inventor) {
+        this.inventor = inventor;
+    }
+
+    public DeliveryData getDeliveryData() {
+        return deliveryData;
+    }
+
+    public void setDeliveryData(DeliveryData deliveryData) {
+        this.deliveryData = deliveryData;
+    }
+
+    public AdditionalPatent getAdditionalPatent() {
+        return additionalPatent;
+    }
+
+    public void setAdditionalPatent(AdditionalPatent additionalPatent) {
+        this.additionalPatent = additionalPatent;
+    }
+
+    public List<Patent> getPriorityRights() {
+        return priorityRights;
+    }
+
+    public void setPriorityRights(List<Patent> priorityRights) {
+        this.priorityRights = priorityRights;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getVocab() {
+        return vocab;
+    }
+
+    public void setVocab(String vocab) {
+        this.vocab = vocab;
+    }
 }

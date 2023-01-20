@@ -1,0 +1,26 @@
+<p-table [value]="patents" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Code</th>
+      <th>Datum podnosenja</th>
+      <th>Podnosilac</th>
+      <th> PDF </th>
+      <th> HTML </th>
+      <th> RDF </th>
+      <th> JSON </th>
+      <th> Donesi rešenje </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-patent>
+    <tr>
+      <td>{{patent.id[0]}}</td>
+      <td>{{patent.applicationDate | dateArrayToString}}</td>
+      <td>{{patent.submitter[0]}}</td>
+      <th> <button pButton class="p-button-sm" (click)="getPDF()"> PDF </button> </th>
+      <th> <button pButton class="p-button-sm" (click)="getHTML()"> HTML </button> </th>
+      <th> <button pButton class="p-button-sm"> RDF </button> </th>
+      <th> <button pButton class="p-button-sm"> JSON </button> </th>
+      <th> <button pButton class="p-button-sm"> Dodaj rešenje </button> </th>
+    </tr>
+  </ng-template>
+</p-table>

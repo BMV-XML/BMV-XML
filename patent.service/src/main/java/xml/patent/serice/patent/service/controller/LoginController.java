@@ -24,7 +24,7 @@ public class LoginController {
     public ResponseEntity<AuthTypeDTO> login(@RequestBody LoginDTO loginDTO){
         System.out.println("LOGIN");
         try {
-            loginDTO.setService("PATENT");
+            //loginDTO.setService("PATENT");
             return new ResponseEntity<>(authenticationService.getAuthType(loginDTO), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

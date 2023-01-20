@@ -9,10 +9,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.StringReader;
 
 @Component
 public class LoaderValidation {
@@ -34,7 +36,7 @@ public class LoaderValidation {
 
             //patentRequest =
             System.out.println("Unmarshall done");
-            return (PatentRequest) unmarshaller.unmarshal(new File(file));
+            return (PatentRequest) unmarshaller.unmarshal(new StreamSource(new StringReader(file)));
         } catch (Exception e) {
             throw new RuntimeException("Jaxb unmarshalling exception");
         }

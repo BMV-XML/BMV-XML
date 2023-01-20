@@ -17,6 +17,8 @@ import xml.patent.serice.patent.service.util.AuthenticationUtilities;
 import javax.xml.transform.OutputKeys;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ExistManager {
@@ -126,6 +128,28 @@ public class ExistManager {
                 PatentRequest request = loader.unmarshalling((String) res.getContent());
                 return request;
             }
+        } finally {
+            closeConnection(col, res);
+        }
+    }
+
+    public List<PatentRequest> retrieveCollection() throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        List<PatentRequest> result = new ArrayList<>();
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] ************** RETRIVE collection");
+            System.out.println(col.getResourceCount());
+            for (String s : col.listResources())
+                result.add(retrieve(s));
+            return result;
         } finally {
             closeConnection(col, res);
         }
