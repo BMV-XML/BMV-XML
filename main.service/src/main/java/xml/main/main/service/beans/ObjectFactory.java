@@ -11,4 +11,7 @@ public class ObjectFactory {
     public Users createUsers() {return new Users(); }
     public User createUser(){return new User();}
 
+    public Solutions createSolutions() { return new Solutions(); }
+
+    public RequestSolution createRequestSolution() { return new RequestSolution(); }
 }

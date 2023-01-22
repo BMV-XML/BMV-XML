@@ -12,22 +12,14 @@ import java.io.OutputStream;
 import java.io.StringReader;
 
 @Component
-public class Loader {
-
-    //private PatentRequest patentRequest;
+public class UserLoader {
 
     public Users unmarshalling(String text) {
         try {
-            System.out.println("\n[INFO] Example "+ text + ": JAXB Patent XML Schema validation.");
 
             JAXBContext context = JAXBContext.newInstance("xml.main.main.service.beans");
 
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            //Schema schema = schemaFactory.newSchema(new File("./data/schema/patent2.xsd"));
-
-            //unmarshaller.setSchema(schema);
-            //unmarshaller.setEventHandler(new MyValidationEventHandler());
 
             System.out.println("Unmarshall done");
             return (Users) unmarshaller.unmarshal(new InputSource(new StringReader(text)));
@@ -45,7 +37,6 @@ public class Loader {
         Marshaller marshaller = context.createMarshaller();
 
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        System.out.println("[INFO] Marshalled patent request");
 
         marshaller.marshal(patentRequest, outputStream);
         return outputStream;

@@ -41,7 +41,7 @@ public class LoginController {
     public ResponseEntity<SuccessDTO> register(@RequestBody RegisterDTO registerDTO) throws Exception {
         System.out.println("************************************ REGISTER *************************************");
         try{
-            userService.register(registerDTO.getUsername(), registerDTO.getPassword(), ServiceType.valueOf(registerDTO.getService()));
+            userService.register(registerDTO.getUsername(), registerDTO.getPassword(), ServiceType.valueOf(registerDTO.getService()), registerDTO.getName(), registerDTO.getSurname());
             return new ResponseEntity(new SuccessDTO(true), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();

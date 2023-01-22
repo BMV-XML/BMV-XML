@@ -1,1 +1,183 @@
-<p>add-patent works!</p>
+<mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step [completed]="completed()">
+    <p><strong>Uputsvo: </strong> Dodajte naslov Vašeg patenta. Na srpskom morate da definišete naslov.</p>
+    <form>
+      <ng-template matStepLabel>Dodaj naslov patenta</ng-template>
+      <div id="editor"></div>
+      <div class="mt-5">
+        <button mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [completed]="isSubmitterCompleted">
+    <form>
+      <ng-template matStepLabel>Podnosilac</ng-template>
+
+      <app-entity (display)="submitterEvent($event)"></app-entity>
+
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [completed]="isInventorCompleted">
+    <form>
+      <section class="example-section">
+        <mat-checkbox class="example-margin" (change)="submitterIsInventorChange($event)">
+          Podnosilac je i pronalazač
+        </mat-checkbox>
+      </section>
+
+      <ng-template matStepLabel>Pronalazač</ng-template>
+
+      <div *ngIf="!isSubmitterTheInventor">
+        <section class="example-section">
+          <mat-checkbox class="example-margin" (change)="inventorWantsToBeListed($event)">
+            Pronalazač hoće da bude naveden
+          </mat-checkbox>
+        </section>
+
+        <app-entity (display)="inventorEvent($event)"></app-entity>
+      </div>
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [completed]="isCommissionerCompleted">
+    <form>
+      <section class="example-section">
+        <mat-checkbox class="example-margin" (change)="commissionerForRepresentationChange($event)">
+          Punomoćnik za zastupanje
+        </mat-checkbox>
+        <mat-checkbox class="example-margin" (change)="commissionerForLettersChange($event)">
+          Punomoćnik za prijem pisama
+        </mat-checkbox>
+        <br/>
+        <mat-checkbox class="example-margin" (change)="commissionerForJointRepresentationChange($event)">
+          Zajednički predstavnik
+        </mat-checkbox>
+      </section>
+      <ng-template matStepLabel>Punomoćnik</ng-template>
+
+      <app-entity (display)="commissionerEvent($event)"></app-entity>
+
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [formGroup]="deliveryFormGroup">
+    <form [formGroup]="deliveryFormGroup">
+      <ng-template matStepLabel>Dostavljanje</ng-template>
+
+      <div class="row">
+        <div class="col-2 mx-2">
+          <h2 class="mx-3">Adresa</h2>
+          <mat-form-field appearance="fill">
+            <mat-label>Ulica</mat-label>
+            <input matInput formControlName="street" placeholder="Ćirila i Metodija"
+                   required>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label> Grad</mat-label>
+            <input matInput formControlName="city" placeholder="Novi Sad"
+                   required>
+          </mat-form-field>
+        </div>
+        <div class="col-2 mx-2">
+          <h2>&nbsp;</h2>
+          <mat-form-field appearance="fill">
+            <mat-label>Broj</mat-label>
+            <input matInput formControlName="number" placeholder="11"
+                   required>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Poštanski broj</mat-label>
+            <input matInput formControlName="postalNumber" placeholder="21000"
+                   required>
+          </mat-form-field>
+          <br>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Država</mat-label>
+            <input matInput formControlName="country" placeholder="Srbija"
+                   required>
+          </mat-form-field>
+        </div>
+      </div>
+      <section class="example-section">
+        <mat-checkbox class="example-margin" (change)="notifyMeWithLettersChange($event)">
+          Obavesti me preko pošte
+        </mat-checkbox>
+        <br/>
+        <mat-checkbox class="example-margin" (change)="notifyMeViaEmailChange($event)">
+          Obavesti me elektronskim putem
+        </mat-checkbox>
+      </section>
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button  mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+
+    </form>
+  </mat-step>
+  <mat-step [completed]="isAdditionalPatentCompleted">
+    <form>
+      <ng-template matStepLabel>Dodatna prijava</ng-template>
+
+
+      <mat-radio-group class="my-2" (change)="additionalPatentOptionChanged($event)" aria-label="Select an option">
+        <mat-radio-button value="1" [checked]="true">Dodatna prijava</mat-radio-button>
+        <br/>
+        <mat-radio-button value="2">Izdvojena prijava</mat-radio-button>
+        <br/>
+        <mat-radio-button value="3">Osnovna prijava</mat-radio-button>
+      </mat-radio-group>
+
+      <br/>
+
+      <app-patent *ngIf="additionalPatent" (previousPatent)="updatePatent($event)"></app-patent>
+
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button  mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+
+    </form>
+  </mat-step>
+  <mat-step [completed]="isAdditionalPatentCompleted">
+    <form>
+      <ng-template matStepLabel>Prava prvenstva</ng-template>
+
+      <ng-template #viewContainerRef>
+
+      </ng-template>
+
+      <br/>
+      <div class="mt-1 my-2">
+        <button class="mx-1" mat-stroked-button (click)="addPatent()"> Dodaj patent</button>
+        <button class="mx-1" mat-stroked-button (click)="removeChild()"> Skloni patent</button>
+      </div>
+
+      <div class="mt-5">
+        <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+        <button mat-stroked-button  color="primary" matStepperNext>Dalje</button>
+      </div>
+
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Finish</ng-template>
+    <p>Završili ste popunjavanje forme.</p>
+    <div class="my-5">
+      <button class="mx-2" mat-stroked-button  color="primary" matStepperPrevious>Nazad</button>
+      <button mat-button >Pošalji</button>
+    </div>
+  </mat-step>
+</mat-stepper>

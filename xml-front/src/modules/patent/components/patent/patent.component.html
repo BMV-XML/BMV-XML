@@ -1,0 +1,24 @@
+<mat-form-field appearance="fill">
+  <mat-label>Broj prijave</mat-label>
+  <input matInput [formControl]="applicationNumber" placeholder="+38161579259"
+         required (ngModelChange)="check()">
+</mat-form-field>
+
+
+<mat-form-field appearance="fill">
+  <mat-label>Izaberi datum</mat-label>
+  <input required matInput [matDatepicker]="picker" (dateChange)="dateChanged($event)">
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Oznaka države</mat-label>
+  <mat-select required (selectionChange)="countrySelectChanged($event)">
+    <mat-option *ngFor="let c of countries" [value]="c.code">
+      {{c.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<br/>

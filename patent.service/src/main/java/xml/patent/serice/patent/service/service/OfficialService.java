@@ -21,12 +21,16 @@ public class OfficialService {
     @Autowired
     private FusekiReader fusekiReader;
 
+    @Autowired
+    private SolutionService solutionService;
+
     public List<PatentDTO> getListOfPatent() throws Exception {
         List<PatentRequest> requests = existManager.retrieveCollection();
         List<PatentDTO> results = new ArrayList<>();
         for (PatentRequest pr : requests){
             PatentDTO p = new PatentDTO();
-            p.setId(pr.getPatentData().getPatentId().getText());
+            p.setHasSolution(solutionService.getIfHasSolution(p.getId()));
+            p.setId(pr.getPatentId());
             p.setApplicationDate(pr.getPatentData().getApplicationDate().getDate());
             p.setSubmitter(pr.getSubmitter().getGlobalEntity().getContact().getEmail());
             results.add(p);

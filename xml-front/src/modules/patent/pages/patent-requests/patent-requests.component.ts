@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {PatentService} from "../../services/patent.service";
 import * as xml2js from "xml2js";
 import {PatentDto} from "../../models/patent-dto";
 import {Router} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
+import {AddSolutionComponent} from "../../components/add-solution/add-solution.component";
+import {ViewSolutionComponent} from "../../components/view-solution/view-solution.component";
 
 @Component({
   selector: 'app-patent-requests',
@@ -12,14 +15,15 @@ import {Router} from "@angular/router";
 export class PatentRequestsComponent {
   patents: PatentDto[] = [];
 
-  constructor(private patentService : PatentService,
-              private router: Router) {
+  constructor(private patentService: PatentService,
+              private router: Router,
+              public dialog: MatDialog) {
     this.patentService.getPatentList().subscribe(
       (res) => {
         console.log("--------------")
         console.log(res)
         let parser = new xml2js.Parser();
-        parser.parseString(res, (err,result) =>{
+        parser.parseString(res, (err, result) => {
           //Extract the value from the data element
           // extractedData = result['config']['data']
           console.log("**********************")
@@ -37,7 +41,7 @@ export class PatentRequestsComponent {
   getPDF() {
     let id = "P-19121157-23"
     this.patentService.getPatentPDF(id).subscribe(
-      (res)=>{
+      (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
@@ -49,12 +53,45 @@ export class PatentRequestsComponent {
   getHTML() {
     let id = "P-19121157-23"
     this.patentService.getPatentHTML(id).subscribe(
-      (res)=>{
+      (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
         //this.router.navigateByUrl(res);
       }
     )
+  }
+
+  openAddSolutionDialog(idElement: string): void {
+    let dialogRef
+    dialogRef = this.dialog.open(AddSolutionComponent, {
+      width: '30%',
+      height: '50%',
+      data: idElement
+    })
+
+    dialogRef.afterClosed().subscribe((res) => {
+      console.log('The dialog was closed')
+      if (res){
+        for (let r of this.patents){
+          if (r.id[0] === idElement){
+            r.hasSolution[0] = 'true'
+          }
+        }
+      }
+    })
+  }
+
+  openViewSolutionDialog(idElement: string): void {
+    let dialogRef
+    dialogRef = this.dialog.open(ViewSolutionComponent, {
+      width: '60%',
+      height: '40%',
+      data: idElement
+    })
+
+    dialogRef.afterClosed().subscribe((res) => {
+      console.log('The dialog was closed')
+    })
   }
 }

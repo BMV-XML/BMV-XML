@@ -1,6 +1,7 @@
 package xml.patent.serice.patent.service.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,13 @@ import java.net.URISyntaxException;
 @Service
 public class AuthenticationService {
 
+    @Value("${main.service.url}")
+    private String basicUrl;
 
 
     public boolean authenticate(LoginDTO loginDTO) throws JsonProcessingException, URISyntaxException {
 
-        URI uri = new URI("http://localhost:8084/login");
+        URI uri = new URI(basicUrl + "/login");
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -35,7 +38,7 @@ public class AuthenticationService {
 
     public AuthTypeDTO getAuthType(LoginDTO loginDTO) throws JsonProcessingException, URISyntaxException {
 
-        URI uri = new URI("http://localhost:8084/auth");
+        URI uri = new URI(basicUrl + "/auth");
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -48,7 +51,7 @@ public class AuthenticationService {
     }
 
     public SuccessDTO register(RegisterDTO registerDTO) throws URISyntaxException {
-        URI uri = new URI("http://localhost:8084/register");
+        URI uri = new URI(basicUrl + "/register");
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

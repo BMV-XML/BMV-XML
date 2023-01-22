@@ -5,6 +5,23 @@
     <form [formGroup]="registerForm" (ngSubmit)="register()">
       <p class="input">
         <mat-form-field [hideRequiredMarker]="true">
+          <input type="text" matInput placeholder="Ime" formControlName="name">
+          <mat-error *ngIf="nameFormControl.hasError('required')">
+            Ime mora da postoji
+          </mat-error>
+        </mat-form-field>
+      </p>
+
+      <p class="input">
+        <mat-form-field [hideRequiredMarker]="true">
+          <input type="text" matInput placeholder="Prezime" formControlName="surname">
+          <mat-error *ngIf="surnameFormControl.hasError('required')">
+            Prezime mora da postoji
+          </mat-error>
+        </mat-form-field>
+      </p>
+      <p class="input">
+        <mat-form-field [hideRequiredMarker]="true">
           <input type="text" matInput placeholder="Korisničko ime" formControlName="username">
           <mat-error *ngIf="usernameFormControl.hasError('required')">
             Korisničko ime mora da postoji
@@ -30,11 +47,13 @@
       </div>
 
 
-      <button [disabled]="!registerForm.valid" class="button" type="submit" mat-raised-button color="primary">Uloguj
-        se
+      <button [disabled]="!registerForm.valid" class="button" type="submit" mat-raised-button color="primary">
+        Registruj se
       </button>
 
 
     </form>
   </mat-card-content>
 </mat-card>
+
+<p-toast position="top-right" key="registration-message"></p-toast>

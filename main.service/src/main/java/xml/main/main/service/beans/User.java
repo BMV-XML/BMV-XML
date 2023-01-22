@@ -10,14 +10,15 @@ import javax.xml.bind.annotation.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "user", propOrder = {
         "username",
         "password",
-        "userType"
+        "userType",
+        "name",
+        "surname"
 })
-@XmlRootElement(name = "Patent")
+@XmlRootElement(name = "user")
 public class User {
 
     @XmlElement(name = "username", required = true)
@@ -27,4 +28,24 @@ public class User {
 
     @XmlElement(name = "usertype", required = true)
     private ServiceType userType;
+
+    @XmlElement(name = "name")
+    private String name;
+
+    @XmlElement(name = "surname")
+    private String surname;
+
+    public User(String username, String password, ServiceType userType) {
+        this.username = username;
+        this.password = password;
+        this.userType = userType;
+    }
+
+    public User(String username, String password, ServiceType userType, String name, String surname) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.userType = userType;
+    }
 }

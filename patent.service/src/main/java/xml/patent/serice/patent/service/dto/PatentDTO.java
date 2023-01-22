@@ -15,4 +15,5 @@ public class PatentDTO {
     private String id;
     private LocalDate applicationDate;
     private String submitter;
+    private boolean hasSolution;
 }

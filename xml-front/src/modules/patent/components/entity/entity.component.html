@@ -1,0 +1,92 @@
+<form [formGroup]="secondFormGroup">
+
+  <div class="row">
+    <div>
+      <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
+        <mat-radio-button value="1" [checked]="true">Fizičko lice</mat-radio-button>
+        <mat-radio-button value="2">Poslovno lice</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field class="entity" *ngIf="person" appearance="fill">
+      <mat-label>Ime</mat-label>
+      <input matInput formControlName="name" placeholder="Petra"
+             required (ngModelChange)="check()">
+    </mat-form-field>
+    <mat-form-field class="entity" *ngIf="person" appearance="fill">
+      <mat-label>Prezime</mat-label>
+      <input matInput formControlName="surname" placeholder="Petrović"
+             required (ngModelChange)="check()">
+    </mat-form-field>
+    <mat-form-field class="entity" *ngIf="person" appearance="fill">
+      <mat-label>Državljanstvo</mat-label>
+      <input matInput formControlName="citizenship" placeholder="srpska"
+             required (ngModelChange)="check()">
+    </mat-form-field>
+    <mat-form-field class="entity" *ngIf="!person" appearance="fill">
+      <mat-label>Poslovno ime</mat-label>
+      <input matInput formControlName="businessName" placeholder="FTN"
+             required (ngModelChange)="check()">
+    </mat-form-field>
+  </div>
+
+
+  <div class="row">
+    <div class="col-2 mx-2">
+      <h2 class="mx-3">Adresa</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>Ulica</mat-label>
+        <input matInput formControlName="street" placeholder="Ćirila i Metodija"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="fill">
+        <mat-label> Grad</mat-label>
+        <input matInput formControlName="city" placeholder="Novi Sad"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+    </div>
+    <div class="col-2 mx-2">
+      <h2>&nbsp;</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>Broj</mat-label>
+        <input matInput formControlName="number" placeholder="11"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="fill">
+        <mat-label>Poštanski broj</mat-label>
+        <input matInput formControlName="postalNumber" placeholder="21000"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+      <br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Država</mat-label>
+        <input matInput formControlName="country" placeholder="Srbija"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+    </div>
+
+    <div class="col-3 unit" style="margin-left: 15%">
+      <h2>Kontakt</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>Broj telefona</mat-label>
+        <input matInput formControlName="phone" placeholder="+38161579259"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="fill">
+        <mat-label>Broj faksa</mat-label>
+        <input matInput formControlName="fax" placeholder="024689589"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+      <br/>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="example@gmail.com"
+               required (ngModelChange)="check()">
+      </mat-form-field>
+    </div>
+  </div>
+
+</form>

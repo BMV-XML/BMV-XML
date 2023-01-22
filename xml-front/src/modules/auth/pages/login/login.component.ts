@@ -5,11 +5,13 @@ import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {OFFICIAL, PATENT} from "../../types";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export class LoginComponent {
   loginForm: FormGroup
@@ -19,7 +21,8 @@ export class LoginComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private router: Router
+    private router: Router,
+    private readonly messageService: MessageService,
   ) {
     this.loginForm = this.fb.group({
       username: this.usernameFormControl,
@@ -47,12 +50,19 @@ export class LoginComponent {
         console.log(res)
         var parser = new xml2js.Parser();
         parser.parseString(res, (err, result) => {
-          if (result['AuthTypeDTO']['successful'][0]) {
+          if (result['AuthTypeDTO']['successful'][0] === 'true') {
             this.authService.saveCredentialsAndType(loginObj, result['AuthTypeDTO']['type'][0])
             if (result['AuthTypeDTO']['type'][0] === PATENT)
               this.router.navigateByUrl("patent/add")
             else if (result['AuthTypeDTO']['type'][0] === OFFICIAL)
               this.router.navigateByUrl("patent/list")
+          } else {
+            this.messageService.add({
+              key: 'login-message',
+              severity: 'warn',
+              summary: 'Neuspešno logovanje',
+              detail: 'Korisničko ime ili lozinka nije ispravna.'
+            })
           }
         });
       },

@@ -10,6 +10,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import { RegisterComponent } from './pages/register/register.component';
 import {MatRadioModule} from "@angular/material/radio";
+import {ToastModule} from "primeng/toast";
 
 
 
@@ -26,7 +27,8 @@ import {MatRadioModule} from "@angular/material/radio";
         MatFormFieldModule,
         MatButtonModule,
         MatInputModule,
-        MatRadioModule
+        MatRadioModule,
+        ToastModule
     ]
 })
 export class AuthModule { }

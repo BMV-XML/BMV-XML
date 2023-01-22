@@ -2,6 +2,7 @@ package xml.main.main.service.beans;
 
 import lombok.Getter;
 import lombok.Setter;
+import xml.main.main.service.exception.NoUserFoundException;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -50,5 +51,13 @@ public class Users {
                 return u.getUserType().toString();
         }
         return null;
+    }
+
+    public User getUser(String username) throws NoUserFoundException {
+        for (User u : users){
+            if (username.equals(u.getUsername()))
+                return u;
+        }
+        throw new NoUserFoundException("No user found with the username: " + username);
     }
 }
