@@ -18,7 +18,7 @@ import java.io.Serializable;
         })
 @XmlRootElement(name = "titles")
 public class TitleDTO implements Serializable {
-    @XmlElement(name = "language")
+    @XmlAttribute(name = "jezik")
     private String language;
     @XmlElement(name = "title")
     private String title;

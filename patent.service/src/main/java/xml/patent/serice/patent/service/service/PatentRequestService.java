@@ -1,12 +1,10 @@
 package xml.patent.serice.patent.service.service;
 
-import org.apache.jena.vocabulary.RDF;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xml.patent.serice.patent.service.beans.*;
 import xml.patent.serice.patent.service.dto.request.*;
+import xml.patent.serice.patent.service.exception.NotValidException;
 import xml.patent.serice.patent.service.fuseki.FusekiReader;
 import xml.patent.serice.patent.service.fuseki.FusekiWriter;
 import xml.patent.serice.patent.service.fuseki.MetadataExtractor;
@@ -22,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PatentRequestService {
@@ -81,14 +81,19 @@ public class PatentRequestService {
         this.savePatentRequest(patentToSave);
     }
 
-    private Inventor createInventor(PatentRequestDTO patentRequest) {
+    private Inventor createInventor(PatentRequestDTO patentRequest) throws NotValidException {
         Inventor inventor = new Inventor();
+        if (patentRequest.isSubmitterIsTheInventor())
+            return null;
         inventor.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.inventorPropertyName, RDFConstants.inventorPropertySurname, RDFConstants.inventorPropertyBusinessName));
-        inventor.setWantToBeListed(inventor.getWantToBeListed());
+        if (patentRequest.isInventorWantsToBeListed())
+            inventor.setWantToBeListed(Checkbox.DA);
+        else
+            inventor.setWantToBeListed(Checkbox.NE);
         return inventor;
     }
 
-    private Commissioner createComissioner(PatentRequestDTO patentRequest) {
+    private Commissioner createComissioner(PatentRequestDTO patentRequest) throws NotValidException {
         Commissioner commissioner = new Commissioner();
         commissioner.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.commissionerPropertyName, RDFConstants.commissionerPropertySurName, RDFConstants.commissionerPropertyBusinessName));
         if (patentRequest.isCommissionerForJointRepresentation()){
@@ -109,7 +114,7 @@ public class PatentRequestService {
         return commissioner;
     }
 
-    private Submitter createSubmitter(PatentRequestDTO patentRequest) {
+    private Submitter createSubmitter(PatentRequestDTO patentRequest) throws NotValidException {
         Submitter submitter = new Submitter();
         submitter.setGlobalEntity(createGlobalEntity(patentRequest.getSubmitter(), RDFConstants.submitterPropertyName,
                 RDFConstants.submitterPropertySurname, RDFConstants.submitterPropertyBusinessName));
@@ -120,7 +125,7 @@ public class PatentRequestService {
         return submitter;
     }
 
-    private GlobalEntity createGlobalEntity(EntityDTO entity, String submitterPropertyName, String submitterPropertySurname, String submitterPropertyBusinessName) {
+    private GlobalEntity createGlobalEntity(EntityDTO entity, String submitterPropertyName, String submitterPropertySurname, String submitterPropertyBusinessName) throws NotValidException {
         if (entity.isPerson()){
             Person result = new Person();
             result.setName(createStringPredicate(entity.getName(), submitterPropertyName));
@@ -131,6 +136,7 @@ public class PatentRequestService {
             return result;
         }else{
             LegalEntity result = new LegalEntity();
+            System.out.println(entity.getBusinessName());
             result.setBusinessName(createStringPredicate(entity.getBusinessName(), submitterPropertyBusinessName));
             result.setAddress(createAddressFromAddressDTO(entity));
             result.setContact(createContact(entity.getEmail(), entity.getFax(), entity.getPhone()));
@@ -138,23 +144,23 @@ public class PatentRequestService {
         }
     }
 
-    private Predicate createStringPredicate(String name, String property) {
+    private Predicate createStringPredicate(String name, String property) throws NotValidException {
         Predicate predicate = new Predicate();
         predicate.setDatatype(RDFConstants.stringDatatype);
-        predicate.setText(name);
+        predicate.setText(checkIfStartsWithCapitalMoreWithSpace(name, "ime"));
         predicate.setProperty(property);
         return predicate;
     }
 
-    private Contact createContact(String email, String fax, String phone) {
+    private Contact createContact(String email, String fax, String phone) throws NotValidException {
         Contact contact = new Contact();
-        contact.setEmail(email);
+        contact.setEmail(checkEmail(email));
         contact.setFaxNumber(fax);
-        contact.setPhoneNumber(phone);
+        contact.setPhoneNumber(checkPhoneNumber(phone));
         return contact;
     }
 
-    private List<Patent> createPriorityRights(PatentRequestDTO patentRequest) {
+    private List<Patent> createPriorityRights(PatentRequestDTO patentRequest) throws NotValidException {
         List<Patent> patents = new ArrayList<>();
         if (patentRequest.getPriorityPatent() == null)
             return patents;
@@ -164,7 +170,7 @@ public class PatentRequestService {
         return patents;
     }
 
-    private AdditionalPatent createAdditionalPatent(PatentRequestDTO patentRequest) {
+    private AdditionalPatent createAdditionalPatent(PatentRequestDTO patentRequest) throws NotValidException {
         AdditionalPatent additionalPatent = new AdditionalPatent();
         if (patentRequest.isAdditionalPatent()) {
             additionalPatent.setAdditionalPatent(Checkbox.DA);
@@ -181,21 +187,22 @@ public class PatentRequestService {
         return additionalPatent;
     }
 
-    private Patent createPatent(PreviousPatentDTO previousPatent, String relation) {
+    private Patent createPatent(PreviousPatentDTO previousPatent, String relation) throws NotValidException {
         Patent patent = new Patent();
-        patent.setPatentId(previousPatent.getApplicationNumber());
+        patent.setPatentId(checkApplicationNumber(previousPatent.getApplicationNumber()));
         patent.setSubmissionDate(previousPatent.getSubmissionDateLocalDate());
-        patent.setCountry(previousPatent.getCountry());
+        patent.setCountry(checkIfStartsWithCapitalMoreWithSpace(previousPatent.getCountry(), "mark"));
         patent.setRelation(relation);
         patent.setHref(RDFConstants.baseURI + convertToSafe(previousPatent.getApplicationNumber()));
         return patent;
     }
 
+
     private String convertToSafe(String applicationNumber) {
         return applicationNumber.replace("/", "-");
     }
 
-    private DeliveryData createDeliveryData(PatentRequestDTO patentRequest) {
+    private DeliveryData createDeliveryData(PatentRequestDTO patentRequest) throws NotValidException {
         DeliveryData deliveryData = new DeliveryData();
         deliveryData.setAddress(createAddressFromAddressDTO(patentRequest.getAddress()));
 
@@ -213,13 +220,13 @@ public class PatentRequestService {
         return deliveryData;
     }
 
-    private Address createAddressFromAddressDTO(AddressDTO addressDto) {
+    private Address createAddressFromAddressDTO(AddressDTO addressDto) throws NotValidException {
         Address address = new Address();
-        address.setCity(addressDto.getCity());
-        address.setCountry(addressDto.getCountry());
-        address.setNumber(addressDto.getNumber());
-        address.setStreet(addressDto.getStreet());
-        address.setPostNumber(addressDto.getPostalNumber());
+        address.setCity(checkIfStartsWithCapitalMoreWithSpace(addressDto.getCity(), "city"));
+        address.setCountry(checkIfStartsWithCapitalMoreWithSpace(addressDto.getCountry(), "country"));
+        address.setNumber(checkIfHouseNumber(addressDto.getNumber()));
+        address.setStreet(checkIfStartsWithCapitalMoreWithSpace(addressDto.getStreet(), "street"));
+        address.setPostNumber(checkPostalNumber(addressDto.getPostalNumber()));
         return address;
     }
 
@@ -245,6 +252,7 @@ public class PatentRequestService {
         address.setNumber(RDFConstants.recipientNumber);
         address.setStreet(RDFConstants.recipientStreet);
         address.setPostNumber(RDFConstants.recipientPostalNumber);
+        recepient.setAddress(address);
         return recepient;
     }
 
@@ -268,28 +276,10 @@ public class PatentRequestService {
         return pd;
     }
 
-    private String generateDocumentId() {
-        LocalDateTime now = LocalDateTime.now();
-        StringBuilder sb = new StringBuilder();
-        sb.append("P-");
-        /*sb.append(now.getDayOfMonth());
-        sb.append(now.getMonth());*/
-        sb.append(now.getDayOfYear());
-        sb.append(now.getHour());
-        sb.append(now.getMinute());
-        sb.append(now.getSecond());
-        sb.append("-");
-        String year = String.valueOf(now.getYear()).substring(2,4);
-        sb.append(year);
-        return sb.toString();
-    }
-
     private String generateId() {
         LocalDateTime now = LocalDateTime.now();
         StringBuilder sb = new StringBuilder();
         sb.append("P-");
-        /*sb.append(now.getDayOfMonth());
-        sb.append(now.getMonth());*/
         sb.append(now.getDayOfYear());
         sb.append(now.getHour());
         sb.append(now.getMinute());
@@ -298,6 +288,69 @@ public class PatentRequestService {
         String year = String.valueOf(now.getYear()).substring(2,4);
         sb.append(year);
         return sb.toString();
+    }
+
+    private String checkPostalNumber(String postNumber) throws NotValidException {
+        Pattern p = Pattern.compile("[0-9]{5}");//. represents single character
+        Matcher m = p.matcher(postNumber);//NE RADIIIIIIIIII
+        if (!m.matches())
+            throw new NotValidException("Phone number is not valid");
+        return postNumber;
+    }
+
+    private String checkPhoneNumber(String phoneNumber) throws NotValidException {
+        Pattern p = Pattern.compile("\\+[0-9]{6,20}");//. represents single character
+        Matcher m = p.matcher(phoneNumber);//NE RADIIIIIIIIII
+        if (!m.matches())
+            throw new NotValidException("Phone number is not valid");
+        return phoneNumber;
+    }
+
+    private String checkEmail(String email) throws NotValidException {
+        Pattern p = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");//. represents single character
+        Matcher m = p.matcher(email);
+        if (!m.matches() | email.length()<6 |email.length() >50)
+            throw new NotValidException("Email is not valid");
+        return email;
+    }
+
+/*
+    private String checkIfStartsWithCapital(String name, String element) throws NotValidException {
+        Pattern p = Pattern.compile("[A-ZŠĆČĐŽ][a-zšđčćž]*");//. represents single character
+        Matcher m = p.matcher(name);
+        if (!m.matches())
+            throw new NotValidException(element + " is not valid");
+        return name;
+    }
+*/
+
+    private String checkIfStartsWithCapitalMoreWithSpace(String name, String element) throws NotValidException {
+        System.out.println(name);
+        Pattern p = Pattern.compile("[A-ZŠĆČĐŽ][a-zšđčćžA-ZŠĆČĐŽ ]*");//. represents single character
+        //Pattern p = Pattern.compile("[A-Z][a-zA-Z]*");//. represents single character
+        Matcher m = p.matcher(name);
+        if (!m.matches() || name.length() < 2 || name.length() > 50)
+            throw new NotValidException(element + " is not valid");
+        return name;
+    }
+
+
+    private String checkIfHouseNumber(String name) throws NotValidException {
+        System.out.println(name);
+        //Pattern p = Pattern.compile("[A-ZŠĆČĐŽ][a-zšđčćžA-ZŠĆČĐŽ ]*}");//. represents single character
+        Pattern p = Pattern.compile("[a-zA-Z0-9]*");//. represents single character
+        Matcher m = p.matcher(name);
+        if (!m.matches() || name.length() < 1 || name.length() > 10)
+            throw new NotValidException("House number is not valid");
+        return name;
+    }
+
+    private String checkApplicationNumber(String applicationNumber) throws NotValidException {
+        Pattern p = Pattern.compile("P-[0-9]{4,10}/[0-9]{2}");//. represents single character
+        Matcher m = p.matcher(applicationNumber);
+        if (!m.matches())
+            throw new NotValidException(applicationNumber + " is not valid");
+        return applicationNumber;
     }
 
 }

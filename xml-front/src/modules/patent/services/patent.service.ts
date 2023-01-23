@@ -24,11 +24,11 @@ export class PatentService {
   }
 
   getPatentPDF(id: string) {
-    return this.httpClient.get(this.api_path + "transform/pdf/" + id, {responseType: 'text'});
+    return this.httpClient.get(this.api_path + "transform/pdf/" + id.replace("/","-"), {responseType: 'text'});
   }
 
   getPatentHTML(id: string) {
-    return this.httpClient.get(this.api_path + "transform/xhtml/" + id, {responseType: 'text'});
+    return this.httpClient.get(this.api_path + "transform/xhtml/" + id.replace("/","-"), {responseType: 'text'});
   }
 
   addSolution(solution: AddSolutionDto){
@@ -38,14 +38,19 @@ export class PatentService {
   }
 
   getSolution(requestId: string) {//TODO: updatuj da koristis true key
-    requestId = "P-9856-23"
-    return this.httpClient.get(this.api_path + "solution/get/" + requestId, {responseType: 'text'});
+    //requestId = "P-9856-23"
+    return this.httpClient.get(this.api_path + "solution/get/" + requestId.replace("/","-"), {responseType: 'text'});
 
   }
 
-  submitRequest(result: PatentRequestDto, titles: TitleDto[], priortyRights: PreviousPatentDto[]) {
+  submitRequest(result: PatentRequestDto, titles: TitleDto[], priortyRights: PreviousPatentDto[], titlesFromXonomy: string) {
     let titleXml = JsonToXML.parse("titles", titles);
     titleXml = titleXml.replace("<?xml version='1.0'?>", "")
+    //titleXml = titleXml.replace("&lt;", "<")
+    //titleXml = titleXml.replace("&gt;", ">")
+    console.log("*************************************************************")
+    console.log(titles)
+    //console.log(titleXml)
     let priorityXml = JsonToXML.parse("priorityPatent", priortyRights);
     priorityXml = priorityXml.replace("<?xml version='1.0'?>", "")
     //result.titles = titleXml
@@ -53,6 +58,7 @@ export class PatentService {
     console.log("----------")
     console.log(log)
     log = log.replace("<titles/>",titleXml)
+    //log = log.replace("<titles/>",titlesFromXonomy)
     log = log.replace("<priorityPatent/>",priorityXml)
     console.log(log)
     return this.httpClient.post(this.api_path + "patent", log, {responseType: 'text'});

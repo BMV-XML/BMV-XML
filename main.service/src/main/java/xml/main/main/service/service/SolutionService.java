@@ -37,12 +37,14 @@ public class SolutionService {
 
     public boolean hasSolution(String requestId) throws Exception {
         Solutions solutions = solutionManager.retrieve();
-        return solutions.doesRequestHaveSolution(requestId);
+        String[] elements = requestId.split("-");
+        return solutions.doesRequestHaveSolution(elements[0]+"-"+elements[1]+"/"+elements[2]);
     }
 
     public SolutionDTO getSolution(String requestId) throws Exception {
         Solutions solutions = solutionManager.retrieve();
-        RequestSolution solution = solutions.getSolution(requestId);
+        String[] elements = requestId.split("-");
+        RequestSolution solution = solutions.getSolution(elements[0]+"-"+elements[1]+"/"+elements[2]);
         return new SolutionDTO(solution);
     }
 }

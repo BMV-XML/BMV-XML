@@ -17,10 +17,10 @@
       <td>{{patent.applicationDate | dateArrayToString}}</td>
       <td>{{patent.submitter[0]}}</td>
       <th>
-        <button pButton class="p-button-sm" (click)="getPDF()"> PDF</button>
+        <button pButton class="p-button-sm" (click)="getPDF(patent.id[0])"> PDF</button>
       </th>
       <th>
-        <button pButton class="p-button-sm" (click)="getHTML()"> HTML</button>
+        <button pButton class="p-button-sm" (click)="getHTML(patent.id[0])"> HTML</button>
       </th>
       <th>
         <button pButton class="p-button-sm"> RDF</button>
@@ -31,7 +31,7 @@
       <th>
         <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'false'"
         (click)="openAddSolutionDialog(patent.id[0])"> Dodaj rešenje</button>
-        <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'false'"
+        <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'true'"
                 (click)="openViewSolutionDialog(patent.id[0])"> Vidi rešenje</button>
       </th>
     </tr>

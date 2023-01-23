@@ -30,7 +30,8 @@ public class SolutionService {
         //headers.setContentType(MediaType.APPLICATION_XML);
 
         System.out.println("******************************** res ********************");
-        ResponseEntity<SuccessDTO> result = restTemplate.getForEntity(uri+"/"+requestId , SuccessDTO.class);
+        System.out.println(requestId);
+        ResponseEntity<SuccessDTO> result = restTemplate.getForEntity(uri+"/"+requestId.replace("/", "-") , SuccessDTO.class);
         System.out.println(result.getBody().isSuccessful());
         return result.getBody().isSuccessful();
     }

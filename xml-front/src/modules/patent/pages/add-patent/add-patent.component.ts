@@ -64,6 +64,7 @@ export class AddPatentComponent {
     submitter: this.entity
   }
 
+  titlesXml: string = ''
   priorityPatent: PreviousPatentDto[] = []
 
   titles: TitleDto[] = []
@@ -81,7 +82,7 @@ export class AddPatentComponent {
               private readonly messageService: MessageService) {}
 
   ngAfterViewInit(): void {
-    let xml = "<Naslovi><Naslov jezik='SR'>aaaa</Naslov><Naslov jezik='HU'>XXXX</Naslov></Naslovi>";
+    let xml = "<titles><title jezik='SR'>aaaa <b>bbbbb</b> cccccc</title><title jezik='HU'>XXXX</title></titles>";
     let editor = document.querySelector("#editor");
     let specification = this.xonomyService.patentSpecification;
     Xonomy.render(xml, editor, specification);
@@ -91,12 +92,17 @@ export class AddPatentComponent {
   completed() {
     let parser = new xml2js.Parser();
     try {
-      parser.parseString(Xonomy.harvest(), (err, result) => {
+      console.log("*********************** HARVEST **********************")
+      this.titlesXml = Xonomy.harvest()
+      console.log(this.titlesXml)
+      parser.parseString(this.titlesXml, (err, result) => {
+        console.log(result)
         //Extract the value from the data element
         // extractedData = result['config']['data']
         //console.log("******************************************************")
         //console.log(result["Naslovi"]["Naslov"])
         let naslovi = result["Naslovi"]["Naslov"]
+        console.log(naslovi)
         //this.given_naslovi = []
         this.titles = []
         for (let n of naslovi) {
@@ -116,6 +122,52 @@ export class AddPatentComponent {
     } catch (err) {
       return false;
     }
+  }
+
+  completedManual() {
+    try{
+    this.titlesXml = Xonomy.harvest()
+    console.log(this.titlesXml)
+    this.titlesXml = this.titlesXml.replace("<titles>", "")
+    this.titlesXml = this.titlesXml.replace("</titles>", "")
+    this.titlesXml = this.titlesXml.replace("xml:space='preserve'", "")
+    let parts = this.titlesXml.split("</title>")
+    console.log(parts)
+    this.titles = []
+    for (let elem of parts){
+      if (elem === '')
+        continue
+      let mainPart = elem.split("<title jezik='")[1]
+      mainPart = mainPart.replace("xml:space='preserve'", "")
+      let jezik = mainPart.substring(0, 2)
+      let title = mainPart.substring(5, mainPart.length)
+      console.log("***** main ****")
+      console.log(jezik)
+      console.log(title)
+      this.titles.push({
+        language: jezik,
+        title: title
+      })
+    }
+
+    return this.checkIfGivenTitlesAreValid()
+    }catch (err){
+      return false;
+    }
+    /*
+      console.log(this.titlesXml)
+    let splited = this.titlesXml.split("<title");
+      for (let s of splited){
+        console.log("JEZIK")
+        let byJezik = s.split("jezik='")
+        console.log(byJezik)
+        console.log("TITLE")
+        console.log(byJezik[1].split(">"))
+        //console.log(s.split("' xml:space='preserve'>"))
+      }
+    console.log()
+
+     */
   }
 
   checkIfGivenTitlesAreValid() {
@@ -270,7 +322,10 @@ export class AddPatentComponent {
       postalNumber: this.deliveryFormGroup.controls["postalNumber"].value,
       street: this.deliveryFormGroup.controls["street"].value,
     }
-    this.patentService.submitRequest(this.result, this.titles, this.priorityPatent).subscribe(
+    console.log("///////////////")
+    this.titlesXml = Xonomy.harvest()//TODO: do provere
+    console.log(this.titlesXml)
+    this.patentService.submitRequest(this.result, this.titles, this.priorityPatent, this.titlesXml).subscribe(
       (res) => {
         console.log("```````````````````` RESULT ``````````````````````")
         console.log(res)
