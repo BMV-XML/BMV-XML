@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/grddl.xsl"?>
+<stamp:Zahtev_za_zig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.ftn.uns.ac.rs/stamp zig.xsd" xmlns="http://www.w3.org/ns/rdfa#"
+ xmlns:pred="http://www.ftn.uns.ac.rs/rdf/stamp/predicate/"
+ xmlns:stamp="http://www.ftn.uns.ac.rs/stamp" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+ about="http://www.ftn.uns.ac.rs/rdf/stamp/Z-1234/22">
+    <stamp:Podnosioci_prijave xsi:type="base:TFizicko_lice">
+        <base:Adresa>
+            <base:Ulica>Gogoljeva</base:Ulica>
+            <base:Broj>22</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Kontakt>
+            <base:Broj_telefona>021-123654-8</base:Broj_telefona>
+            <base:Broj_faksa>021-123654-8</base:Broj_faksa>
+            <base:E_posta>milica@gmail.com</base:E_posta>
+        </base:Kontakt>
+        <base:Ime property="pred:ime_podnosilac_prijave" datatype="xs:string">Milica</base:Ime>
+        <base:Prezime property="pred:prezime_podnosilac_prijave" datatype="xs:string">Petrovic</base:Prezime>
+        <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
+    </stamp:Podnosioci_prijave>
+    <stamp:Podnosioci_prijave xsi:type="base:TPoslovno_lice">
+        <base:Adresa>
+            <base:Ulica>Trg Dositeja Obradovica</base:Ulica>
+            <base:Broj>6</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Kontakt>
+            <base:Broj_telefona>021/712-6523</base:Broj_telefona>
+            <base:Broj_faksa>21/712-6523</base:Broj_faksa>
+            <base:E_posta>ftn@uns.ac.rs</base:E_posta>
+        </base:Kontakt>
+        <base:Poslovno_ime>Fakultet tehnickih nauka</base:Poslovno_ime>
+    </stamp:Podnosioci_prijave>
+    <stamp:Punomocnik xsi:type="base:TFizicko_lice">
+        <base:Adresa>
+            <base:Ulica>Cirila i Metodija</base:Ulica>
+            <base:Broj>11</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Kontakt>
+            <base:Broj_telefona>061236545</base:Broj_telefona>
+            <base:Broj_faksa>061236545</base:Broj_faksa>
+            <base:E_posta>violeta@gmail.com</base:E_posta>
+        </base:Kontakt>
+        <base:Ime property="pred:ime_punomocnik" datatype="xs:string">Violeta</base:Ime>
+        <base:Prezime property="pred:prezime_punomocnik" datatype="xs:string">Erdelji</base:Prezime>
+        <base:Drzavljanstvo>srpsko</base:Drzavljanstvo>
+    </stamp:Punomocnik>
+    <stamp:Zajednicki_predstavnik xsi:type="base:TPoslovno_lice">
+        <base:Adresa>
+            <base:Ulica>Bulevar oslobodjenja</base:Ulica>
+            <base:Broj>55</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Kontakt>
+            <base:Broj_telefona>02136254</base:Broj_telefona>
+            <base:Broj_faksa>02136254</base:Broj_faksa>
+            <base:E_posta>zajednicki@gmail.com</base:E_posta>
+        </base:Kontakt>
+        <base:Poslovno_ime property="pred:ime_zajednicki_predstavnik" datatype="xs:string">Advokatska kancelarija</base:Poslovno_ime>
+    </stamp:Zajednicki_predstavnik>
+    <base:Primalac>
+        <base:Adresa>
+            <base:Ulica>Bulevar oslobodjenja</base:Ulica>
+            <base:Broj>106</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Novi Sad</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Naziv>Zavod za registraciju zigova</base:Naziv>
+    </base:Primalac>
+    <stamp:Podaci_o_zigu>
+        <stamp:Tip>KOLEKTIVNI</stamp:Tip>
+        <stamp:Vrsta>trodimenzionalni</stamp:Vrsta>
+        <stamp:Izgled_znaka>http://localhost:8080/resources/images/z1.jpg</stamp:Izgled_znaka>
+        <stamp:Boja_znaka>Crvena</stamp:Boja_znaka>
+        <stamp:Boja_znaka>Bela</stamp:Boja_znaka>
+        <stamp:Opis_znaka>Ynak je trodimenyionalan i sadrzi crvenu i belu boju.</stamp:Opis_znaka>
+        <stamp:Klase_robe_i_usluga>23</stamp:Klase_robe_i_usluga>
+        <stamp:Klase_robe_i_usluga>24</stamp:Klase_robe_i_usluga>
+        <stamp:Prvenstvo>DA</stamp:Prvenstvo>
+        <stamp:Broj_prijave_ziga>Ž-1234/22</stamp:Broj_prijave_ziga>
+        <stamp:Datum_prijave property="pred:datum_prijave" datatype="pred:xs:date">2022-05-04</stamp:Datum_prijave>
+    </stamp:Podaci_o_zigu>
+    <stamp:Podaci_o_taksama>
+        <stamp:Osnovna_taksa>1000</stamp:Osnovna_taksa>
+        <stamp:Taksa_za_klasu>2</stamp:Taksa_za_klasu>
+        <stamp:Taksa_za_graficko_resenje>4500</stamp:Taksa_za_graficko_resenje>
+        <stamp:Ukupno>7000</stamp:Ukupno>
+    </stamp:Podaci_o_taksama>
+    <stamp:Podaci_o_prilozima>
+        <stamp:Primer_znaka>
+            <stamp:Predat_prilog>DA</stamp:Predat_prilog>
+            <stamp:Putanja_do_priloga>path0</stamp:Putanja_do_priloga>
+        </stamp:Primer_znaka>
+        <stamp:Spisak_robe_i_usluga>
+            <stamp:Predat_prilog>DA</stamp:Predat_prilog>
+            <stamp:Putanja_do_priloga>path1</stamp:Putanja_do_priloga>
+        </stamp:Spisak_robe_i_usluga>
+        <stamp:Punomocje_ce_biti_naknadno_dostavljeno>
+            <stamp:Prilog_ce_se_naknadno_dostaviti>NE</stamp:Prilog_ce_se_naknadno_dostaviti>
+            <stamp:Datum>2006-05-04</stamp:Datum>
+        </stamp:Punomocje_ce_biti_naknadno_dostavljeno>
+        <stamp:Dokaz_o_uplati_takse>
+            <stamp:Predat_prilog>NE</stamp:Predat_prilog>
+            <stamp:Putanja_do_priloga>path2</stamp:Putanja_do_priloga>
+        </stamp:Dokaz_o_uplati_takse>
+    </stamp:Podaci_o_prilozima>
+</stamp:Zahtev_za_zig>
