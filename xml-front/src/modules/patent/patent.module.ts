@@ -5,7 +5,7 @@ import {RouterModule} from "@angular/router";
 import {PatentRoutes} from "./patent.routes";
 import { PatentRequestsComponent } from './pages/patent-requests/patent-requests.component';
 import {TableModule} from "primeng/table";
-import { DateArrayToStringPipe } from './pipes/date-array-to-string.pipe';
+import { DateArrayToStringPipe } from '../shared/pipes/date-array-to-string.pipe';
 import {ButtonModule} from "primeng/button";
 import { AddSolutionComponent } from './components/add-solution/add-solution.component';
 import {MatDialogModule} from "@angular/material/dialog";
@@ -24,6 +24,8 @@ import { PatentComponent } from './components/patent/patent.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {DateAdapter, MatNativeDateModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
+import {SharedModule} from "../shared/shared.module";
+import {ToastModule} from "primeng/toast";
 
 
 
@@ -31,7 +33,6 @@ import {MatSelectModule} from "@angular/material/select";
   declarations: [
     AddPatentComponent,
     PatentRequestsComponent,
-    DateArrayToStringPipe,
     AddSolutionComponent,
     ViewSolutionComponent,
     EntityComponent,
@@ -55,7 +56,9 @@ import {MatSelectModule} from "@angular/material/select";
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    SharedModule,
+    ToastModule
   ]
 })
 export class PatentModule { }

@@ -6,6 +6,7 @@ import {FormControl, Validators} from "@angular/forms";
 import {CountryDto} from "../../models/country-dto";
 import {MatSelectChange} from "@angular/material/select";
 import {PreviousPatentDto} from "../../models/previous-patent-dto";
+import {applicationNumberValidator} from "../../validators";
 
 @Component({
   selector: 'app-patent',
@@ -18,7 +19,8 @@ export class PatentComponent {
   @Output() previousPatent = new EventEmitter<PreviousPatentDto>()
   patent: PreviousPatentDto = { id: 0, applicationNumber: "", country: "", submissionDate: null, completed: false }
   countries: CountryDto[];
-  applicationNumber: FormControl = new FormControl('', [Validators.required])
+  applicationNumber: FormControl = new FormControl('', [Validators.required, applicationNumberValidator])
+  dateIsInPast: boolean = true;
 
   constructor(
     private dateAdapter: DateAdapter<Date>) {
@@ -47,6 +49,11 @@ export class PatentComponent {
     this.patent.submissionDate = $event.value// new Date($event.value)
     console.log("---------------------------------------------- Date Changed ----------------")
     console.log(this.patent.submissionDate)
+    if (this.patent.submissionDate !== null && this.patent.submissionDate < new Date()){
+      this.dateIsInPast = true
+    }else{
+      this.dateIsInPast = false
+    }
     this.check()
   }
 

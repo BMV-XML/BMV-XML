@@ -2,6 +2,12 @@ import {Component, EventEmitter, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatRadioChange} from "@angular/material/radio";
 import {EntityDto} from "../../models/entity-dto";
+import {
+  capitalFirstLetterText,
+  capitalFirstLetterTextWithSpace, emailValidator, numberValidator, phoneValidator, postalNumber,
+  stringAndNumber,
+  stringValidator
+} from "../../validators";
 
 @Component({
   selector: 'app-entity',
@@ -13,38 +19,38 @@ export class EntityComponent {
   person: boolean = true
 
   @Output() display = new EventEmitter<EntityDto>()
-  nameFormControl = new FormControl('', [])
-  surnameFormControl = new FormControl('', [])
-  citizenshipFormControl = new FormControl('', [])
-  businessNameFormControl = new FormControl('', [])
+  nameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
+  surnameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
+  citizenshipFormControl = new FormControl('', [Validators.required, stringValidator])
+  businessNameFormControl = new FormControl('', [Validators.required, capitalFirstLetterTextWithSpace])
   secondFormGroup: FormGroup;
 
 
   constructor(private _formBuilder: FormBuilder) {
     this.secondFormGroup = this._formBuilder.group({
-      street: ['', Validators.required],
-      number: ['', Validators.required],
-      postalNumber: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      phone: ['', Validators.required],
-      fax: ['', Validators.required],
-      email: ['', Validators.required],
-      name: this.nameFormControl,
-      surname: this.surnameFormControl,
-      citizenship: this.citizenshipFormControl,
-      businessName: this.businessNameFormControl,
+      street: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
+      number: ['', [Validators.required, stringAndNumber]],
+      postalNumber: ['', [Validators.required, postalNumber]],
+      city: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
+      country: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
+      phone: ['', [Validators.required, phoneValidator]],
+      fax: ['', [Validators.required]],//numberValidator
+      email: ['', [Validators.required, emailValidator]]
     });
   }
 
   check () : void {
     console.log("/////////////////////// Change ///////////////////////////")
-    if (this.secondFormGroup.valid || this.secondFormGroup.errors === null){
+    console.log(this.secondFormGroup.errors)
+    console.log(this.secondFormGroup.valid)
+    if (this.secondFormGroup.valid){
       console.log(this.businessNameFormControl.value)
-      if (this.person && this.nameFormControl.value !== null && this.surnameFormControl.value !== null && this.citizenshipFormControl.value !== null)
+      if (this.person && this.nameFormControl.valid && this.surnameFormControl.valid && this.citizenshipFormControl.valid)
         this.display.emit(this.createEntityDto(true));
-      else if (!this.person && this.businessNameFormControl.value !== null)
+      else if (!this.person && this.businessNameFormControl.valid)
         this.display.emit(this.createEntityDto(true));
+      else
+        this.display.emit(this.createEntityDto(false));
     } else{
       this.display.emit(this.createEntityDto(false));
       console.log(this.secondFormGroup.errors)
@@ -57,7 +63,7 @@ export class EntityComponent {
       this.person = true
     else if ($event.value === '2')
       this.person = false
-
+    this.check()
   }
 
   private createEntityDto(completed: boolean): EntityDto {
@@ -74,7 +80,8 @@ export class EntityComponent {
       postalNumber: this.secondFormGroup.controls["postalNumber"].value,
       street: this.secondFormGroup.controls["street"].value,
       surname: this.surnameFormControl.value,
-      completed: completed
+      completed: completed,
+      person: this.person
     }
   }
 }

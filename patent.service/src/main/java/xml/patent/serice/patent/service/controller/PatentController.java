@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.dto.LoginDTO;
+import xml.patent.serice.patent.service.dto.request.PatentRequestDTO;
 import xml.patent.serice.patent.service.jaxb.LoaderValidation;
 import xml.patent.serice.patent.service.service.AuthenticationService;
 import xml.patent.serice.patent.service.service.PatentRequestService;
@@ -45,6 +46,16 @@ public class PatentController {
     }
 
 
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> savePatentRequest(@RequestBody PatentRequestDTO patentRequest) {
+        System.out.println(patentRequest);
+        try {
+            this.patentRequestService.savePatentRequest(patentRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("xxxxxxxxxxx", HttpStatus.OK);
+    }
 
 
 

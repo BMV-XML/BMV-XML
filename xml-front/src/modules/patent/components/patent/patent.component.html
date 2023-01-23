@@ -1,24 +1,39 @@
-<mat-form-field appearance="fill">
+<mat-form-field class="mx-1" appearance="fill">
   <mat-label>Broj prijave</mat-label>
   <input matInput [formControl]="applicationNumber" placeholder="+38161579259"
          required (ngModelChange)="check()">
+  <mat-error *ngIf="applicationNumber.hasError('pattern') && !applicationNumber.hasError('required')">
+    Format prijave je: P-0000/23
+  </mat-error>
+  <mat-error *ngIf="applicationNumber.hasError('required')">
+    Broj prijave je <strong>potrebno</strong>
+  </mat-error>
 </mat-form-field>
 
 
-<mat-form-field appearance="fill">
+<mat-form-field class="mx-1" appearance="fill">
   <mat-label>Izaberi datum</mat-label>
   <input required matInput [matDatepicker]="picker" (dateChange)="dateChanged($event)">
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
+  <mat-hint *ngIf="patent.submissionDate == null">
+    Datum je <strong>potrebno</strong>
+  </mat-hint>
+  <mat-hint *ngIf="!dateIsInPast">
+    Datum mora da bude u prošlosti
+  </mat-hint>
 </mat-form-field>
 
-<mat-form-field appearance="fill">
+<mat-form-field class="mx-1" appearance="fill">
   <mat-label>Oznaka države</mat-label>
   <mat-select required (selectionChange)="countrySelectChanged($event)">
     <mat-option *ngFor="let c of countries" [value]="c.code">
       {{c.name}}
     </mat-option>
   </mat-select>
+  <mat-hint *ngIf="patent.country === ''">
+    Država je <strong>potrebno</strong>
+  </mat-hint>
 </mat-form-field>
 
 <br/>

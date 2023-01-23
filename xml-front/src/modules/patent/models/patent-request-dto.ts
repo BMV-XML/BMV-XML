@@ -3,11 +3,10 @@ import {PreviousPatentDto} from "./previous-patent-dto";
 import {TitleDto} from "./title-dto";
 
 export interface PatentRequestDto {
-  titles: TitleDto[]
-
-  commissioner: EntityDto | undefined
-  submitter: EntityDto | undefined
-  inventor: EntityDto | undefined
+  titles: string
+  commissioner: EntityDto
+  submitter: EntityDto
+  inventor: EntityDto
 
   submitterIsTheInventor: boolean
   inventorWantsToBeListed: boolean
@@ -15,13 +14,13 @@ export interface PatentRequestDto {
   commissionerForLetters: boolean
   commissionerForJointRepresentation: boolean
 
-  address: AddressDto | undefined
+  address: AddressDto
   notifyMeViaLetters: boolean
   notifyMeViaEmails: boolean
 
   additionalPatent: boolean
   separatedPatent: boolean
-  previousPatent: PreviousPatentDto | undefined
+  previousPatent: PreviousPatentDto
 
-  priorityPatent: PreviousPatentDto[]
+  priorityPatent: ""
 }

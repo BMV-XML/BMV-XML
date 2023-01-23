@@ -14,8 +14,8 @@ public class PatentRepository {
     @Autowired
     private ExistManager existManager;
 
-    public void saveRequest(OutputStream outputStream) throws Exception {
-        existManager.storeInExist(generateDocumentId(), outputStream);
+    public void saveRequest(OutputStream outputStream, String withName) throws Exception {
+        existManager.storeInExist(withName, outputStream);
         //"1.xml" -- documentId
     }
 
