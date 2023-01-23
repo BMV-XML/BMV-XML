@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Repository
 public class AuthorshipRepository {
-    private final String collectionId = "/db/request/stamps";
+    private final String collectionId = "/db/request/authorship";
 
     @Autowired
     private ExistManager existManager;
@@ -42,6 +42,7 @@ public class AuthorshipRepository {
         sb.append("-");
         String year = String.valueOf(now.getYear()).substring(2, 4);
         sb.append(year);
+        System.out.println(sb);
         return sb.toString();
     }
 }

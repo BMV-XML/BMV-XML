@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static xml.authorship.service.authorship.service.util.SparqlUtil.*;
+
 @Service
 public class AuthorshipRequestService {
 
@@ -50,5 +52,19 @@ public class AuthorshipRequestService {
 
         ArrayList<String> result = fusekiReader.executeQuery(params);
         return  result;
+    }
+
+    public String searchMetadataById(String id, String type) {
+        String graphUri = "/authorship/metadata";
+        if (type.equals(RDF_JSON)) {
+            String sparqlCondition = "VALUES ?subject { <" + "http://www.ftn.uns.ac.rs/rdf/authorship/" + id + "> }" +
+                    " ?subject ?predicate ?object .";
+//        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/authorship/" + id + "> ?d ?s .";
+            return fusekiReader.getMetadataJson(graphUri, sparqlCondition);
+        } else if (type.equals(NTRIPLES)) {
+            String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/authorship/" + id + "> ?predicate ?object .";
+            return fusekiReader.getMetadataRdf(graphUri, sparqlCondition);
+        }
+        return null;
     }
 }

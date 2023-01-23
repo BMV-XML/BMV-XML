@@ -1,6 +1,7 @@
 package xml.authorship.service.authorship.service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import xml.authorship.service.authorship.service.service.AuthorshipRequestServic
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static xml.authorship.service.authorship.service.util.SparqlUtil.*;
 
 @RestController
 @RequestMapping("authorship")
@@ -38,5 +41,21 @@ public class AuthorshipController {
             output.append("\n").append(s);
         }
         return new ResponseEntity<>(output.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "getJsonMetadata", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getJsonMetadataById(@RequestParam(name = "id") String id) {
+        String result = authorshipRequestService.searchMetadataById(id, RDF_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", id + ".json");
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "getRdfMetadata", produces = "application/rdf+xml")
+    public ResponseEntity<String> getRdfMetadataById(@RequestParam(name = "id") String id) {
+        String result = authorshipRequestService.searchMetadataById(id, NTRIPLES);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", id + ".rdf");
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 }

@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class FusekiWriter {
@@ -30,7 +31,7 @@ public class FusekiWriter {
 
         System.out.println("[INFO] Loading triples from an RDF/XML to a model...");
 
-        InputStream inputStream = new ByteArrayInputStream(outputStream.toString().getBytes(Charset.forName("UTF-8")));
+        InputStream inputStream = new ByteArrayInputStream(outputStream.toString().getBytes(StandardCharsets.UTF_8));
         // Creates a default model
         Model model = ModelFactory.createDefaultModel();
         model.read(inputStream, "");
@@ -40,15 +41,15 @@ public class FusekiWriter {
         model.write(System.out, SparqlUtil.NTRIPLES);
 
         System.out.println("[INFO] Rendering model as RDF/XML...");
-        //   model.write(System.out, SparqlUtil.RDF_XML);
-
+//           model.write(System.out, SparqlUtil.RDF_XML);
+//        model.write(out, "RDF/JSON");
 
         // Creating the first named graph and updating it with RDF data
         System.out.println("[INFO] Writing the triples to a named graph \"" + GRAPH_URI + "\".");
         String sparqlUpdate = SparqlUtil.insertData(authManager.getFullDataEndpoint() + GRAPH_URI, new String(out.toByteArray()));
         System.out.println(sparqlUpdate);
 
-        // UpdateRequest represents a unit of execution
+//         UpdateRequest represents a unit of execution
         UpdateRequest update = UpdateFactory.create(sparqlUpdate);
         /*
          * Create UpdateProcessor, an instance of execution of an UpdateRequest.
