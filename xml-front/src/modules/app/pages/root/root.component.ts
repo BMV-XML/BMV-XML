@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
-import {OFFICIAL, PATENT} from "../../../auth/types";
+import {OFFICIAL, PATENT, STAMP} from "../../../auth/types";
 
 @Component({
   selector: 'app-root',
@@ -29,6 +29,10 @@ export class RootComponent {
 
   isPatent(){
     return this.role === PATENT
+  }
+
+  isStamp(){
+    return this.role === STAMP
   }
 
   isNoOne() {

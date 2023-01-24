@@ -10,6 +10,9 @@ import {RegisterDto} from "../models/register-dto";
 })
 export class AuthService {
   private readonly api_path = environment.patent_path;
+  private readonly api_main = environment.main_path;
+  private readonly api_stamp = environment.stamp_path;
+  private readonly api_authorship = 'environment.authorship'
   private parser: DOMParser
 
   constructor(private readonly httpClient: HttpClient) {
@@ -18,12 +21,20 @@ export class AuthService {
 
   login(loginObj: LoginDto) {
     const log = JsonToXML.parse("root", loginObj);
-    return this.httpClient.post(this.api_path + "login", log, {responseType: 'text'});
+    console.log(log)
+    if(loginObj.service === "PATENT"){
+      return this.httpClient.post(this.api_path + "login", log, {responseType: 'text'});
+    }else if(loginObj.service === "STAMP"){
+      console.log("stamp je i zovem stamp")
+      return this.httpClient.post(this.api_stamp + "login", log, {responseType: 'text'});
+    } else{
+      return this.httpClient.post(this.api_authorship + "login", log, {responseType: 'text'});
+    }
   }
 
   register(registerDto: RegisterDto) {
     const log = JsonToXML.parse("root", registerDto);
-    return this.httpClient.post(this.api_path + "register", log, {responseType: 'text'});
+    return this.httpClient.post(this.api_main + "register", log, {responseType: 'text'});
 
   }
 

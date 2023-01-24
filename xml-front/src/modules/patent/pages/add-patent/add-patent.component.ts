@@ -35,6 +35,7 @@ export class AddPatentComponent {
   })
 
   entity: EntityDto = {
+    id:0,
     businessName: "",
     citizenship: "",
     city: "",

@@ -8,6 +8,7 @@ export interface EntityDto extends AddressDto {
   businessName: string | null
   completed: boolean
   person: boolean
+  id: number
 }
 
 export interface AddressDto {

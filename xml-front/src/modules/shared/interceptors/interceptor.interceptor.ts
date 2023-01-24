@@ -22,18 +22,17 @@ export class Interceptor implements HttpInterceptor {
     //  p = localStorage.getItem('password').toString()
       //let u : string = ((localStorage.getItem('username') !== null) ? '' : localStorage.getItem('username'));
 
-      const cloned = req.clone({
-        headers: new HttpHeaders()
-          .append('Content-Type', 'application/xml')
-          .append('Accept', 'application/xml')
-          .append('username', String(localStorage.getItem('username')))
-          .append('password', String(localStorage.getItem('password')))
-      })
+      const cloned = req.clone()
+      if(!req.headers.has('Content-Type')) {
 
+        const cloned = req.clone({
+          headers: new HttpHeaders()
+              .append('Content-Type', 'application/xml')
+              .append('Accept', 'application/xml')
+              .append('username', String(localStorage.getItem('username')))
+              .append('password', String(localStorage.getItem('password')))
+        })
+      }
     return next.handle(cloned)
   }
-
-
-
-
 }

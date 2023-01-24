@@ -1,0 +1,201 @@
+<mat-stepper [linear]="isLinear" #stepper>
+    <mat-step [completed]="isApplicantCompleted()">
+
+        <div class="step">
+            <form>
+                <ng-template matStepLabel>Podnosilac</ng-template>
+
+                <ng-template #applicantContainerRef>
+
+                </ng-template>
+
+                <br/>
+                <div class="mt-1 my-2">
+                    <button class="mx-1" mat-stroked-button (click)="addApplicant()"> Dodaj podnosioca</button>
+                    <button class="mx-1" mat-stroked-button (click)="removeApplicant()"> Skloni podnosioca</button>
+                </div>
+
+                <div class="mt-5">
+                    <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+                    <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+                </div>
+
+            </form>
+        </div>
+    </mat-step>
+
+    <mat-step [completed]="isLowerCompleted">
+        <div class="step">
+            <form>
+                <ng-template matStepLabel>Punomoćnik</ng-template>
+
+                <app-entity (display)="addLower($event)"></app-entity>
+
+                <div class="mt-5">
+                    <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+                    <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+                </div>
+            </form>
+        </div>
+    </mat-step>
+
+    <mat-step [completed]="isCommonRepresentativeCompleted">
+        <div class="step">
+            <form>
+                <ng-template matStepLabel>Zajednički predstavnik</ng-template>
+
+                <app-entity (display)="addCommonRepresentative($event)"></app-entity>
+
+                <div class="mt-5">
+                    <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+                    <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+                </div>
+            </form>
+        </div>
+    </mat-step>
+
+
+    <mat-step [completed]="isStampCompleted">
+        <div class="step">
+            <form>
+                <ng-template matStepLabel>Podaci o žigu</ng-template>
+
+                <div>
+                    <p>Vrsta žiga</p>
+                    <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
+                        <mat-radio-button value="1">individualni</mat-radio-button>
+                        <mat-radio-button value="2">kolektivni</mat-radio-button>
+                        <mat-radio-button value="3">žig garancije</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div>
+                    <p>Tip žiga</p>
+                    <mat-radio-group (change)="optionChangedKind($event)" aria-label="Select an option">
+                        <mat-radio-button value="1">verbalni znak(znak u reči)</mat-radio-button>
+                        <mat-radio-button value="2">grafički znak</mat-radio-button>
+                        <mat-radio-button value="3">kombinovani znak</mat-radio-button>
+                        <mat-radio-button value="4">trodimenzionalni znak</mat-radio-button>
+                        <mat-radio-button value="5">druga vrsta znaka</mat-radio-button>
+
+                    </mat-radio-group>
+                    <mat-form-field class="input m-2" appearance="fill" [hidden]="isHiddenOtherKind">
+                        <mat-label>Tip znaka</mat-label>
+                        <input matInput formControlName="otherKindFormControl" placeholder="verbalni znak"
+                               required (ngModelChange)="check()">
+                        <mat-error
+                                *ngIf="formGroup.controls['otherKind'].hasError('pattern') && !formGroup.controls['otherKind'].hasError('required')">
+                            Tip se sastoji od slova i brojeva
+                        </mat-error>
+                        <mat-error *ngIf="formGroup.controls['otherKind'].hasError('required')">
+                            Tip <strong>potrebno</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div>
+
+                    <form>
+                        <mat-form-field class="example-chip-list" appearance="fill">
+                            <mat-label>Boje</mat-label>
+                            <mat-chip-grid #chipGrid aria-label="Color selection">
+                                <mat-chip-row *ngFor="let color of result.stamp.colors" (removed)="removeColor(color)">
+                                    {{color}}
+                                    <button matChipRemove [attr.aria-label]="'remove ' + color">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip-row>
+                            </mat-chip-grid>
+                            <input placeholder="Nova boja..." #colorInput
+                                   [formControl]="colorCtrl"
+                                   [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                   (matChipInputTokenEnd)="addColor($event)"/>
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                <mat-option *ngFor="let color of filteredColors | async" [value]="color">
+                                    {{color}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </form>
+
+                    <form>
+                        <mat-form-field class="example-chip-list" appearance="fill">
+                            <mat-label>Klase roba i usluga</mat-label>
+                            <mat-chip-grid #chipGrid2 aria-label="Goods selection">
+                                <mat-chip-row *ngFor="let good of result.stamp.goodsAndServicesClass"
+                                              (removed)="removeGood(good)">
+                                    {{good}}
+                                    <button matChipRemove [attr.aria-label]="'remove ' + good">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                </mat-chip-row>
+                            </mat-chip-grid>
+                            <input placeholder="Nova klasa robe ili usluga..." #goodInput [formControl]="goodCtrl"
+                                   [matChipInputFor]="chipGrid2" [matAutocomplete]="auto1"
+                                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                   (matChipInputTokenEnd)="addGood($event)"/>
+                            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectedGood($event)">
+                                <mat-option *ngFor="let good of filteredGoods | async" [value]="good">
+                                    {{good}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </form>
+
+
+                    <mat-form-field class="input m-2" appearance="fill">
+                        <mat-label>Opis znaka</mat-label>
+                        <input matInput formControlName="descriptionFormControl" placeholder="Znak je..."
+                               required (ngModelChange)="check()">
+                        <mat-error
+                                *ngIf="formGroup.controls['description'].hasError('pattern') && !formGroup.controls['otherKind'].hasError('required')">
+                            Opis se sastoji od slova i brojeva
+                        </mat-error>
+                        <mat-error *ngIf="formGroup.controls['description'].hasError('required')">
+                            Opis je <strong>potrebno</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="input m-2" appearance="fill">
+                        <mat-label>Transliteracija znaka (znak na stranom jeziku)</mat-label>
+                        <input matInput formControlName="transliterationFormControl" placeholder=""
+                               required (ngModelChange)="check()">
+                        <mat-error
+                                *ngIf="formGroup.controls['transliteration'].hasError('pattern')">
+                            Transliteracija znaka se sastoji od slova i brojeva
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="input m-2" appearance="fill">
+                        <mat-label>Prevod znaka (znak na stranom jeziku)</mat-label>
+                        <input matInput formControlName="translationFormControl" placeholder=""
+                               required (ngModelChange)="check()">
+                        <mat-error
+                                *ngIf="formGroup.controls['translation'].hasError('pattern')">
+                            Prevod znaka se sastoji od slova i brojeva
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="formInput fileInput">
+                    <img [src]="signPhoto"
+                         style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;"/>
+                    <label for="file" class="file-label">
+                        Promeni sliku:
+                        <mat-icon color="primary" class="icon">cloud_upload</mat-icon>
+                    </label>
+                    <input type="file" id="file" accept="image/*" style="display: none;" (change)="selectPhoto($event)">
+                </div>
+
+
+                <div class="mt-5">
+                    <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+                    <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+                </div>
+            </form>
+        </div>
+    </mat-step>
+
+</mat-stepper>

@@ -4,8 +4,9 @@ import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {OFFICIAL, PATENT} from "../../types";
+import {OFFICIAL, PATENT, STAMP} from "../../types";
 import {MessageService} from "primeng/api";
+import {MatRadioChange} from "@angular/material/radio";
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent {
   loginForm: FormGroup
   usernameFormControl = new FormControl('', [Validators.required])
   passwordFormControl = new FormControl('', [Validators.required])
+  chosenRole: string = "PATENT"
 
   constructor(
     private readonly fb: FormBuilder,
@@ -41,7 +43,8 @@ export class LoginComponent {
       return
     let loginObj: LoginDto = {
       username: this.usernameFormControl.value,
-      password: this.passwordFormControl.value
+      password: this.passwordFormControl.value,
+      service: this.chosenRole
     }
     this.authService.login(loginObj).subscribe(
       (res) => {
@@ -56,6 +59,9 @@ export class LoginComponent {
               this.router.navigateByUrl("patent/add")
             else if (result['AuthTypeDTO']['type'][0] === OFFICIAL)
               this.router.navigateByUrl("patent/list")
+            else if (result['AuthTypeDTO']['type'][0] === STAMP){
+              this.router.navigateByUrl("stamp/add")
+            }
           } else {
             this.messageService.add({
               key: 'login-message',
@@ -71,5 +77,12 @@ export class LoginComponent {
         console.log(err)
       }
     )
+  }
+
+  optionChanged($event: MatRadioChange): void {
+    if ($event.value === '1')
+      this.chosenRole = "PATENT"
+    else if ($event.value === '2')
+      this.chosenRole = "STAMP"
   }
 }

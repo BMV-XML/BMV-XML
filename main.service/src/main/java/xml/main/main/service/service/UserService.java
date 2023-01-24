@@ -21,7 +21,12 @@ public class UserService extends ExistManager{
     }
 
     public void register(String username, String password, ServiceType serviceType, String name, String surname) throws Exception {
-        Users users = usersManager.retrieve();
+        Users users;
+        try {
+            users = usersManager.retrieve();
+        }catch (NullPointerException e){
+            users = null;
+        }
         if (users == null)
             users = new Users();
         if (users.hasSameUsername(username))
