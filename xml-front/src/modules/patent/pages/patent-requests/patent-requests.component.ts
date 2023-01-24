@@ -38,8 +38,8 @@ export class PatentRequestsComponent {
 
   }
 
-  getPDF() {
-    let id = "P-19121157-23"
+  getPDF(id : string) {
+    //let id = "P-19121157-23"
     this.patentService.getPatentPDF(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")
@@ -50,8 +50,8 @@ export class PatentRequestsComponent {
     )
   }
 
-  getHTML() {
-    let id = "P-19121157-23"
+  getHTML(id : string) {
+    //let id = "P-19121157-23"
     this.patentService.getPatentHTML(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")

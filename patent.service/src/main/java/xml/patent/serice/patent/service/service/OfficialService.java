@@ -29,7 +29,9 @@ public class OfficialService {
         List<PatentDTO> results = new ArrayList<>();
         for (PatentRequest pr : requests){
             PatentDTO p = new PatentDTO();
-            p.setHasSolution(solutionService.getIfHasSolution(p.getId()));
+            p.setHasSolution(solutionService.getIfHasSolution(pr.getPatentId()));
+            System.out.println("--------- PATENT -----------");
+            System.out.println(p.isHasSolution());
             p.setId(pr.getPatentId());
             p.setApplicationDate(pr.getPatentData().getApplicationDate().getDate());
             p.setSubmitter(pr.getSubmitter().getGlobalEntity().getContact().getEmail());

@@ -12,15 +12,16 @@ export class XonomyService {
 
   public patentSpecification = {
     elements: {
-      Naslovi: {
+      titles: {
         displayName: "Naslovi",
         menu: [{
           caption: 'Dodaj naslov',
           action: Xonomy.newElementChild,
-          actionParameter: '<Naslov jezik=""></Naslov>',
+          actionParameter: '<title jezik=""></title>',
         }]
       },
-      Naslov: {
+      title: {
+        displayName: "Naslov",
         hasText: true,
         //asker: Xonomy.askString,
         inlineMenu: [{

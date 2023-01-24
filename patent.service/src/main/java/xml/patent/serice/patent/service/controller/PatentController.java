@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.dto.LoginDTO;
+import xml.patent.serice.patent.service.dto.StatusDTO;
 import xml.patent.serice.patent.service.dto.request.PatentRequestDTO;
+import xml.patent.serice.patent.service.exception.NotValidException;
 import xml.patent.serice.patent.service.jaxb.LoaderValidation;
 import xml.patent.serice.patent.service.service.AuthenticationService;
 import xml.patent.serice.patent.service.service.PatentRequestService;
@@ -47,14 +49,18 @@ public class PatentController {
 
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> savePatentRequest(@RequestBody PatentRequestDTO patentRequest) {
+    public ResponseEntity<StatusDTO> savePatentRequest(@RequestBody PatentRequestDTO patentRequest) {
         System.out.println(patentRequest);
         try {
             this.patentRequestService.savePatentRequest(patentRequest);
+            return new ResponseEntity<>(new StatusDTO(true, "", 0), HttpStatus.OK);
+        } catch (NotValidException notValidException){
+            notValidException.printStackTrace();
+            return new ResponseEntity<>(new StatusDTO(false, notValidException.getMessage(), notValidException.getCode()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(new StatusDTO(false, "Unexpected exception", 0), HttpStatus.OK);
         }
-        return new ResponseEntity<>("xxxxxxxxxxx", HttpStatus.OK);
     }
 
 

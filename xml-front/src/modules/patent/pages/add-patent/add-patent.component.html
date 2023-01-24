@@ -1,6 +1,8 @@
 <mat-stepper [linear]="isLinear" #stepper>
-  <mat-step [completed]="completed()">
+  <!-- <mat-step [completed]="completed()"> -->
+  <mat-step [completed]="completedManual()">
     <div class="step">
+     <!-- <button (click)="completedManual()"> HARVEST </button>-->
       <p><strong>Uputsvo: </strong> Dodajte naslov Vašeg patenta. Na srpskom morate da definišete naslov.</p>
       <form>
         <ng-template matStepLabel>Naslov patenta</ng-template>
@@ -12,7 +14,7 @@
     </div>
   </mat-step>
   <mat-step [completed]="isSubmitterCompleted">
-    <button (click)="nextisSubmitterCompleted()" matStepperNext>xxxxxxxxxxxx</button>
+    <!--<button (click)="nextisSubmitterCompleted()" matStepperNext>xxxxxxxxxxxx</button>-->
     <div class="step">
       <form>
         <ng-template matStepLabel>Podnosilac</ng-template>
@@ -54,7 +56,7 @@
     </div>
   </mat-step>
   <mat-step [completed]="isCommissionerCompleted">
-    <button (click)="nextisCommissionerCompleted()" matStepperNext>xxxxxxxxxxxx</button>
+    <!--<button (click)="nextisCommissionerCompleted()" matStepperNext>xxxxxxxxxxxx</button>-->
     <div class="step">
     <form>
       <section class="example-section">

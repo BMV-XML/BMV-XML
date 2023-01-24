@@ -16,7 +16,7 @@
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="40"/>
-                            <xs:minLength value="5"/>
+                            <xs:minLength value="2"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -39,7 +39,7 @@
                 <xs:element name="Grad">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="3"/>
+                            <xs:minLength value="2"/>
                             <xs:maxLength value="40"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -47,7 +47,7 @@
                 <xs:element name="Drzava">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="4"/>
+                            <xs:minLength value="2"/>
                             <xs:maxLength value="40"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -114,7 +114,7 @@
                     <xs:element name="Drzavljanstvo">
                         <xs:simpleType>
                             <xs:restriction base="xs:string">
-                                <xs:minLength value="3"/>
+                                <xs:minLength value="2"/>
                                 <xs:maxLength value="50"/>
                             </xs:restriction>
                         </xs:simpleType>
@@ -148,7 +148,7 @@
                 <xs:element name="Naziv">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="3"/>
+                            <xs:minLength value="2"/>
                             <xs:maxLength value="40"/>
                         </xs:restriction>
                     </xs:simpleType>
