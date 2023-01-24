@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<aut:Zahtjev xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:base="http://www.ftn.uns.ac.rs/base-schame" xmlns:aut="http://www.ftn.uns.ac.rs/authorship">
+    <aut:Primalac>
+        <base:Adresa>
+            <base:Ulica>Kneginje Ljubice</base:Ulica>
+            <base:Broj>5</base:Broj>
+            <base:Postanski_broj>21000</base:Postanski_broj>
+            <base:Grad>Beograd</base:Grad>
+            <base:Drzava>Srbija</base:Drzava>
+        </base:Adresa>
+        <base:Naziv>Zavod za intelektualnu svojinu</base:Naziv>
+    </aut:Primalac>
+    <aut:Podnosilac>
+        <aut:Osoba xsi:type="base:TFizicko_lice">
+            <base:Adresa>
+                <base:Ulica>Gogoljeva</base:Ulica>
+                <base:Broj>6</base:Broj>
+                <base:Postanski_broj>21000</base:Postanski_broj>
+                <base:Grad>Novi Sad</base:Grad>
+                <base:Drzava>Srbija</base:Drzava>
+            </base:Adresa>
+            <base:Kontakt>
+                <base:Broj_telefona>0667478399</base:Broj_telefona>
+                <base:Broj_faksa>123123321</base:Broj_faksa>
+                <base:E_posta>ja@email.com</base:E_posta>
+            </base:Kontakt>
+            <base:Ime>Mitar</base:Ime>
+            <base:Prezime>Miric</base:Prezime>
+            <base:Drzavljanstvo>Srbin</base:Drzavljanstvo>
+        </aut:Osoba>
+        <aut:Podnosilac_je_autor>DA</aut:Podnosilac_je_autor>
+    </aut:Podnosilac>
+    <aut:Autorsko_djelo>
+        <aut:Naslov>Novi naslovvv</aut:Naslov>
+        <aut:Vrsta>MUZICKO_DJELO</aut:Vrsta>
+        <aut:Forma_zapisa>STAMPANI_TEKST</aut:Forma_zapisa>
+        <aut:Stvoreno_u_radnom_odnosu>NE</aut:Stvoreno_u_radnom_odnosu>
+        <aut:Nacin_koriscenja>Pjeva se</aut:Nacin_koriscenja>
+    </aut:Autorsko_djelo>
+    <aut:ID>A-0001/22</aut:ID>
+    <aut:Datum_podnosenja>2022-12-08</aut:Datum_podnosenja>
+    <aut:Prilozi/>
+</aut:Zahtjev>
