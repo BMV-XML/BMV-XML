@@ -24,4 +24,9 @@ public class AdditionalPatent {
     @XmlElement(name = "Patent", required = false)
     private Patent patent;
 
+    public boolean contains(String s) {
+        if (patent == null)
+            return false;
+        return patent.contains(s);
+    }
 }

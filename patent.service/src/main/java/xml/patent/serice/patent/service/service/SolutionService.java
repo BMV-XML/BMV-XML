@@ -57,7 +57,7 @@ public class SolutionService {
         headers.setContentType(MediaType.APPLICATION_XML);
 
         System.out.println("******************************** get solution ********************");
-        ResponseEntity<SolutionDTO> result = restTemplate.getForEntity(uri+"/get/" + patentId, SolutionDTO.class);
+        ResponseEntity<SolutionDTO> result = restTemplate.getForEntity(uri+"/get/" + patentId.replace("/","-"), SolutionDTO.class);
         return result.getBody();
     }
 }

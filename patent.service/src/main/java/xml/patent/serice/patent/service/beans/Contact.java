@@ -26,4 +26,13 @@ public class Contact {
     @XmlElement(name = "E_posta", required = true, namespace = "http://www.ftn.uns.ac.rs/base-schame")
     private String email;
 
+    public boolean contains(String s) {
+        if (phoneNumber.toLowerCase().contains(s))
+            return true;
+        if (faxNumber.toLowerCase().contains(s))
+            return true;
+        if (email.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

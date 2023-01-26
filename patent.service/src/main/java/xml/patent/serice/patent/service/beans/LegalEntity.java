@@ -21,4 +21,13 @@ public class LegalEntity extends GlobalEntity {
     @XmlElement(name = "Poslovno_ime", required = true)
     private Predicate businessName;
 
+    @Override
+    boolean contains(String s) {
+        if (basicContains(s))
+            return true;
+        if (businessName.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        return false;
+    }
 }

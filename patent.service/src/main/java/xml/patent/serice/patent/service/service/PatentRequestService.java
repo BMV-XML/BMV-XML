@@ -68,6 +68,7 @@ public class PatentRequestService {
         patentToSave.setPatentData(createPatentData(patentRequest));
         patentToSave.setRecepient(createRecepient());
         patentToSave.setTitleList(createTitlesList(patentRequest));
+
         patentToSave.setSubmitter(createSubmitter(patentRequest));
         patentToSave.setCommissioner(createComissioner(patentRequest));
         patentToSave.setInventor(createInventor(patentRequest));
@@ -85,7 +86,7 @@ public class PatentRequestService {
         Inventor inventor = new Inventor();
         if (patentRequest.isSubmitterIsTheInventor())
             return null;
-        inventor.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.inventorPropertyName, RDFConstants.inventorPropertySurname, RDFConstants.inventorPropertyBusinessName));
+        inventor.setGlobalEntity(createGlobalEntity(patentRequest.getInventor(), RDFConstants.inventorPropertyName));
         if (patentRequest.isInventorWantsToBeListed())
             inventor.setWantToBeListed(Checkbox.DA);
         else
@@ -95,7 +96,7 @@ public class PatentRequestService {
 
     private Commissioner createComissioner(PatentRequestDTO patentRequest) throws NotValidException {
         Commissioner commissioner = new Commissioner();
-        commissioner.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.commissionerPropertyName, RDFConstants.commissionerPropertySurName, RDFConstants.commissionerPropertyBusinessName));
+        commissioner.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.commissionerPropertyName));
         if (patentRequest.isCommissionerForJointRepresentation()){
             commissioner.setCommonRepresentative(Checkbox.DA);
         }else{
@@ -116,8 +117,7 @@ public class PatentRequestService {
 
     private Submitter createSubmitter(PatentRequestDTO patentRequest) throws NotValidException {
         Submitter submitter = new Submitter();
-        submitter.setGlobalEntity(createGlobalEntity(patentRequest.getSubmitter(), RDFConstants.submitterPropertyName,
-                RDFConstants.submitterPropertySurname, RDFConstants.submitterPropertyBusinessName));
+        submitter.setGlobalEntity(createGlobalEntity(patentRequest.getSubmitter(), RDFConstants.submitterPropertyName));
         if (patentRequest.isSubmitterIsTheInventor())
             submitter.setSubmitterTheInventor(Checkbox.DA);
         else
@@ -125,11 +125,11 @@ public class PatentRequestService {
         return submitter;
     }
 
-    private GlobalEntity createGlobalEntity(EntityDTO entity, String submitterPropertyName, String submitterPropertySurname, String submitterPropertyBusinessName) throws NotValidException {
+    private GlobalEntity createGlobalEntity(EntityDTO entity, String submitterPropertyName) throws NotValidException {
         if (entity.isPerson()){
             Person result = new Person();
             result.setName(createStringPredicate(entity.getName(), submitterPropertyName));
-            result.setSurname(createStringPredicate(entity.getSurname(), submitterPropertySurname));
+            result.setSurname(createStringPredicate(entity.getSurname(), submitterPropertyName));
             result.setCitizenship(entity.getCitizenship());
             result.setAddress(createAddressFromAddressDTO(entity));
             result.setContact(createContact(entity.getEmail(), entity.getFax(), entity.getPhone()));
@@ -137,7 +137,7 @@ public class PatentRequestService {
         }else{
             LegalEntity result = new LegalEntity();
             System.out.println(entity.getBusinessName());
-            result.setBusinessName(createStringPredicate(entity.getBusinessName(), submitterPropertyBusinessName));
+            result.setBusinessName(createStringPredicate(entity.getBusinessName(), submitterPropertyName));
             result.setAddress(createAddressFromAddressDTO(entity));
             result.setContact(createContact(entity.getEmail(), entity.getFax(), entity.getPhone()));
             return result;

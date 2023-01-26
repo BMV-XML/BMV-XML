@@ -23,4 +23,8 @@ public class DeliveryData {
     private Checkbox emailNotification;
     @XmlElement(name = "Obavesti_me_preko_poste", required = true)
     private Checkbox letterNotification;
+
+    public boolean contains(String s) {
+        return address.contains(s);
+    }
 }

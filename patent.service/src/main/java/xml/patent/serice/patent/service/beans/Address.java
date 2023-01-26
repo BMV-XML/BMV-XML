@@ -34,4 +34,17 @@ public class Address {
     @XmlElement(name = "Drzava", required = true, namespace = "http://www.ftn.uns.ac.rs/base-schame")
     private String country;
 
+    public boolean contains(String s) {
+        if (street.toLowerCase().contains(s))
+            return true;
+        if (number.toLowerCase().contains(s))
+            return true;
+        if (postNumber.toLowerCase().contains(s))
+            return true;
+        if (city.toLowerCase().contains(s))
+            return true;
+        if (country.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

@@ -31,4 +31,12 @@ public class Patent {
     protected String relation;
     @XmlAttribute(name = "href", required = true)
     protected String href;
+
+    public boolean contains(String s) {
+        if (patentId.toLowerCase().contains(s))
+            return true;
+        if (country.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

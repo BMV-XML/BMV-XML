@@ -24,4 +24,12 @@ public class Title {
     protected String property;
     @XmlAttribute(name = "datatype", required = true)
     protected String datatype;
+
+    public boolean contains(String s) {
+        if (language.toLowerCase().contains(s))
+            return true;
+        if (title.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

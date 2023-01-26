@@ -284,7 +284,8 @@ export class AddPatentComponent {
 
   removeChild() {
     const index = this.vcr.indexOf(this.ref.hostView)
-    if (index != -1) this.vcr.remove(index)
+    this.vcr.remove(index)
+    //if (index != -1) this.vcr.remove(index)
     if (this.priorityPatent.length === this.counter){
       this.counter--
       this.priorityPatent.pop()

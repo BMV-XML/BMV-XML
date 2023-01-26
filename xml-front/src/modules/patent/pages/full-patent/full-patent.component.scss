@@ -1,0 +1,48 @@
+.basic {
+  border: 1px solid black;
+  max-width: 40%;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.podnosilac-okvir {
+  margin-top: 10px;
+  margin-right: 10px;
+  border: 1px solid black;
+}
+
+.podnosilac {
+  padding: 2px;
+  margin-top: 10px;
+  margin-left: 10px;
+
+}
+
+.all {
+  margin-left: 100px;
+  margin-top: 20px;
+  border: 1px solid black;
+  margin-right: 100px;
+  padding: 30px;
+}
+
+.title{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+label {
+  margin-top: 3px;
+}
+
+.link
+{
+  max-width: 300px;
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.input {
+  margin-right: 10px;
+}

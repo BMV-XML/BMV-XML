@@ -74,4 +74,36 @@ public class PatentRequest {
     public String getPatentId() {
         return patentData.getPatentId().getText();
     }
+
+    public boolean contains(List<String> searchBy) {
+        for (String s : searchBy){
+            if (!contains(s.toLowerCase()))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean contains(String s){
+        if (patentData.contains(s))
+            return true;
+        for (Title t: titleList){
+            if (t.contains(s))
+                return true;
+        }
+        if (submitter.getGlobalEntity().contains(s))
+            return true;
+        if (commissioner.getGlobalEntity().contains(s))
+            return true;
+        if (inventor.getGlobalEntity().contains(s))
+            return true;
+        if (deliveryData.contains(s))
+            return true;
+        if (additionalPatent.contains(s))
+            return true;
+        for (Patent p : priorityRights){
+            if (p.contains(s))
+                return true;
+        }
+        return false;
+    }
 }
