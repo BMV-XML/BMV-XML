@@ -8,6 +8,7 @@ import {TitleDto} from "../models/title-dto";
 import {PreviousPatentDto} from "../models/previous-patent-dto";
 import {FilterDto} from "../models/filter-dto";
 import {SearchBy} from "../models/search-by";
+import {RangeDto} from "../models/range-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +89,10 @@ export class PatentService {
   searchPatentList(searchBy: SearchBy[]) {
     const log = JsonToXML.parse("FilterDto", searchBy);
     return this.httpClient.post(this.api_path + "search", log, {responseType: 'text'});
+  }
+
+  getReportForPeriod(range: RangeDto) {
+    const log = JsonToXML.parse("range", range);
+    return this.httpClient.post(this.api_path + "report", log, {responseType: 'text'});
   }
 }

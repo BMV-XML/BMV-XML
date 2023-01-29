@@ -20,7 +20,8 @@ import java.time.LocalDate;
         "officialName",
         "officialSurname",
         "rejectionText",
-        "approved"
+        "approved",
+        "requestDate"
 })
 @XmlRootElement(name = "solution")
 public class RequestSolution {
@@ -30,6 +31,11 @@ public class RequestSolution {
 
     @XmlElement(name = "id", required = true)
     private String requestId;
+
+
+    @XmlElement
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate requestDate;
 
     @XmlElement(name = "official_name", required = true)
     private String officialName;
@@ -43,11 +49,13 @@ public class RequestSolution {
     @XmlElement(name = "approved", required = true)
     private Checkbox approved;
 
-    public RequestSolution(LocalDate date, String requestId, String officialName, String officialSurname, String rejectionText) {
+    public RequestSolution(LocalDate date, String requestId, String officialName, String officialSurname, String rejectionText, LocalDate requestDate) {
+        //t/his.requestDate = requestDate;
         this.date = date;
         this.requestId = requestId;
         this.officialName = officialName;
         this.officialSurname = officialSurname;
         this.rejectionText = rejectionText;
+        this.requestDate = requestDate;
     }
 }

@@ -70,7 +70,7 @@ public class PatentRequestService {
         patentToSave.setTitleList(createTitlesList(patentRequest));
 
         patentToSave.setSubmitter(createSubmitter(patentRequest));
-        patentToSave.setCommissioner(createComissioner(patentRequest));
+        patentToSave.setCommissioner(createCommissioner(patentRequest));
         patentToSave.setInventor(createInventor(patentRequest));
         //people
         patentToSave.setDeliveryData(createDeliveryData(patentRequest));
@@ -94,7 +94,7 @@ public class PatentRequestService {
         return inventor;
     }
 
-    private Commissioner createComissioner(PatentRequestDTO patentRequest) throws NotValidException {
+    private Commissioner createCommissioner(PatentRequestDTO patentRequest) throws NotValidException {
         Commissioner commissioner = new Commissioner();
         commissioner.setGlobalEntity(createGlobalEntity(patentRequest.getCommissioner(), RDFConstants.commissionerPropertyName));
         if (patentRequest.isCommissionerForJointRepresentation()){

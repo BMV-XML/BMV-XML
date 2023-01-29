@@ -6,13 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.beans.PatentRequest;
-import xml.patent.serice.patent.service.dto.FilterDTO;
-import xml.patent.serice.patent.service.dto.FullPatentDTO;
-import xml.patent.serice.patent.service.dto.PatentDTO;
-import xml.patent.serice.patent.service.dto.SearchExpression;
+import xml.patent.serice.patent.service.dto.*;
 import xml.patent.serice.patent.service.service.OfficialService;
+import xml.patent.serice.patent.service.service.ReportService;
 
 import javax.xml.transform.sax.SAXResult;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +20,9 @@ public class OfficialController {
 
     @Autowired
     private OfficialService officialService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping(value = "list", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<PatentDTO>> getListOfPatents(){
@@ -80,6 +82,23 @@ public class OfficialController {
     private String getPatentId(String id) {
         String[] elements = id.split("-");
         return elements[0]+"-"+elements[1]+"/"+elements[2];
+    }
+
+    @PostMapping(value="report", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO) throws Exception {
+        System.out.println("********************************* report **************");
+        return new ResponseEntity<>(reportService.generateReportPDF(rangeDTO), HttpStatus.OK);
+        /*
+        System.out.println(rangeDTO.getStartDate());
+        System.out.println(rangeDTO.getEndDate());
+        ReportDTO reportDTO = reportService.getReportForRange(rangeDTO);
+        int result = reportService.getNumberOfReportsForRange(rangeDTO);
+        System.out.println(result);
+        System.out.println(reportDTO.getApproved());
+        System.out.println(reportDTO.getDeclined());
+         */
+        //System.out.println(reportDTO.getApproved());
+        //System.out.println(reportDTO.getDeclined());
     }
 
     @GetMapping(value = "list/rdf")

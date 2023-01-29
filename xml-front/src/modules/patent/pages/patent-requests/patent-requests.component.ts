@@ -6,7 +6,7 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {AddSolutionComponent} from "../../components/add-solution/add-solution.component";
 import {ViewSolutionComponent} from "../../components/view-solution/view-solution.component";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {FilterDto} from "../../models/filter-dto";
 import {SearchBy} from "../../models/search-by";
 import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
@@ -16,6 +16,8 @@ import {FilterComponent} from "../../components/filter/filter.component";
 import {SelectDto} from "../../models/select-dto";
 import {MatSelect} from "@angular/material/select";
 import {capitalFirstLetterTextWithSpace, postalNumber, stringAndNumber} from "../../validators";
+import {RangeDto} from "../../models/range-dto";
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-patent-requests',
@@ -59,23 +61,28 @@ export class PatentRequestsComponent {
     text: ['', [Validators.required]],
   })
 
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(private patentService: PatentService,
               private router: Router, private _formBuilder: FormBuilder,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('sr-Latn');
     this.patentService.getPatentList().subscribe(
       (res) => {
         console.log("--------------")
         console.log(res)
         let parser = new xml2js.Parser();
         parser.parseString(res, (err, result) => {
-          //Extract the value from the data element
-          // extractedData = result['config']['data']
           console.log("**********************")
           console.log(result['List']['item'][0])
           this.patents = []
           for (let i of result['List']['item'])
             this.patents.push(i)
-          //this.patents = result['List'];
         });
       }
     )
@@ -84,26 +91,22 @@ export class PatentRequestsComponent {
 
   getPDF($event: MouseEvent, id: string) {
     $event.stopPropagation();
-    //let id = "P-19121157-23"
     this.patentService.getPatentPDF(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
-        //this.router.navigateByUrl(res);
       }
     )
   }
 
   getHTML($event: MouseEvent, id: string) {
     $event.stopPropagation();
-    //let id = "P-19121157-23"
     this.patentService.getPatentHTML(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
-        //this.router.navigateByUrl(res);
       }
     )
   }
@@ -167,14 +170,11 @@ export class PatentRequestsComponent {
         console.log(res)
         let parser = new xml2js.Parser();
         parser.parseString(res, (err, result) => {
-          //Extract the value from the data element
-          // extractedData = result['config']['data']
           console.log("**********************")
           console.log(result['List']['item'][0])
           this.patents = []
           for (let i of result['List']['item'])
             this.patents.push(i)
-          //this.patents = result['List'];
         });
       }
     )
@@ -183,26 +183,22 @@ export class PatentRequestsComponent {
 
   getRDF($event: MouseEvent, id: any) {
     $event.stopPropagation();
-    //let id = "P-19121157-23"
     this.patentService.getPatentRDF(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
-        //this.router.navigateByUrl(res);
       }
     )
   }
 
   getJSON($event: MouseEvent, id: any) {
     $event.stopPropagation();
-    //let id = "P-19121157-23"
     this.patentService.getPatentJSON(id).subscribe(
       (res) => {
         console.log("*************************************** pdf ***************************************")
         console.log(res)
         window.open(res, "_blank");
-        //this.router.navigateByUrl(res);
       }
     )
   }
@@ -212,13 +208,9 @@ export class PatentRequestsComponent {
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
-    // Add our fruit
     if (value) {
       this.fruits.push({name: value});
     }
-
-    // Clear the input value
     event.chipInput!.clear();
   }
 
@@ -232,14 +224,10 @@ export class PatentRequestsComponent {
 
   edit(fruit: SearchBy, event: MatChipEditedEvent) {
     const value = event.value.trim();
-
-    // Remove fruit if it no longer has a name
     if (!value) {
       this.remove(fruit);
       return;
     }
-
-    // Edit existing fruit
     const index = this.fruits.indexOf(fruit);
     if (index >= 0) {
       this.fruits[index].name = value;
@@ -259,8 +247,6 @@ export class PatentRequestsComponent {
     console.log(res)
     let parser = new xml2js.Parser();
     parser.parseString(res, (err, result) => {
-      //Extract the value from the data element
-      // extractedData = result['config']['data']
       try {
         console.log("**********************")
         console.log(result['List']['item'][0])
@@ -270,15 +256,12 @@ export class PatentRequestsComponent {
       } catch (err) {
         this.patents = []
       }
-      //this.patents = result['List'];
     });
 
   }
 
 
   @ViewChild("viewContainerRef", { read: ViewContainerRef }) vcr!: ViewContainerRef;
-  //ref!: ComponentRef<FilterComponent>
-  //counter: number = 0
   refList: ComponentRef<FilterComponent>[] = []
 
   addFilterElement() {
@@ -286,38 +269,49 @@ export class PatentRequestsComponent {
     this.refList.push(ref)
     ref.instance.operator_options = this.operator_options;
     ref.instance.type_options = this.type_options;
-    //this.ref.instance.id = this.counter
-    /*
-    this.ref.instance.patent.id = this.counter
-    this.counter++
-    this.ref.instance.previousPatent.subscribe(
-      value =>{
-        if (value.completed)
-          this.priorityPatent[value.id] = value
-
-        console.log("------------------ stanje ------------- ")
-        console.log(this.priorityPatent)
-      }
-    );*/
   }
 
   removeFilterElement() {
+    if (this.refList.length == 0)
+      return
     const index = this.vcr.indexOf(this.refList[this.refList.length-1].hostView)
     if (index != -1) {this.vcr.remove(index); this.refList.pop()}
-    /*
-    if (this.priorityPatent.length === this.counter){
-      this.counter--
-      this.priorityPatent.pop()
-    }
-    console.log("------------------ stanje ------------- ")
-    console.log(this.priorityPatent)
-
-     */
   }
 
   firstElement: FilterDto = {operator: "", type: "", value: ""}
 
 
+  makeReport() {
+    //alert("TODO: implement report")
+    let range: RangeDto = {
+      startDate: this.convertDateToString(this.range.controls.start.value?.toLocaleString()),
+      endDate:  this.convertDateToString(this.range.controls.end.value?.toLocaleString())
+
+    }
+    alert(range.startDate);
+
+    this.patentService.getReportForPeriod(range).subscribe(
+      res => {
+        window.open(res, "_blank");
+      }
+    )
+
+  }
+
+  private convertDateToString(param: string | undefined) {
+    if (param === undefined)
+      return ''
+    let elems = param.split(",")
+    let dateParts = elems[0].split("/")
+    let day : string = dateParts[1]
+    if (dateParts[1].length === 1)
+      day = '0' + dateParts[1]
+    let month : string = dateParts[0]
+    if (dateParts[0].length === 1)
+      month = '0' + dateParts[0]
+    return day + "." + month +"." + dateParts[2] + "."
+
+  }
 }
 
 

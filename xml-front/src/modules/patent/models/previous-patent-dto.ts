@@ -1,6 +1,6 @@
 export interface PreviousPatentDto {
   applicationNumber: string
-  submissionDate: Date | null
+  submissionDate: Date | null | number[]
   country: string
   completed: boolean
   id: number

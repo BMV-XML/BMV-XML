@@ -22,9 +22,9 @@ public class Solutions {
     @XmlElement(name = "solution", required = false)
     List<RequestSolution> solutions;
 
-    public void addSolution(User user, String requestId, boolean approved, String rejectionText) {
+    public void addSolution(User user, String requestId, boolean approved, String rejectionText, LocalDate requestDate) {
         RequestSolution requestSolution = new RequestSolution(LocalDate.now(), requestId,
-                user.getName(), user.getSurname(), rejectionText);
+                user.getName(), user.getSurname(), rejectionText,requestDate);
         System.out.println("----------------- add solution ----------------------");
         System.out.println(user.getName());
         System.out.println(user.getSurname());
@@ -38,7 +38,9 @@ public class Solutions {
     }
 
     public boolean doesRequestHaveSolution(String requestId) {
+        System.out.println("SOLUTIONS:");
         for (RequestSolution s : solutions){
+            System.out.println(s.getRequestId());
             if (s.getRequestId().equals(requestId))
                 return true;
         }
@@ -51,5 +53,14 @@ public class Solutions {
                 return s;
         }
         throw new NoSolutionException("There is no solution for exception: " + requestId);
+    }
+
+    public List<RequestSolution> getPatentList() {
+        List<RequestSolution> res = new ArrayList<>();
+        for (RequestSolution requestSolution : this.solutions){
+            if (requestSolution.getRequestId().startsWith("P-"))
+                res.add(requestSolution);
+        }
+        return res;
     }
 }

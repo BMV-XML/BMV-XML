@@ -1,5 +1,6 @@
 import {TitleDto} from "./title-dto";
 import {PreviousPatentDto} from "./previous-patent-dto";
+import {SolutionDto} from "./solution-dto";
 
 export interface FullPatentDto {
   acknowladgedDateOfSubmission: number[]
@@ -24,7 +25,8 @@ export interface FullPatentDto {
   recipientPostNumber: string[]
   recipientStreet: string[]
   separatedPatent: string[]//bool
-  solution: any
+  solution: SolutionDto
+
   submissionDate: number[]
   titles: TitleDto[]
 

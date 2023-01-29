@@ -19,7 +19,6 @@ import java.io.StringReader;
 @Component
 public class LoaderValidation {
 
-    //private PatentRequest patentRequest;
 
     public PatentRequest unmarshalling(String file) {
         try {

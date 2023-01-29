@@ -154,6 +154,8 @@ public class FullPatentDTO {
     }
 
     public void setInventorData(Inventor inventor) {
+        if (inventor == null)
+            return;
         inventorCity = inventor.getGlobalEntity().getAddress().getCity();
         inventorCountry = inventor.getGlobalEntity().getAddress().getCountry();
         inventorNumber = inventor.getGlobalEntity().getAddress().getNumber();

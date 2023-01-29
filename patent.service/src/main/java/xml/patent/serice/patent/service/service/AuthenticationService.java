@@ -2,15 +2,10 @@ package xml.patent.serice.patent.service.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import xml.patent.serice.patent.service.dto.AuthTypeDTO;
-import xml.patent.serice.patent.service.dto.LoginDTO;
-import xml.patent.serice.patent.service.dto.RegisterDTO;
-import xml.patent.serice.patent.service.dto.SuccessDTO;
+import xml.patent.serice.patent.service.dto.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,7 +26,9 @@ public class AuthenticationService {
         headers.setContentType(MediaType.APPLICATION_XML);
 
         System.out.println("******************************** res ********************");
-        ResponseEntity<SuccessDTO> result = restTemplate.postForEntity(uri, loginDTO, SuccessDTO.class);
+        //ResponseEntity<SolutionDTO> result = restTemplate.exchange(uri+"/get/" + patentId.replace("/","-"), HttpMethod.GET, entity, SolutionDTO.class);
+        HttpEntity entity = new HttpEntity(loginDTO, headers);
+        ResponseEntity<SuccessDTO> result = restTemplate.exchange(uri, HttpMethod.POST, entity, SuccessDTO.class);
         System.out.println(result.getBody().isSuccessful());
         return result.getBody().isSuccessful();
     }
@@ -45,7 +42,9 @@ public class AuthenticationService {
         headers.setContentType(MediaType.APPLICATION_XML);
 
         System.out.println("******************************** res ********************");
-        ResponseEntity<AuthTypeDTO> result = restTemplate.postForEntity(uri, loginDTO, AuthTypeDTO.class);
+        HttpEntity entity = new HttpEntity(loginDTO, headers);
+        ResponseEntity<AuthTypeDTO> result = restTemplate.exchange(uri, HttpMethod.POST, entity, AuthTypeDTO.class);
+        //ResponseEntity<AuthTypeDTO> result = restTemplate.postForEntity(uri, loginDTO, AuthTypeDTO.class);
         //System.out.println(result.getBody().isSuccessful());
         return result.getBody();
     }
@@ -58,7 +57,9 @@ public class AuthenticationService {
         headers.setContentType(MediaType.APPLICATION_XML);
 
         System.out.println("******************************** res ********************");
-        ResponseEntity<SuccessDTO> result = restTemplate.postForEntity(uri, registerDTO, SuccessDTO.class);
+        HttpEntity entity = new HttpEntity(registerDTO, headers);
+        ResponseEntity<SuccessDTO> result = restTemplate.exchange(uri, HttpMethod.POST, entity, SuccessDTO.class);
+        //ResponseEntity<SuccessDTO> result = restTemplate.postForEntity(uri, registerDTO, SuccessDTO.class);
         //System.out.println(result.getBody().isSuccessful());
         return result.getBody();
     }
