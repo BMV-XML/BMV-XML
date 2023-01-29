@@ -121,7 +121,7 @@
     <h3>Dodatna prijava -
     <label *ngIf="patent.additionalPatent[0] == 'true'">Dodatni patent</label>
     <label *ngIf="patent.separatedPatent[0] == 'true'">Izdvojeni patent</label>
-    <label *ngIf="patent.separatedPatent[0] == 'false'|| patent.separatedPatent[0] == 'false'">osnovna
+    <label *ngIf="patent.separatedPatent[0] == 'false' && patent.additionalPatent[0] == 'false'">osnovna
       prijava</label>
     </h3>
     <div *ngIf="patent.additionalPatent [0]== 'true' || patent.separatedPatent[0] == 'true'"

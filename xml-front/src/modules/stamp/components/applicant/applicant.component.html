@@ -1,0 +1,165 @@
+<form [formGroup]="secondFormGroup">
+
+    <div class="row">
+        <div>
+            <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
+                <mat-radio-button value="1" [checked]="true">Fizičko lice</mat-radio-button>
+                <mat-radio-button value="2">Poslovno lice</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <mat-form-field class="entity" *ngIf="person" appearance="fill">
+            <mat-label>Ime</mat-label>
+            <input matInput [formControl]="nameFormControl" placeholder="Petra"
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="nameFormControl.hasError('pattern') && !nameFormControl.hasError('required')">
+                Ime počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="nameFormControl.hasError('required')">
+                Ime je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="entity" *ngIf="person" appearance="fill">
+            <mat-label>Prezime</mat-label>
+            <input matInput [formControl]="surnameFormControl" placeholder="Petrović"
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="surnameFormControl.hasError('pattern') && !surnameFormControl.hasError('required')">
+                Prezime počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="surnameFormControl.hasError('required')">
+                Prezime je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="entity" *ngIf="person" appearance="fill">
+            <mat-label>Državljanstvo</mat-label>
+            <input matInput [formControl]="citizenshipFormControl" placeholder="srpska"
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="citizenshipFormControl.hasError('pattern') && !citizenshipFormControl.hasError('required')">
+                Državljanstvo sastoji od slova
+            </mat-error>
+            <mat-error *ngIf="citizenshipFormControl.hasError('required')">
+                Državljanstvo je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="entity" *ngIf="!person" appearance="fill">
+            <mat-label>Poslovno ime</mat-label>
+            <input matInput [formControl]="businessNameFormControl" placeholder="FTN"
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="nameFormControl.hasError('pattern') && !nameFormControl.hasError('required')">
+                Poslovno ime počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="nameFormControl.hasError('required')">
+                Poslovno ime je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div class="row">
+        <div class="col-3 mx-2">
+            <h2 class="mx-3">Adresa</h2>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Ulica</mat-label>
+                <input matInput formControlName="street" placeholder="Ćirila i Metodija"
+                       required (ngModelChange)="check()">
+
+                <mat-error *ngIf="secondFormGroup.controls['street'].hasError('pattern') && !secondFormGroup.controls['street'].hasError('required')">
+                    Naziv ulice počinje sa velikom slovom
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['street'].hasError('required')">
+                    Ulica je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+            <br/>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label> Grad</mat-label>
+                <input matInput formControlName="city" placeholder="Novi Sad"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['city'].hasError('pattern') && !secondFormGroup.controls['city'].hasError('required')">
+                    Naziv grada počinje sa velikom slovom
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['city'].hasError('required')">
+                    Grad je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-3 mx-2">
+            <h2>&nbsp;</h2>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Broj</mat-label>
+                <input matInput formControlName="number" placeholder="11"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['number'].hasError('pattern') && !secondFormGroup.controls['number'].hasError('required')">
+                    Broj može da sadrži samo slova i brojeve
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['number'].hasError('required')">
+                    Grad je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+            <br/>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Poštanski broj</mat-label>
+                <input matInput formControlName="postalNumber" placeholder="21000"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['postalNumber'].hasError('pattern') && !secondFormGroup.controls['postalNumber'].hasError('required')">
+                    Poštanski broj sastoji od brojeva
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['postalNumber'].hasError('required')">
+                    Poštanski broj je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Država</mat-label>
+                <input matInput formControlName="country" placeholder="Srbija"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['country'].hasError('pattern') && !secondFormGroup.controls['country'].hasError('required')">
+                    Naziv države počinje sa velikom slovom
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['country'].hasError('required')">
+                    Država je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-3 unit" style="margin-left: 15%">
+            <h2>Kontakt</h2>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Broj telefona</mat-label>
+                <input matInput formControlName="phone" placeholder="+38161579259"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['phone'].hasError('pattern') && !secondFormGroup.controls['phone'].hasError('required')">
+                    Format telefona +38168727886
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['phone'].hasError('required')">
+                    Telefon je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+            <br/>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Broj faksa</mat-label>
+                <input matInput formControlName="fax" placeholder="024689589"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['fax'].hasError('pattern') && !secondFormGroup.controls['fax'].hasError('required')">
+                    Format broja faksa: 02416895
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['fax'].hasError('required')">
+                    Broj faksa je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+            <br/>
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="example@gmail.com"
+                       required (ngModelChange)="check()">
+                <mat-error *ngIf="secondFormGroup.controls['email'].hasError('email') && !secondFormGroup.controls['email'].hasError('required')">
+                    Format email-a: petar@gmail.com
+                </mat-error>
+                <mat-error *ngIf="secondFormGroup.controls['email'].hasError('required')">
+                    Email je <strong>potrebno</strong>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+</form>

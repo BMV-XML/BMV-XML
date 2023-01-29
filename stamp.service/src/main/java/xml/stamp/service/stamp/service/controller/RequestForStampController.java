@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
 import xml.stamp.service.stamp.service.service.RequestForStampService;
-import xml.stamp.service.stamp.service.transform.PDFTransformer;
-import xml.stamp.service.stamp.service.transform.XHTMLTransformer;
 
-import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.ArrayList;
 

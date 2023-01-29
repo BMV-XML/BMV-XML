@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   stamp_path: 'http://localhost:8080/',
-  patent_path: 'http://localhost:8082/'
+  patent_path: 'http://localhost:8082/',
+  main_path: 'http://localhost:8084/'
 }
 
 /*

@@ -23,6 +23,16 @@ const routes: Routes = [
           import('../patent/patent.module').then((m) => m.PatentModule)
       }
     ]
+  },
+  {
+    path:'stamp',
+    children:[
+      {
+        path:'',
+        component: RootComponent,
+        loadChildren:()=> import('../stamp/stamp.module').then((m)=>m.StampModule)
+      }
+    ]
   }
   ];
 

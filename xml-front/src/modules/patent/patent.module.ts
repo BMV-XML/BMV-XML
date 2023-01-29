@@ -18,7 +18,6 @@ import {BadgeModule} from "primeng/badge";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import { EntityComponent } from './components/entity/entity.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { PatentComponent } from './components/patent/patent.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -38,7 +37,6 @@ import { FilterComponent } from './components/filter/filter.component';
     PatentRequestsComponent,
     AddSolutionComponent,
     ViewSolutionComponent,
-    EntityComponent,
     PatentComponent,
     FullPatentComponent,
     FilterComponent
