@@ -81,22 +81,22 @@ public class ExistManager {
 
         try {
             col = getOrCreateCollection(collectionId);
-            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            //System.out.println("[INFO] Retrieving the collection: " + collectionId);
             col = getOrCreateCollection(collectionId);
 
             /*
              *  create new XMLResource with a given id
              *  an id is assigned to the new resource if left empty (null)
              */
-            System.out.println("[INFO] Inserting the document: " + documentId);
+            //System.out.println("[INFO] Inserting the document: " + documentId);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
 
             // link the stream to the XML resource
             res.setContent(outputStream);
-            System.out.println("[INFO] Storing the document: " + res.getId());
+            //System.out.println("[INFO] Storing the document: " + res.getId());
 
             col.storeResource(res);
-            System.out.println("[INFO] Done.");
+            //System.out.println("[INFO] Done.");
 
         } finally {
             closeConnection(col, res);
@@ -123,7 +123,7 @@ public class ExistManager {
             } else {
 
                 System.out.println("[INFO] Showing the document as XML resource: ");
-                System.out.println(res.getContent());
+                //System.out.println(res.getContent());
 
                 PatentRequest request = loader.unmarshalling((String) res.getContent());
                 return request;
@@ -146,7 +146,7 @@ public class ExistManager {
             col.setProperty(OutputKeys.INDENT, "yes");
 
             System.out.println("[INFO] ************** RETRIVE collection");
-            System.out.println(col.getResourceCount());
+            //System.out.println(col.getResourceCount());
             for (String s : col.listResources())
                 result.add(retrieve(s));
             return result;

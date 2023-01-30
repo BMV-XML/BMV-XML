@@ -19,4 +19,13 @@ public abstract class GlobalEntity {
     @XmlElement(name = "Kontakt", required = true)
     protected Contact contact;
 
+    abstract boolean contains(String s);
+
+    protected boolean basicContains(String s){
+        if (address.contains(s))
+            return true;
+        if (contact.contains(s))
+            return true;
+        return false;
+    }
 }

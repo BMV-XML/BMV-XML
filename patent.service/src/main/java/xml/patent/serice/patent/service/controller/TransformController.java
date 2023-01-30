@@ -8,8 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.dto.LoginDTO;
 import xml.patent.serice.patent.service.service.AuthenticationService;
+import xml.patent.serice.patent.service.service.PatentSearchService;
 import xml.patent.serice.patent.service.transformer.PDFTransformer;
 import xml.patent.serice.patent.service.transformer.XHTMLTransformer;
+
+import javax.websocket.server.PathParam;
+
+import java.io.IOException;
+
+import static xml.patent.serice.patent.service.util.SparqlUtil.NTRIPLES;
+import static xml.patent.serice.patent.service.util.SparqlUtil.RDF_JSON;
 
 @RestController
 @RequestMapping(value = "transform")
@@ -23,6 +31,9 @@ public class TransformController {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private PatentSearchService patentSearchService;
 
     @GetMapping(value = "/pdf/{patentId}", produces = MediaType.APPLICATION_XML_VALUE)//trabalo bi samo službenik da ima pristup
     public ResponseEntity<String> transformPDF(@PathVariable String patentId,
@@ -54,6 +65,32 @@ public class TransformController {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    @GetMapping(value = "json/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> getJsonMetadataById(@PathVariable String id) {
+        try {
+            patentSearchService.searchMetadataById(id, RDF_JSON);
+            return new ResponseEntity<>("http://localhost:8082/resources/json/" + id + ".json", HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("http://localhost:8082/resources/json/" + id + ".json", HttpStatus.NOT_FOUND);
+        }
+        //HttpHeaders headers = new HttpHeaders();
+        //headers.setContentDispositionFormData("attachment", id + ".json");
+    }
+
+    @GetMapping(value = "rdf/{id}", produces = "application/xml")
+    public ResponseEntity<String> getRdfMetadataById(@PathVariable String id) {
+        String result = null;
+        try {
+            result = patentSearchService.searchMetadataById(id, NTRIPLES);
+            result = "http://localhost:8082/resources/rdf/" + id + ".rdf";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }

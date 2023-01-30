@@ -21,14 +21,21 @@ public class SparqlUtil {
 
 
     /* Simple SPARQL query on a named graph */
-    private static final String SELECT_NAMED_GRAPH_TEMPLATE = "SELECT * FROM <%1$s> WHERE { %2$s }";
+    private static final String SELECT_NAMED_GRAPH_TEMPLATE =
+            "PREFIX xs:     <http://www.w3.org/2001/XMLSchema#>\n" +
+            "SELECT * FROM <%1$s> WHERE { %2$s }";
 
+    public static final String CONSTRUCT_NAMED_GRAPH_TEMPLATE = "CONSTRUCT FROM <%1$s> WHERE { %2$s }";
 
+   // private static final String SELECT_NAMED_GRAPH_TEMPLATE_COMP
+    //        = "SELECT * FROM <%1$s> WHERE { ?naslov <http://www.ftn.uns.ac.rs/rdf/patent/predicate/naslov> ?naslov . }";
     /* Plain text RDF serialization format */
     public static final String NTRIPLES = "N-TRIPLES";
-
-    /* An XML serialization format for RDF data */
     public static final String RDF_XML = "RDF/XML";
+
+    /* An JSON serialization format for RDF data */
+    public static final String RDF_JSON = "RDF/JSON";
+
 
     public static String dropAll() {
         return DROP_ALL;
@@ -48,7 +55,13 @@ public class SparqlUtil {
     }
 
     public static String selectData(String graphURI, String sparqlCondition) {
+        System.out.println(SELECT_NAMED_GRAPH_TEMPLATE);
+        System.out.println(graphURI);
+        System.out.println(sparqlCondition  );
         return String.format(SELECT_NAMED_GRAPH_TEMPLATE, graphURI, sparqlCondition);
     }
 
+    public static String constructData(String graphURI, String sparqlCondition) {
+        return String.format(CONSTRUCT_NAMED_GRAPH_TEMPLATE, graphURI, sparqlCondition);
+    }
 }

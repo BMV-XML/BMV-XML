@@ -1,0 +1,145 @@
+<div class="all">
+  <div class="row">
+    <div class="col-8">
+      <div *ngFor="let t of patent.titles">
+        <label class="title">{{t.title}}</label> ({{t.language}})
+      </div>
+    </div>
+    <div class="col-4">
+
+      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'false'"
+              (click)="openAddSolutionDialog($event)"> Dodaj rešenje
+      </button>
+      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'true'"
+              (click)="openViewSolutionDialog($event)"> Vidi rešenje
+      </button>
+    </div>
+  </div>
+
+  <div class="row basic">
+    <div class="col-6">
+      <label>Broj prijave:</label><br/>
+      <label>Datum podnošenja: </label><br/>
+      <label>Datum prihvatanja: </label><br/>
+    </div>
+    <div class="col-6">
+      <label>{{patent.patentId}}</label><br/>
+      <label>{{patent.applicationDate | dateArrayToString}}</label><br/>
+      <label>{{patent.acknowladgedDateOfSubmission | dateArrayToString}}</label><br/>
+    </div>
+  </div>
+
+  <div class="row mt-4 podnosilac">
+    <h3>Podnosilac</h3>
+    <div class="col-3 podnosilac-okvir">
+      <div [hidden]="!submitterPerson">
+        <label>Ime: {{patent.submitterName}} {{patent.submitterSurname}}</label><br/>
+        <label>Državljanstvo: {{patent.submitterCitizenship[0]}}</label><br/>
+      </div>
+      <div [hidden]="submitterPerson">
+        <label>{{patent.submitterBusinessName}}</label><br/>
+      </div>
+    </div>
+    <div class="col-3 podnosilac-okvir">
+      <label>Grad: {{patent.submitterName}}, {{patent.submitterPostNumber}}</label><br/>
+      <label>Ulica: {{patent.submitterStreet}} &nbsp; {{patent.submitterNumber}}</label><br/>
+      <label>Država: {{patent.submitterCountry}}</label><br/>
+    </div>
+    <div class="col-3 podnosilac-okvir">
+      <label>Email: {{patent.submitterEmail}}</label><br/>
+      <label>Telefon: {{patent.submitterPhone}}</label><br/>
+      <label>Faks: {{patent.submitterFax}}</label><br/>
+    </div>
+  </div>
+
+  <div class="row mt-4 podnosilac">
+    <h3>Punomoćnik</h3>
+    <label  *ngIf="patent.commissionercommonRepresentative[0] == 'true'"> Zajednički predstavnik </label>
+    <label  *ngIf="patent.commissionerForReceivingLetters[0] == 'true'"> Za primanje pisme</label>
+    <label  *ngIf="patent.commissionerForRepresentation[0] == 'true'"> Za prestavljanje</label>
+    <div class="col-3 podnosilac-okvir">
+      <div  [hidden]="patent.commissionerPerson[0] != 'true'">
+        <label>Ime: {{patent.commissionerName}} {{patent.commissionerSurname}}</label><br/>
+        <label>Državljanstvo: {{patent.commissionerCitizenship}}</label><br/>
+      </div>
+      <div  [hidden]="patent.commissionerPerson[0] != 'false'">
+        <label>{{patent.commissionerBusinessName}}</label><br/>
+      </div>
+    </div>
+    <div class="col-3 podnosilac-okvir">
+      <label>Grad: {{patent.commissionerCity}}, {{patent.commissionerPostNumber}}</label><br/>
+      <label>Ulica: {{patent.commissionerStreet}} &nbsp; {{patent.commissionerNumber}}</label><br/>
+      <label>Država: {{patent.commissionerCountry}}</label><br/>
+    </div>
+    <div class="col-3 podnosilac-okvir">
+      <label>Email: {{patent.commissionerEmail}}</label><br/>
+      <label>Telefon: {{patent.commissionerPhone}}</label><br/>
+      <label>Faks: {{patent.commissionerFax}}</label><br/>
+    </div>
+  </div>
+
+  <div [hidden]="patent.submitterIsTheInventor[0] == 'true'">
+
+    <div class="row mt-4 podnosilac">
+      <h3>Pronalazač</h3>
+      <label *ngIf="patent.wantToBeListed[0] == 'true'"> Hoće da bude naveden</label><br/>
+      <label *ngIf="patent.wantToBeListed[0] == 'false'"><strong>Ne</strong> hoće da bude naveden</label><br/>
+      <div class="col-3 podnosilac-okvir">
+        <div *ngIf="patent.inventorsPerson[0] == 'true'">
+          <label>Ime: {{patent.inventorName}} {{patent.inventorSurname}}</label><br/>
+          <label>Državljanstvo: {{patent.inventorCitizenship}}</label><br/>
+        </div>
+        <div *ngIf="patent.inventorsPerson[0] == 'false'">
+          <label>{{patent.inventorBusinessName}}</label><br/>
+        </div>
+      </div>
+      <div class="col-3 podnosilac-okvir">
+        <label>Grad: {{patent.inventorCity}}, {{patent.inventorPostNumber}}</label><br/>
+        <label>Ulica: {{patent.inventorStreet}} &nbsp; {{patent.inventorNumber}}</label><br/>
+        <label>Država: {{patent.inventorCountry}}</label><br/>
+      </div>
+      <div class="col-3 podnosilac-okvir">
+        <label>Email: {{patent.inventorEmail}}</label><br/>
+        <label>Telefon: {{patent.inventorPhone}}</label><br/>
+        <label>Faks: {{patent.inventorFax}}</label><br/>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4 podnosilac">
+    <h3>Dostavljanje</h3>
+    <label *ngIf="patent.emailNotification[0] == 'true'">Obavesti me elektronskim putem</label>
+    <label *ngIf="patent.letterNotification[0] == 'true'">Obavesti me preko pošte</label>
+    <div class="col-3 podnosilac-okvir">
+      <label>Grad: {{patent.deliveryCity}}, {{patent.deliveryPostNumber}}</label><br/>
+      <label>Ulica: {{patent.deliveryStreet}} &nbsp; {{patent.deliveryNumber}}</label><br/>
+      <label>Država: {{patent.deliveryCountry}}</label>
+    </div>
+  </div>
+
+  <div class="row mt-4 podnosilac">
+    <h3>Dodatna prijava -
+    <label *ngIf="patent.additionalPatent[0] == 'true'">Dodatni patent</label>
+    <label *ngIf="patent.separatedPatent[0] == 'true'">Izdvojeni patent</label>
+    <label *ngIf="patent.separatedPatent[0] == 'false' && patent.additionalPatent[0] == 'false'">osnovna
+      prijava</label>
+    </h3>
+    <div *ngIf="patent.additionalPatent [0]== 'true' || patent.separatedPatent[0] == 'true'"
+         class="col-3 podnosilac-okvir">
+      <label>Patent: {{patent.previousPatentId[0]}}</label><br/>
+      <label>Datum: {{patent.submissionDate | dateArrayToString}}</label><br/>
+      <label>Država: {{patent.country[0]}}</label>
+    </div>
+  </div>
+
+  <div class="row mt-4 podnosilac" *ngIf="patent.priorityRights.length > 0">
+    <h3>Prava prvenstva</h3>
+    <div class="row">
+      <div class="col-3 link" (click)="generateUrl(p.applicationNumber)" *ngFor="let p of patent.priorityRights">
+        <label>Patent: {{p.applicationNumber}}</label><br/>
+        <label>Datum: {{p.submissionDate }}</label><br/>
+        <label>Država: {{p.country}}</label>
+      </div>
+    </div>
+  </div>
+</div>

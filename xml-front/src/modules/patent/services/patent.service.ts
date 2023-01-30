@@ -6,6 +6,9 @@ import {AddSolutionDto} from "../models/add-solution-dto";
 import {PatentRequestDto} from "../models/patent-request-dto";
 import {TitleDto} from "../models/title-dto";
 import {PreviousPatentDto} from "../models/previous-patent-dto";
+import {FilterDto} from "../models/filter-dto";
+import {SearchBy} from "../models/search-by";
+import {RangeDto} from "../models/range-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -64,4 +67,32 @@ export class PatentService {
     return this.httpClient.post(this.api_path + "patent", log, {responseType: 'text'});
   }
 
+  getPatent(requestId: string) {
+    return this.httpClient.get(this.api_path + "get/"+ requestId.replace("/", "-"), {responseType: 'text'});
+
+  }
+
+  filteRequests(filter: FilterDto[]) {
+    const log = JsonToXML.parse("FilterDto", filter);
+    console.log(log)
+    return this.httpClient.post(this.api_path + "filter", log, {responseType: 'text'});
+  }
+
+  getPatentRDF(id: any) {
+    return this.httpClient.get(this.api_path + "transform/rdf/" + id.replace("/","-"), {responseType: 'text'});
+  }
+
+  getPatentJSON(id: any) {
+    return this.httpClient.get(this.api_path + "transform/json/" + id.replace("/","-"), {responseType: 'text'});
+  }
+
+  searchPatentList(searchBy: SearchBy[]) {
+    const log = JsonToXML.parse("FilterDto", searchBy);
+    return this.httpClient.post(this.api_path + "search", log, {responseType: 'text'});
+  }
+
+  getReportForPeriod(range: RangeDto) {
+    const log = JsonToXML.parse("range", range);
+    return this.httpClient.post(this.api_path + "report", log, {responseType: 'text'});
+  }
 }

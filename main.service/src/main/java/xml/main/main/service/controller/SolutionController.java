@@ -11,7 +11,7 @@ import xml.main.main.service.dto.SuccessDTO;
 import xml.main.main.service.service.SolutionService;
 
 @RestController
-@RequestMapping(value = "solution")
+@RequestMapping(value = "solution", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
 public class SolutionController {
 
     @Autowired
@@ -20,6 +20,7 @@ public class SolutionController {
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<SuccessDTO> addSolution(@RequestBody AddSolutionDTO addSolutionDTO){
         System.out.println("************************** save add solution *****************");
+        System.out.println(addSolutionDTO.getRequestDate());
         try {
             solutionService.addSolution(addSolutionDTO);
             return new ResponseEntity<>(new SuccessDTO(true), HttpStatus.OK);

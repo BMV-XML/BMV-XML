@@ -18,12 +18,6 @@ public class RDFConstants {
     public static String baseURI = "http://www.ftn.uns.ac.rs/rdf/patent/";
     public static String vocabURI = "http://www.ftn.uns.ac.rs/rdf/patent/predicate";
     public static String submitterPropertyName = "pred:pod_ime";
-    public static String submitterPropertySurname = "pred:pod_prezime";
-    public static String submitterPropertyBusinessName = "pred:pod_ime";
     public static String commissionerPropertyName = "pred:pun_ime";
-    public static String commissionerPropertySurName = "pred:pun_prezime";
-    public static String commissionerPropertyBusinessName = "pred:pun_ime";
     public static String inventorPropertyName = "pred:pro_ime";
-    public static String inventorPropertySurname = "pred:pro_prezime";
-    public static String inventorPropertyBusinessName = "pred:pro_ime";
 }

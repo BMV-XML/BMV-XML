@@ -12,6 +12,8 @@ import xml.main.main.service.dto.SolutionDTO;
 import xml.main.main.service.exception.AlreadyHasSolutionException;
 import xml.main.main.service.exception.NotAuthentificatedException;
 
+import java.time.LocalDate;
+
 @Service
 public class SolutionService {
 
@@ -22,6 +24,11 @@ public class SolutionService {
     private UserService userService;//getUserByUsername
 
     public void addSolution(AddSolutionDTO addSolutionDTO) throws Exception {
+        System.out.println("**********");;
+        System.out.println(addSolutionDTO.getRequestId());
+        String[] elements = addSolutionDTO.getRequestId().split("-");
+        if (addSolutionDTO.getRequestId().split("-").length == 3)
+            addSolutionDTO.setRequestId(elements[0]+"-"+elements[1]+"/"+elements[2]);
         if (hasSolution(addSolutionDTO.getRequestId()))
             throw new AlreadyHasSolutionException("Request: " + addSolutionDTO.getRequestId() + " already has solution");
         User user = userService.getUserByUsername(addSolutionDTO.getUsername());
@@ -31,14 +38,16 @@ public class SolutionService {
         if (solutions == null)
             solutions = new Solutions();
         solutions.addSolution(user, addSolutionDTO.getRequestId(), addSolutionDTO.isApproved(),
-                addSolutionDTO.getRejectionText());
+                addSolutionDTO.getRejectionText(), addSolutionDTO.getRequestDateAsDate());// LocalDate.now());//
         solutionManager.storeSolutionFromObj(solutions);
     }
 
     public boolean hasSolution(String requestId) throws Exception {
         Solutions solutions = solutionManager.retrieve();
         String[] elements = requestId.split("-");
-        return solutions.doesRequestHaveSolution(elements[0]+"-"+elements[1]+"/"+elements[2]);
+        if (requestId.split("-").length == 3)
+            requestId = elements[0]+"-"+elements[1]+"/"+elements[2];
+        return solutions.doesRequestHaveSolution(requestId);
     }
 
     public SolutionDTO getSolution(String requestId) throws Exception {

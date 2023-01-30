@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
+import java.util.Locale;
 
 @Getter
 @Setter
@@ -28,4 +29,8 @@ public class PatentData {
     @XmlElement(name = "Priznati_datum_podnosenja", required = true)
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate acknowladgeDateOfSubmission;
+
+    public boolean contains(String s) {
+        return patentId.getText().toLowerCase().contains(s);
+    }
 }

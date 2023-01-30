@@ -25,6 +25,9 @@ import {DateAdapter, MatNativeDateModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {SharedModule} from "../shared/shared.module";
 import {ToastModule} from "primeng/toast";
+import { FullPatentComponent } from './pages/full-patent/full-patent.component';
+import {MatChipsModule} from "@angular/material/chips";
+import { FilterComponent } from './components/filter/filter.component';
 
 
 
@@ -34,7 +37,9 @@ import {ToastModule} from "primeng/toast";
     PatentRequestsComponent,
     AddSolutionComponent,
     ViewSolutionComponent,
-    PatentComponent
+    PatentComponent,
+    FullPatentComponent,
+    FilterComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +61,8 @@ import {ToastModule} from "primeng/toast";
     MatNativeDateModule,
     MatSelectModule,
     SharedModule,
-    ToastModule
+    ToastModule,
+    MatChipsModule
   ]
 })
 export class PatentModule { }

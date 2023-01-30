@@ -1,22 +1,26 @@
 package xml.patent.serice.patent.service.fuseki;
 
+import org.apache.commons.text.StringSubstitutor;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import xml.patent.serice.patent.service.dto.FilterDTO;
+import xml.patent.serice.patent.service.dto.FilterElements;
 import xml.patent.serice.patent.service.util.AuthenticationUtilities;
 import xml.patent.serice.patent.service.util.FileUtil;
 import xml.patent.serice.patent.service.util.SparqlUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static xml.patent.serice.patent.service.util.SparqlUtil.NTRIPLES;
 
 @Component
 public class FusekiReader {
@@ -24,12 +28,9 @@ public class FusekiReader {
     @Autowired
     AuthenticationUtilities authManager;
 
-    private static final String SPARQL_NAMED_GRAPH_URI = "/patent/metadata";//"/patent/sparql/metadata";
+    private static final String SPARQL_NAMED_GRAPH_URI = "/patent/metadata";
 
-    private static final String TEST_NAMED_GRAPH_URI = "/example/test/metadata";
-    private static final String PERSON_NAMED_GRAPH_URI = "/example/patent/metadata";
-
-    private final String QUERY_FILEPATH = "data/rdf/q1.rq";
+    private final String QUERY_FILEPATH = "data/rdf/filterTitle.rq";
 
     public void run() throws IOException {
 
@@ -94,13 +95,14 @@ public class FusekiReader {
 
         // Querying the named graph with a referenced SPARQL query
         System.out.println("[INFO] Loading SPARQL query from file \"" + QUERY_FILEPATH + "\"");
-        String sparqlQuery = String.format(FileUtil.readFile(QUERY_FILEPATH, StandardCharsets.UTF_8),
-                authManager.getDataEndpoint() + SPARQL_NAMED_GRAPH_URI);
+        String sparqlQuery = FileUtil.readFile(QUERY_FILEPATH, StandardCharsets.UTF_8);
+        //String sparqlQuery = String.format(queryTemplate,
+        //        authManager.getDataEndpoint() + SPARQL_NAMED_GRAPH_URI);
 
         System.out.println(sparqlQuery);
 
         // Create a QueryExecution that will access a SPARQL service over HTTP
-        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint()+"/patent/metadata", sparqlQuery);
 
         System.out.println(query);
         /*
@@ -145,6 +147,140 @@ public class FusekiReader {
     public String readFile(String path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);
+    }
+
+    private static final String GRAPH_URI = "/patent/metadata";
+
+    public String getMetadataJson(String graphUri, String sparqlQueryCondition) {
+        System.out.println("[INFO] Selecting the triples from the named graph \"" + graphUri + "\".");
+        String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + graphUri, sparqlQueryCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+        ResultSet results = query.execSelect();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ResultSetFormatter.outputAsJSON(out, results);
+        String json = new String(out.toByteArray(), StandardCharsets.UTF_8);
+        int indexOfSubStr = json.indexOf("bindings");
+        String file = String.format("{\n  %s", json.substring(indexOfSubStr - 1));
+        query.close();
+        return file;
+    }
+
+    public String getMetadataRdf(String graphUri, String sparqlQueryCondition) {
+        String sparqlQuery = SparqlUtil.constructData(authManager.getFullDataEndpoint() + graphUri, sparqlQueryCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+        Model model = query.execConstruct();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        model.write(out, NTRIPLES);
+
+        return out.toString();
+    }
+
+    public HashSet<String> search(List<FilterDTO> elements) {
+        StringBuilder conditionBuilder = new StringBuilder();
+        List<String> contains = new ArrayList<>();
+        for (FilterDTO elem : elements){
+            boolean alreadyContains = false;
+            for (String e : contains)
+                if (elem.getType().equals(e)) {alreadyContains = true; break;}
+            if (!alreadyContains) {
+                contains.add(elem.getType());
+                conditionBuilder.append("?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/" + elem.getType() + "> ?" + elem.getType() + ". ");
+            }
+        }
+        conditionBuilder.append("filter (");
+        int index = 0;
+        String lastOperator = "";
+        for (FilterDTO elem : elements) {
+            conditionBuilder.append(lastOperator);
+            switch (elem.getOperator()){
+                case "i": {
+                    //lastOperator = "&&";
+                    if (index != 0) conditionBuilder.append(" && ");
+                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
+                }
+                case "ili": {
+                    //lastOperator = "||";
+                    if (index != 0) conditionBuilder.append(" || ");
+                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
+                }case "ne": {
+                    ///lastOperator = "&&";
+                    if (index != 0) conditionBuilder.append(" && ");
+                    conditionBuilder.append("!CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
+                }
+            }
+            index++;
+        }
+        conditionBuilder.append(")");
+        //String condition = "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/datum_prijave> ?date . " +
+        //"filter ( ?date  \"" + "2023-01-24" + "\"^^xs:date )";
+        //    "filter CONTAINS(UCASE(str(?date)), UCASE(\"" + searchBy + "\"))";
+        String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + GRAPH_URI,
+                conditionBuilder.toString());
+
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+
+        ResultSet results = query.execSelect();
+        HashSet<String> foundPatents = new HashSet<>();
+        while (results.hasNext()) {
+            QuerySolution querySolution = results.next();
+            String[] patentUrl = querySolution.getResource("patent").toString().split("/");
+            foundPatents.add(patentUrl[patentUrl.length-1]);
+        }
+        System.out.println("***********************************");
+        for (String founds : foundPatents){
+            System.out.println(founds);
+        }
+        query.close();
+        return foundPatents;
+    }
+
+    public List<String> searchByUser(String type, String searchBy){
+        //Map<String, String> params = new HashMap<>();
+        //params.put("moj_naslov", "Marko Markovic");
+        //String name = "Marko Markovic";
+        List<String> appendConstrains = new ArrayList<>();
+        for (String n : searchBy.split(" ")){
+            appendConstrains.add("CONTAINS(UCASE(str(?podnosilac)), UCASE('" + n +"'))");
+        }
+        StringBuilder sb = new StringBuilder();
+        String condition = "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/"+ type + "> ?podnosilac ." +
+                "filter (";// CONTAINS(UCASE(str(?podnosilac)), UCASE('{{moj_naslov}}'))";
+        sb.append(condition);
+        int index = 0;
+        for (String app : appendConstrains){
+            sb.append(app);
+            if ( appendConstrains.size() > 1 && index != appendConstrains.size() - 1)
+                sb.append(" && ");
+            if (index == appendConstrains.size() - 1)
+                sb.append(")");
+            index++;
+        }
+        condition = sb.toString();
+        //condition = StringSubstitutor.replace(condition, params, "{{", "}}");
+        String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + GRAPH_URI,
+                condition);
+
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+
+        ResultSet results = query.execSelect();
+        List<String> foundPatents = new ArrayList<>();
+        while (results.hasNext()) {
+            QuerySolution querySolution = results.next();
+            String[] patentUrl = querySolution.getResource("patent").toString().split("/");
+            foundPatents.add(patentUrl[patentUrl.length-1]);
+        }
+        System.out.println("***********************************");
+        for (String founds : foundPatents){
+            System.out.println(founds);
+        }
+        query.close();
+        return foundPatents;
     }
 }
 

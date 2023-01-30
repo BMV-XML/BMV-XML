@@ -29,4 +29,19 @@ public class Person extends GlobalEntity {
     @XmlElement(name = "Prezime", required = true)
     protected Predicate surname;
 
+    @Override
+    public boolean contains(String s){
+        if (basicContains(s))
+            return true;
+        if (name.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        if (surname.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        if (citizenship.toLowerCase().contains(s)){
+            return true;
+        }
+        return false;
+    }
 }
