@@ -88,7 +88,10 @@
         <stamp:Opis_znaka>Ynak je trodimenyionalan i sadrzi crvenu i belu boju.</stamp:Opis_znaka>
         <stamp:Klase_robe_i_usluga>23</stamp:Klase_robe_i_usluga>
         <stamp:Klase_robe_i_usluga>24</stamp:Klase_robe_i_usluga>
-        <stamp:Prvenstvo>DA</stamp:Prvenstvo>
+        <stamp:Prvenstvo>
+            <stamp:Postoji_prvenstvo>DA</stamp:Postoji_prvenstvo>
+            <stamp:Osnov>prvi sam stigao</stamp:Osnov>
+         </stamp:Prvenstvo>
         <stamp:Broj_prijave_ziga>Ž-1234/22</stamp:Broj_prijave_ziga>
         <stamp:Datum_prijave property="pred:datum_prijave" datatype="pred:xs:date">2022-05-04</stamp:Datum_prijave>
     </stamp:Podaci_o_zigu>
@@ -109,7 +112,7 @@
         </stamp:Spisak_robe_i_usluga>
         <stamp:Punomocje_ce_biti_naknadno_dostavljeno>
             <stamp:Prilog_ce_se_naknadno_dostaviti>NE</stamp:Prilog_ce_se_naknadno_dostaviti>
-            <stamp:Datum>2006-05-04</stamp:Datum>
+            <stamp:Putanja_do_priloga>path1</stamp:Putanja_do_priloga>
         </stamp:Punomocje_ce_biti_naknadno_dostavljeno>
         <stamp:Dokaz_o_uplati_takse>
             <stamp:Predat_prilog>NE</stamp:Predat_prilog>

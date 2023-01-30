@@ -16,8 +16,8 @@ public class RequestForStampRepository {
     private ExistManager existManager;
 
 
-    public void saveRequest(OutputStream outputStream) throws Exception {
-        existManager.storeFromText(collectionId, generateDocumentId(), outputStream);
+    public void saveRequest(OutputStream outputStream, String id ) throws Exception {
+        existManager.storeFromText(collectionId, id, outputStream);
     }
 
     public void saveRequestFromRequest(RequestForStamp requestForStamp) throws Exception {
@@ -32,19 +32,5 @@ public class RequestForStampRepository {
         return existManager.filter();
     }
 
-    private String generateDocumentId() {
-        LocalDateTime now = LocalDateTime.now();
-        StringBuilder sb = new StringBuilder();
-        sb.append("Ž-");
-        /*sb.append(now.getDayOfMonth());
-        sb.append(now.getMonth());*/
-        sb.append(now.getDayOfYear());
-        sb.append(now.getHour());
-        sb.append(now.getMinute());
-        sb.append(now.getSecond());
-        sb.append("-");
-        String year = String.valueOf(now.getYear()).substring(2, 4);
-        sb.append(year);
-        return sb.toString();
-    }
+
 }

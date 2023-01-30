@@ -30,6 +30,7 @@ import {StampRoutes} from "./stamp.routes";
 import { ApplicantComponent } from './components/applicant/applicant.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         SharedModule,
         ToastModule,
         MatChipsModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatTableModule
     ]
 })
 export class StampModule {

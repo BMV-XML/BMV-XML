@@ -14,17 +14,18 @@ import java.util.Random;
 @Service
 public class PhotoService {
 
-    final static String PHOTOS_PATH = "BMV-XML/stamp.service/src/main/resources/static/images/";
+    final static String PHOTOS_PATH = "src/main/resources/static/images/";
 
-    public String addPhoto(MultipartFile[] multipartFiles) throws IOException {
+    public String addPhotoFile(MultipartFile[] multipartFiles) throws IOException {
         if (multipartFiles == null) {
             return "";
         }
-        Path path = Paths.get(PHOTOS_PATH  + "_" + this.generateId());
-        return savePicturesOnPath(multipartFiles, path);
+        String name = "S" + this.generateId();
+        Path path = Paths.get(PHOTOS_PATH  + name);
+        return  savePicturesFilesOnPath(multipartFiles, path);
     }
 
-    private String savePicturesOnPath(MultipartFile[] multipartFiles, Path path) throws IOException {
+    private String savePicturesFilesOnPath(MultipartFile[] multipartFiles, Path path) throws IOException {
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }

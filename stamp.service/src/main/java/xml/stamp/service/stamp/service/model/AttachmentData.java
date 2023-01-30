@@ -1,6 +1,7 @@
 package xml.stamp.service.stamp.service.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Podaci_o_prilozima", propOrder = {"exampleStamp", "listOfGoodsAndServices",
         "authority", "generalAuthorityAddedBefore", "authorityWillBeAddedAfter",
@@ -33,7 +35,7 @@ public class AttachmentData {
     protected Attachment generalAuthorityAddedBefore;
 
     @XmlElement(name = "Punomocje_ce_biti_naknadno_dostavljeno", required = true)
-    protected SubsequentAttachment authorityWillBeAddedAfter;
+    protected Attachment authorityWillBeAddedAfter;
 
     @XmlElement(name = "Opsti_akt_o_kolektivnom_zigu_ili_zigu_garancije", required = true)
     protected Attachment generalActOnCollectiveStampOrGuaranteeStamp;

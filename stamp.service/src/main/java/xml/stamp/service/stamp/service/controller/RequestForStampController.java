@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
+import xml.stamp.service.stamp.service.dto.RequestForStampDTO;
+import xml.stamp.service.stamp.service.dto.StatusDTO;
+import xml.stamp.service.stamp.service.exceptions.NotValidException;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
 import xml.stamp.service.stamp.service.service.RequestForStampService;
 
@@ -20,6 +23,26 @@ public class RequestForStampController {
 
     @Autowired
     private RequestForStampService service;
+
+
+
+
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<StatusDTO> savePatentRequest(@RequestBody RequestForStampDTO stampRequest) {
+        System.out.println(stampRequest);
+        try {
+            this.service.saveStampRequest(stampRequest);
+            return new ResponseEntity<>(new StatusDTO(true, "", 0), HttpStatus.OK);
+        } catch (NotValidException notValidException){
+            notValidException.printStackTrace();
+            return new ResponseEntity<>(new StatusDTO(false, notValidException.getMessage(), notValidException.getCode()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new StatusDTO(false, "Unexpected exception", 0), HttpStatus.OK);
+        }
+    }
+
+
 
 
     @PostMapping(value = "/xml", consumes = MediaType.APPLICATION_XML_VALUE)

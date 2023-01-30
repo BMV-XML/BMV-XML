@@ -51,4 +51,8 @@ public class RequestForStamp {
                 ", attachmentData=" + attachmentData +
                 '}';
     }
+
+    public String getStampId() {
+        return stampData.getStampApplicationNumber();
+    }
 }

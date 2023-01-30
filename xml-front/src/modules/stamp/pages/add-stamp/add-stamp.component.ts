@@ -12,6 +12,19 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {GoodsAndClasses} from "../goods-and-classes";
 import {DomSanitizer} from "@angular/platform-browser";
 import {StampService} from "../../services/stamp-service/stamp.service";
+import * as xml2js from "xml2js";
+import {ApplicantsDto} from "../../models/applicants-dto";
+import {ColorsDto} from "../../models/colors-dto";
+import {GoodsAndClassesDto} from "../../models/goods-and-classes-dto";
+
+export interface PeriodicElement {
+    name: string;
+    position: number;
+    path:string;
+    submittedAttachment:string,
+   // attachmentDto: AttachmentDto;
+}
+
 
 @Component({
     selector: 'app-add-stamp',
@@ -25,6 +38,7 @@ export class AddStampComponent {
     isCommonRepresentativeCompleted: boolean = true
     isHiddenOtherKind: boolean = true;
     isStampCompleted: boolean = true;
+    isFilesUploaded : boolean = true;
     formGroup: FormGroup;
     otherKindFormControl = new FormControl('', [Validators.required, stringAndNumber])
     descriptionFormControl = new FormControl('', [Validators.required, stringAndNumber])
@@ -75,21 +89,57 @@ export class AddStampComponent {
 
 
     result: StampRequestDto = {
-        applicants: [],
+        applicants: "",
         lowyer: this.entity,
         commonRepresentative: this.entity,
         stamp: {
-            colors: [],
+            colors: "",
             description: "",
-            goodsAndServicesClass: [],
+            goodsAndServicesClass: "",
             kind: "",
             priority: "",
             type: "",
             transliteration: "",
-            translation: ""
+            translation: "",
+            image : ""
         },
-        recepient: {street: "", city: "", number: "", country: "", postalNumber: "", name: ""}
+        recepient: {street: "", city: "", number: "", country: "", postalNumber: "", name: ""},
+        attachmentData:{
+            exampleStamp: {path:"", submittedAttachment:"NE"},
+            listOfGoodsAndServices:{path:"", submittedAttachment:"NE"},
+            authority:{path:"", submittedAttachment:"NE"},
+            generalAuthorityAddedBefore:{path:"", submittedAttachment:"NE"},
+            authorityWillBeAddedAfter:{path:"", submittedAttachment:"NE"},
+            generalActOnCollectiveStampOrGuaranteeStamp:{path:"", submittedAttachment:"NE"},
+            proofOfRightOfPriority:{path:"", submittedAttachment:"NE"},
+
+            proofOfTaxPayment:{path:"", submittedAttachment:"NE"},
+        }
     }
+
+    applicantsDto : ApplicantsDto = {
+        applicants:[]
+    }
+
+    colorsDto : ColorsDto={
+        colors :[]
+    }
+
+    goodsAndClasses : GoodsAndClassesDto = {
+        goodsAndServicesClass: []
+    }
+
+    products: PeriodicElement[] = [
+        {position: 1, name: 'Primerak znaka', path: "", submittedAttachment:"NE"},
+        {position: 2, name: 'Spisak robe i usluga', path: "", submittedAttachment:"NE"},
+        {position: 3, name: 'Punomoćje', path: "", submittedAttachment:"NE"},
+        {position: 4, name: 'Generalno punomoćje ranije priloženo', path: "", submittedAttachment:"NE"},
+        {position: 5, name: 'Punomoćje će biti naknadno dostavljeno', path: "", submittedAttachment:"NE"},
+        {position: 6, name: 'Opšti akt o kolektivnom/žigu garancije', path: "", submittedAttachment:"NE"},
+        {position: 7, name: 'Dokaz o pravu prvenstva', path: "", submittedAttachment:"NE"},
+        {position: 8, name: 'Dokaz o uplati takse', path: "", submittedAttachment:"NE"},
+
+    ];
 
 
     @ViewChild("applicantContainerRef", {read: ViewContainerRef}) vcr!: ViewContainerRef;
@@ -121,11 +171,11 @@ export class AddStampComponent {
             value => {
                 if (value.completed)
                     console.log(this.counter)
-                this.result.applicants[value.id] = value
+                this.applicantsDto.applicants[value.id] = value
                 console.log("------------------ stanje ------------- ")
                 console.log("counnter: ")
                 console.log(this.counter)
-                console.log(this.result)
+                console.log(this.applicantsDto)
             }
         );
     }
@@ -133,16 +183,16 @@ export class AddStampComponent {
     removeApplicant() {
         const index = this.vcr.indexOf(this.ref.hostView)
         if (index != -1) this.vcr.remove(index)
-        if (this.result.applicants.length === this.counter) {
+        if (this.applicantsDto.applicants.length === this.counter) {
             this.counter--
-            this.result.applicants.pop()
+            this.applicantsDto.applicants.pop()
         }
         console.log("------------------ stanje ------------- ")
         console.log(this.result)
     }
 
     isApplicantCompleted(): boolean {
-        if (this.result.applicants.length > 0) {
+        if (this.applicantsDto.applicants.length > 0) {
             return true;
         }
         return false;
@@ -203,7 +253,7 @@ export class AddStampComponent {
     }
 
     colorAlreadyAdded(color:string) : boolean{
-        for(let c of this.result.stamp.colors){
+        for(let c of this.colorsDto.colors){
             if(c===color){
                 return true
             }
@@ -215,7 +265,7 @@ export class AddStampComponent {
         const value = ($event.value || '').trim();
         // Add our fruit
         if (value && !this.colorAlreadyAdded(value)) {
-            this.result.stamp.colors.push(value);
+            this.colorsDto.colors.push(value);
         }
         // Clear the input value
         $event.chipInput!.clear();
@@ -225,13 +275,13 @@ export class AddStampComponent {
     removeColor(color: string): void {
         const index = this.result.stamp.colors.indexOf(color);
         if (index >= 0) {
-            this.result.stamp.colors.splice(index, 1);
+            this.colorsDto.colors.splice(index, 1);
         }
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
         if(!this.colorAlreadyAdded(event.option.viewValue))
-            this.result.stamp.colors.push(event.option.viewValue);
+            this.colorsDto.colors.push(event.option.viewValue);
         if(this.colorInput !== undefined)
             this.colorInput.nativeElement.value = '';
         this.colorCtrl.setValue(null);
@@ -246,7 +296,7 @@ export class AddStampComponent {
         const value = ($event.value || '').trim();
         // Add our fruit
         if (value && !this.goodAlreadyAdded(value)) {
-            this.result.stamp.goodsAndServicesClass.push(value);
+            this.goodsAndClasses.goodsAndServicesClass.push(value);
         }
         // Clear the input value
         $event.chipInput!.clear();
@@ -255,7 +305,7 @@ export class AddStampComponent {
     }
 
     private goodAlreadyAdded(good: string) {
-        for(let c of this.result.stamp.goodsAndServicesClass){
+        for(let c of this.goodsAndClasses.goodsAndServicesClass){
             if(c===good){
                 return true
             }
@@ -264,15 +314,15 @@ export class AddStampComponent {
     }
 
     removeGood(good: string) {
-        const index = this.result.stamp.goodsAndServicesClass.indexOf(good);
+        const index = this.goodsAndClasses.goodsAndServicesClass.indexOf(good);
         if (index >= 0) {
-            this.result.stamp.goodsAndServicesClass.splice(index, 1);
+            this.goodsAndClasses.goodsAndServicesClass.splice(index, 1);
         }
     }
 
     selectedGood($event: MatAutocompleteSelectedEvent) {
         if(!this.goodAlreadyAdded($event.option.viewValue))
-            this.result.stamp.goodsAndServicesClass.push($event.option.viewValue);
+            this.goodsAndClasses.goodsAndServicesClass.push($event.option.viewValue);
         if(this.goodInput !== undefined)
             this.goodInput.nativeElement.value = '';
         this.goodCtrl.setValue(null);
@@ -286,14 +336,82 @@ export class AddStampComponent {
     selectPhoto($event: any) {
         const data = new FormData()
         data.append('files', $event.target.files[0])
-        this.stampService.addPhoto(data).subscribe({
-            next: (res: Blob) => {
+        this.stampService.addPhoto(data).subscribe((res)=>{
+            var parser = new xml2js.Parser();
+            parser.parseString(res, (err, result) => {
                 console.log("ono sto dobijem sa backa posle slanja slike")
                 console.log(res)
-                const objectURL = URL.createObjectURL(res)
-                this.signPhoto = this.sanitizer.bypassSecurityTrustUrl(objectURL)
+                console.log(result['PhotoFileDTO']['path'][0])
+                this.signPhoto=result['PhotoFileDTO']['path'][0]
+                this.result.stamp.image = result['PhotoFileDTO']['path'][0]
                // this.messageService.add({ key: 'update-profile-message', severity: 'success', summary: 'Uspešna promena slike', detail: 'Profilna slika je uspešno ažurirana.' })
-            }
+            })
+        })
+    }
+
+    selectFile($event: any, element:PeriodicElement) {
+        console.log(" SELECT FILE")
+        const data = new FormData()
+        data.append('files', $event.target.files[0])
+        this.stampService.addFile(data).subscribe((res)=> {
+            var parser = new xml2js.Parser();
+            parser.parseString(res, (err, result) => {
+                console.log("ono sto dobijem sa backa posle slanja slike")
+                console.log(res)
+                console.log(result['PhotoFileDTO']['path'][0])
+                this.setFile(element, result['PhotoFileDTO']['path'][0])
+            })
+        })
+    }
+
+    private setFile(element: PeriodicElement, path:string){
+        if(element.name === "Primerak znaka"){
+            this.result.attachmentData.exampleStamp.submittedAttachment = "DA"
+            this.result.attachmentData.exampleStamp.path = path
+        }
+        else if(element.name==="Spisak robe i usluga"){
+            this.result.attachmentData.listOfGoodsAndServices.submittedAttachment="DA"
+            this.result.attachmentData.listOfGoodsAndServices.path = path
+        }else if (element.name === "Punomoćje"){
+            this.result.attachmentData.authority.submittedAttachment="DA"
+            this.result.attachmentData.authority.path = path
+        }else if(element.name === "Generalno punomoćje ranije priloženo"){
+            this.result.attachmentData.generalAuthorityAddedBefore.submittedAttachment="DA"
+            this.result.attachmentData.generalAuthorityAddedBefore.path = path
+        }else if(element.name === "Punomoćje će biti naknadno dostavljeno"){
+            this.result.attachmentData.authorityWillBeAddedAfter.submittedAttachment="DA"
+            this.result.attachmentData.authorityWillBeAddedAfter.path = path
+        }
+        else if (element.name === "Opšti akt o kolektivnom/žigu garancije" ){
+            this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp.submittedAttachment="DA"
+            this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp.path = path
+        }else if(element.name === "Dokaz o pravu prvenstva"){
+            this.result.attachmentData.proofOfRightOfPriority.submittedAttachment="DA"
+            this.result.attachmentData.proofOfRightOfPriority.path = path
+        }else if(element.name === "Dokaz o uplati takse"){
+            this.result.attachmentData.proofOfTaxPayment.submittedAttachment="DA"
+            this.result.attachmentData.proofOfTaxPayment.path = path
+        }
+        element.submittedAttachment="DA"
+        element.path = path
+    }
+
+
+    submitRequest() {
+        this.stampService.submitRequest(this.result, this.applicantsDto, this.colorsDto, this.goodsAndClasses).subscribe(res=>{
+            console.log(res);
         })
     }
 }
+
+
+/*
+* Primerak znaka', attachmentDto: this.result.attachmentData.exampleStamp},
+        {position: 2, name: 'Spisak robe i usluga', attachmentDto: this.result.attachmentData.listOfGoodsAndServices},
+        {position: 3, name: 'Punomoćje', attachmentDto: this.result.attachmentData.authority},
+        {position: 4, name: 'Generalno punomoćje ranije priloženo', attachmentDto: this.result.attachmentData.generalAuthorityAddedBefore},
+        {position: 5, name: 'Punomoćje će biti naknadno dostavljeno', attachmentDto:this.result.attachmentData.authorityWillBeAddedAfter},
+        {position: 6, name: 'Opšti akt o kolektivnom/žigu garancije', attachmentDto:this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp},
+        {position: 7, name: 'Dokaz o pravu prvenstva', attachmentDto:this.result.attachmentData.proofOfRightOfPriority},
+        {position: 8, name: 'Dokaz o uplati takse',
+* */
