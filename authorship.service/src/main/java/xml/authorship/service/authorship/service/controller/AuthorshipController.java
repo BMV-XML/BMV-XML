@@ -33,7 +33,7 @@ public class AuthorshipController {
         return new ResponseEntity<>("radi", HttpStatus.OK);
     }
 
-    @GetMapping(value = "fusekiSearch/{name}")
+    @GetMapping(value = "fusekiSearch/{name}")  // TODO: nezz da li radi
     public ResponseEntity<String> searchFromRDF(@PathVariable("name") String name) throws IOException {
         ArrayList<String> result = authorshipRequestService.searchByMetadata(name);
         StringBuilder output = new StringBuilder();

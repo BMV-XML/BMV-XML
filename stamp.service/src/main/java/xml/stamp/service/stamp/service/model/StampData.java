@@ -5,9 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -46,7 +43,7 @@ public class StampData {
     protected List<String> goodsAndServicesClass;
 
     @XmlElement(name = "Prvenstvo", required = true)
-    protected Checkbox priority;
+    protected Priority priority;
 
     @XmlElement(name="Broj_prijave_ziga", required = true)
     protected String stampApplicationNumber;

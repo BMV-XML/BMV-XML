@@ -2,7 +2,7 @@ package xml.stamp.service.stamp.service.model;
 
 
 public enum StampType {
-    INDIVIDULNI(0),
+    INDIVIDUALNI(0),
     KOLEKTIVNI(1),
     ZIG_GARANCIJE(2);
 
@@ -19,7 +19,7 @@ public enum StampType {
             case 1:
                 return StampType.KOLEKTIVNI;
             default:
-                return StampType.INDIVIDULNI;
+                return StampType.INDIVIDUALNI;
         }
     }
 

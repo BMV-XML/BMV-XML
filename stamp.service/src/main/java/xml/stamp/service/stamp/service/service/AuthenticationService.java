@@ -44,7 +44,7 @@ public class AuthenticationService {
 
         System.out.println("******************************** res ********************");
         ResponseEntity<AuthTypeDTO> result = restTemplate.postForEntity(uri, loginDTO, AuthTypeDTO.class);
-        //System.out.println(result.getBody().isSuccessful());
+        System.out.println(result.getBody().isSuccessful());
         return result.getBody();
     }
 

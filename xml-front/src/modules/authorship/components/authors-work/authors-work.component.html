@@ -1,0 +1,103 @@
+<form >
+
+    <div class="row">
+        <mat-form-field class="entity" appearance="fill">
+            <mat-label>Naslov</mat-label>
+            <input matInput [formControl]="titleFormControl" placeholder="Orlovi rano lete"
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="titleFormControl.hasError('pattern') && !titleFormControl.hasError('required')">
+                Naslov počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="titleFormControl.hasError('required')">
+                Naslov je <strong>potreban</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="entity" appearance="fill">
+            <mat-label>Alternativni naslov</mat-label>
+            <input matInput [formControl]="alternateTitleFormControl" placeholder="Orlovi rano lete"
+                   (ngModelChange)="check()">
+            <mat-error *ngIf="alternateTitleFormControl.hasError('pattern')">
+                Alternativni naslov počinje sa velikom slovom
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Vrsta djela</mat-label>
+            <mat-select required [formControl]="workTypeFormControl" (ngModelChange)="check()">
+              <mat-option *ngFor="let type of types" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="workTypeFormControl.hasError('required')">
+                Vrsta djela je <strong>obavezna</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Forma zapisa</mat-label>
+            <mat-select required [formControl]="workFormFormControl" (ngModelChange)="check()">
+              <mat-option *ngFor="let form of forms" [value]="form">
+                {{form}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="workTypeFormControl.hasError('required')">
+                Forma zapisa je <strong>obavezna</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox class="example-margin mb-3" (change)="madeInWorkRelationshipChange($event)">
+            Stvoreno u radnom odnosu
+        </mat-checkbox>
+
+        <mat-form-field class="entity" appearance="fill">
+            <mat-label>Način korišćenja</mat-label>
+            <input matInput [formControl]="wayOfUsageFormControl" placeholder="..."
+                   required (ngModelChange)="check()">
+            <mat-error *ngIf="wayOfUsageFormControl.hasError('required')">
+                Način korišćenja je <strong>potreban</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox class="example-margin" (change)="remadeChange($event)">
+            Djelo prerade
+        </mat-checkbox>
+
+        <mat-form-field class="entity mt-3" appearance="fill" *ngIf="isRemade">
+            <mat-label>Naslov prerađenog djela</mat-label>
+            <input matInput [formControl]="remadeTitleFormControl" placeholder="Petra"
+                required (ngModelChange)="check()">
+            <mat-error *ngIf="remadeTitleFormControl.hasError('pattern') && !remadeTitleFormControl.hasError('required')">
+                Naslov počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="remadeTitleFormControl.hasError('required')">
+                Naslov je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="entity" appearance="fill" *ngIf="isRemade">
+            <mat-label>Ime autora</mat-label>
+            <input matInput [formControl]="nameFormControl" placeholder="Petra"
+                required (ngModelChange)="check()">
+            <mat-error *ngIf="nameFormControl.hasError('pattern') && !nameFormControl.hasError('required')">
+                Ime počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="nameFormControl.hasError('required')">
+                Ime je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="entity" appearance="fill" *ngIf="isRemade"> 
+            <mat-label>Prezime autora</mat-label>
+            <input matInput [formControl]="surnameFormControl" placeholder="Petrović"
+                required (ngModelChange)="check()">
+            <mat-error *ngIf="surnameFormControl.hasError('pattern') && !surnameFormControl.hasError('required')">
+                Prezime počinje sa velikom slovom
+            </mat-error>
+            <mat-error *ngIf="surnameFormControl.hasError('required')">
+                Prezime je <strong>potrebno</strong>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+</form>
+

@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {RegisterDto} from "../../models/register-dto";
 import {MatRadioChange} from "@angular/material/radio";
@@ -97,5 +96,7 @@ export class RegisterComponent {
       this.chosenRole = PATENT
     else if ($event.value === '2')
       this.chosenRole = STAMP
+    else
+      this.chosenRole = "AUTHORSHIP"
   }
 }

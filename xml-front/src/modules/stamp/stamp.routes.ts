@@ -8,7 +8,7 @@ export const StampRoutes: Routes = [
         path: 'add',
         pathMatch: 'full',
         component: AddStampComponent,
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
         data: {expectedRole: STAMP}
     },
 

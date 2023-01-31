@@ -4,7 +4,7 @@ import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {OFFICIAL, PATENT, PATENT_OFFICIAL, STAMP} from "../../types";
+import {AUTHORSHIP, OFFICIAL, PATENT, STAMP, PATENT_OFFICIAL} from "../../types";
 import {MessageService} from "primeng/api";
 import {MatRadioChange} from "@angular/material/radio";
 
@@ -63,6 +63,9 @@ export class LoginComponent {
             else if (result['AuthTypeDTO']['type'][0] === STAMP){
               this.router.navigateByUrl("stamp/add")
             }
+            else if (result['AuthTypeDTO']['type'][0] === AUTHORSHIP){
+              this.router.navigateByUrl("authorship/add")
+            }
           } else {
             this.messageService.add({
               key: 'login-message',
@@ -85,5 +88,7 @@ export class LoginComponent {
       this.chosenRole = PATENT
     else if ($event.value === '2')
       this.chosenRole = STAMP
+    else
+      this.chosenRole = "AUTHORSHIP"
   }
 }

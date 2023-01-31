@@ -81,7 +81,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="Prvenstvo" type="base:checkbox"/>
+                <xs:element name="Prvenstvo" type="Prvenstvo"/>
                 <xs:element name="Broj_prijave_ziga">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -133,7 +133,7 @@
                 <xs:element name="Spisak_robe_i_usluga" type="Prilog"/>
                 <xs:element name="Punomocje" type="Prilog" minOccurs="0"/>
                 <xs:element name="Generalno_punomocje_ranije_prilozeno" type="Prilog" minOccurs="0"/>
-                <xs:element name="Punomocje_ce_biti_naknadno_dostavljeno" type="Naknadni_prilog"/>
+                <xs:element name="Punomocje_ce_biti_naknadno_dostavljeno" type="Prilog"/>
                 <xs:element name="Opsti_akt_o_kolektivnom_zigu_ili_zigu_garancije" type="Prilog"
                     minOccurs="0"/>
                 <xs:element name="Dokaz_o_pravu_prvenstva" type="Prilog" minOccurs="0"/>
@@ -151,6 +151,12 @@
         <xs:sequence>
             <xs:element name="Prilog_ce_se_naknadno_dostaviti" type="base:checkbox"/>
             <xs:element name="Datum" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Prvenstvo">
+        <xs:sequence>
+            <xs:element name="Postoji_prvenstvo" type="base:checkbox"/>
+            <xs:element name="Osnov" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
