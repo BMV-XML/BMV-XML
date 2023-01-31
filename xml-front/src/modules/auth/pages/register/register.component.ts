@@ -7,6 +7,7 @@ import * as xml2js from "xml2js";
 import {RegisterDto} from "../../models/register-dto";
 import {MatRadioChange} from "@angular/material/radio";
 import {MessageService} from "primeng/api";
+import {PATENT, STAMP} from "../../types";
 
 @Component({
   selector: 'app-register',
@@ -16,11 +17,13 @@ import {MessageService} from "primeng/api";
 })
 export class RegisterComponent {
   registerForm: FormGroup
-  usernameFormControl = new FormControl('', [Validators.required])
+  capitalFirstLetterText = Validators.pattern('[A-ZŠĆČĐŽ][a-zšđčćž]*')
+  username = Validators.pattern('[a-zšđčćž0-9]*')
+  usernameFormControl = new FormControl('', [Validators.required, this.username])
   passwordFormControl = new FormControl('', [Validators.required])
-  nameFormControl = new FormControl('', [Validators.required])
-  surnameFormControl = new FormControl('', [Validators.required])
-  chosenRole: string = "PATENT"
+  nameFormControl = new FormControl('', [Validators.required, this.capitalFirstLetterText])
+  surnameFormControl = new FormControl('', [Validators.required, this.capitalFirstLetterText])
+  chosenRole: string = PATENT
 
   constructor(
     private readonly fb: FormBuilder,
@@ -91,8 +94,8 @@ export class RegisterComponent {
 
   optionChanged($event: MatRadioChange): void {
     if ($event.value === '1')
-      this.chosenRole = "PATENT"
+      this.chosenRole = PATENT
     else if ($event.value === '2')
-      this.chosenRole = "STAMP"
+      this.chosenRole = STAMP
   }
 }

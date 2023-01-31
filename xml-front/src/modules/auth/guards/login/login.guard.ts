@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate } from '@angular/router'
-import {OFFICIAL, PATENT, STAMP} from "../../types";
+import {OFFICIAL, PATENT, PATENT_OFFICIAL, STAMP} from "../../types";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class LoginGuard implements CanActivate {
     }else if (localStorage.getItem('type') === STAMP) {
       //this.router.navigate(['/patent/add'])
       //return false
-    }else if (localStorage.getItem('type') === OFFICIAL) {
+    }else if (localStorage.getItem('type') === PATENT_OFFICIAL) {
       this.router.navigate(['/patent/list'])
       return false
     }

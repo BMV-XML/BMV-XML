@@ -4,7 +4,7 @@ import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {OFFICIAL, PATENT, STAMP} from "../../types";
+import {OFFICIAL, PATENT, PATENT_OFFICIAL, STAMP} from "../../types";
 import {MessageService} from "primeng/api";
 import {MatRadioChange} from "@angular/material/radio";
 
@@ -18,7 +18,7 @@ export class LoginComponent {
   loginForm: FormGroup
   usernameFormControl = new FormControl('', [Validators.required])
   passwordFormControl = new FormControl('', [Validators.required])
-  chosenRole: string = "PATENT"
+  chosenRole: string = PATENT
 
   constructor(
     private readonly fb: FormBuilder,
@@ -55,9 +55,10 @@ export class LoginComponent {
         parser.parseString(res, (err, result) => {
           if (result['AuthTypeDTO']['successful'][0] === 'true') {
             this.authService.saveCredentialsAndType(loginObj, result['AuthTypeDTO']['type'][0])
+            console.log(result['AuthTypeDTO']['type'][0])
             if (result['AuthTypeDTO']['type'][0] === PATENT)
               this.router.navigateByUrl("patent/add")
-            else if (result['AuthTypeDTO']['type'][0] === OFFICIAL)
+            else if (result['AuthTypeDTO']['type'][0] === PATENT_OFFICIAL)
               this.router.navigateByUrl("patent/list")
             else if (result['AuthTypeDTO']['type'][0] === STAMP){
               this.router.navigateByUrl("stamp/add")
@@ -81,8 +82,8 @@ export class LoginComponent {
 
   optionChanged($event: MatRadioChange): void {
     if ($event.value === '1')
-      this.chosenRole = "PATENT"
+      this.chosenRole = PATENT
     else if ($event.value === '2')
-      this.chosenRole = "STAMP"
+      this.chosenRole = STAMP
   }
 }
