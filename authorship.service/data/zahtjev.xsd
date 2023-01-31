@@ -53,9 +53,7 @@
     <xs:element name="Punomocnik">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Ime" type="xs:string"/>
-                <xs:element name="Prezime" type="xs:string"/>
-                <xs:element ref="base:Adresa"/>
+                <xs:element name="Osoba" type="base:TFizicko_lice"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -91,15 +89,12 @@
     <xs:element name="Autor">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="0" name="Ime" type="xs:string"/>
-                <xs:element minOccurs="0" name="prezime" type="xs:string"/>
-                <xs:element minOccurs="0" name="Pseudonim" type="xs:string" maxOccurs="1"/>
-                <xs:element minOccurs="0" ref="base:Adresa"/>
-                <xs:element minOccurs="0" name="Drzavljanstvo" type="xs:string"/>
+                <xs:element minOccurs="0" name="Osoba" type="base:TFizicko_lice"/>
+                <xs:element minOccurs="0" name="Pseudonim" type="xs:string"/>
                 <xs:element minOccurs="0" name="Godina_smrti">
                     <xs:simpleType>
                         <xs:restriction base="xs:positiveInteger">
-                            <xs:maxInclusive value="2022"/>
+                            <xs:maxInclusive value="2023"/>
                             <xs:pattern value="[\-+]?[0-9]+"/>
                         </xs:restriction>
                     </xs:simpleType>

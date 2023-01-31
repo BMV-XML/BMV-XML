@@ -16,6 +16,8 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Service
 public class XHTMLTransformer {
@@ -44,7 +46,7 @@ public class XHTMLTransformer {
 
     }
 
-    public void generateHTML(String documentId) {
+    public File generateHTML(String documentId) {
 
         try {
             String retrieved = existManager.retrieve(documentId);
@@ -63,12 +65,15 @@ public class XHTMLTransformer {
             DocumentBuilder builder = documentFactory.newDocumentBuilder();
             org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(retrieved)));
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new FileOutputStream(output_path + documentId + ".html"));
+            String filePath = output_path + documentId + ".html";
+            StreamResult result = new StreamResult(Files.newOutputStream(Paths.get(filePath)));
             transformer.transform(source, result);
             System.out.println("[INFO] Done");
+            return new File(filePath);
         } catch (Exception e) {
             System.out.println("EX");
             e.printStackTrace();
+            return null;
         }
 
     }

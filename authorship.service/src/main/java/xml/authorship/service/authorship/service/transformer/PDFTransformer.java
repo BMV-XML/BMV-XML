@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.nio.file.Files;
 
 @Component
 public class PDFTransformer {
@@ -36,7 +37,7 @@ public class PDFTransformer {
         transformerFactory = new TransformerFactoryImpl();
     }
 
-    public void generatePDF(String documentId) throws Exception {
+    public File generatePDF(String documentId) throws Exception {
         String retrieved = existManager.retrieve(documentId);
 
         System.out.println("[INFO] " + PDFTransformer.class.getSimpleName());
@@ -59,12 +60,13 @@ public class PDFTransformer {
             pdfFile.getParentFile().mkdir();
         }
 
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(pdfFile));
+        OutputStream out = new BufferedOutputStream(Files.newOutputStream(pdfFile.toPath()));
         out.write(outputStream.toByteArray());
 
         System.out.println("[INFO] File \"" + pdfFile.getCanonicalPath() + "\" generated successfully.");
         out.close();
 
         System.out.println("[INFO] End.");
+        return pdfFile;
     }
 }

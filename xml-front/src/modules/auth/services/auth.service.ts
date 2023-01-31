@@ -12,7 +12,7 @@ export class AuthService {
   private readonly api_path = environment.patent_path;
   private readonly api_main = environment.main_path;
   private readonly api_stamp = environment.stamp_path;
-  private readonly api_authorship = 'environment.authorship'
+  private readonly api_authorship = environment.authorship_path;
   private parser: DOMParser
 
   constructor(private readonly httpClient: HttpClient) {

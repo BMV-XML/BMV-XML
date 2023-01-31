@@ -33,6 +33,16 @@ const routes: Routes = [
         loadChildren:()=> import('../stamp/stamp.module').then((m)=>m.StampModule)
       }
     ]
+  },
+  {
+    path:'authorship',
+    children:[
+      {
+        path:'',
+        component: RootComponent,
+        loadChildren:()=> import('../authorship/authorship.module').then((m) => m.AuthorshipModule)
+      }
+    ]
   }
   ];
 

@@ -94,5 +94,7 @@ export class RegisterComponent {
       this.chosenRole = "PATENT"
     else if ($event.value === '2')
       this.chosenRole = "STAMP"
+    else
+      this.chosenRole = "AUTHORSHIP"
   }
 }

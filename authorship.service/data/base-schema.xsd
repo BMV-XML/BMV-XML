@@ -5,8 +5,8 @@
 
     <xs:complexType abstract="true" name="TLice">
         <xs:sequence>
-            <xs:element ref="base:Adresa"/>
-            <xs:element ref="base:Kontakt"/>
+            <xs:element minOccurs="0" ref="base:Adresa"/>
+            <xs:element minOccurs="0" ref="base:Kontakt"/>
         </xs:sequence>
     </xs:complexType>
     <xs:element name="Adresa">
@@ -111,7 +111,7 @@
                             </xs:simpleContent>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="Drzavljanstvo">
+                    <xs:element minOccurs="0" name="Drzavljanstvo">
                         <xs:simpleType>
                             <xs:restriction base="xs:string">
                                 <xs:minLength value="3"/>
