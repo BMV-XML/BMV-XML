@@ -75,7 +75,7 @@ export class FullPatentComponent {
     hasSolution: [],
     letterNotification: [],
     patentId: [],
-    previousPatentId: [],
+    previousPatentId: '',
     priorityRights: [],
     recipientCity: [],
     recipientCountry: [],

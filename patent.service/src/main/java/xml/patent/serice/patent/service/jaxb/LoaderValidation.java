@@ -37,6 +37,7 @@ public class LoaderValidation {
             System.out.println("Unmarshall done");
             return (PatentRequest) unmarshaller.unmarshal(new StreamSource(new StringReader(file)));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Jaxb unmarshalling exception");
         }
     }

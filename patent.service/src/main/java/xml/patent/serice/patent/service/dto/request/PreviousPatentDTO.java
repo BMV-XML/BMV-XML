@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -25,16 +26,9 @@ public class PreviousPatentDTO {
     }
 
     public LocalDate getSubmissionDateLocalDate() {
-        //TODO: FORMAT
-        return LocalDate.now();
+        if (submissionDate == null)
+            return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+        return LocalDate.parse(submissionDate, formatter);
     }
 }
-/*
-
-  applicationNumber: string
-  submissionDate: Date | null
-  country: string
-
-  completed: boolean
-  id: number
- */
