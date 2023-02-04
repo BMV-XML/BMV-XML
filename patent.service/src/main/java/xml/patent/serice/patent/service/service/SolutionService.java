@@ -37,12 +37,9 @@ public class SolutionService {
         System.out.println(requestId);
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<SuccessDTO> result = restTemplate.exchange(uri+"/"+requestId.replace("/", "-"), HttpMethod.GET, entity, SuccessDTO.class);
-        //SuccessDTO result = restTemplate.getForObject(uri+"/"+requestId.replace("/", "-"), SuccessDTO.class);
-       // ResponseEntity<SuccessDTO> result = restTemplate.getForEntity(uri+"/"+requestId.replace("/", "-"), SuccessDTO.class);
         System.out.println(result.getBody().isSuccessful());
 
         return result.getBody().isSuccessful();
-        //return result.isSuccessful();
     }
 
     public boolean addSolution(AddSolutionDTO addSolutionDTO) throws Exception {
@@ -67,9 +64,7 @@ public class SolutionService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
 
-        //System.out.println(requestId);
         HttpEntity entity = new HttpEntity(headers);
-        //ResponseEntity<SuccessDTO> result = restTemplate.exchange(uri+"/"+requestId.replace("/", "-"), HttpMethod.GET, entity, SuccessDTO.class);
         System.out.println("******************************** get solution ********************");
         ResponseEntity<SolutionDTO> result = restTemplate.exchange(uri+"/get/" + patentId.replace("/","-"), HttpMethod.GET, entity, SolutionDTO.class);
         return result.getBody();

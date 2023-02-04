@@ -24,8 +24,10 @@ public class LoginController {
     public ResponseEntity<AuthTypeDTO> login(@RequestBody LoginDTO loginDTO){
         System.out.println("LOGIN");
         try {
-            //loginDTO.setService("PATENT");
-            return new ResponseEntity<>(authenticationService.getAuthType(loginDTO), HttpStatus.OK);
+            AuthTypeDTO authTypeDTO = authenticationService.getAuthType(loginDTO);
+            if (authTypeDTO.isSuccessful() && authTypeDTO.getType().equals("ALL"))
+                authTypeDTO.setType("PATENT-" + authTypeDTO.getType());
+            return new ResponseEntity<>(authTypeDTO, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new AuthTypeDTO(false, null), HttpStatus.BAD_REQUEST);

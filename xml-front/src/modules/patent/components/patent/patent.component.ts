@@ -7,6 +7,7 @@ import {CountryDto} from "../../models/country-dto";
 import {MatSelectChange} from "@angular/material/select";
 import {PreviousPatentDto} from "../../models/previous-patent-dto";
 import {applicationNumberValidator} from "../../validators";
+import {PatentService} from "../../services/patent.service";
 
 @Component({
   selector: 'app-patent',
@@ -17,12 +18,12 @@ export class PatentComponent {
 
   id: number | undefined
   @Output() previousPatent = new EventEmitter<PreviousPatentDto>()
-  patent: PreviousPatentDto = { id: 0, applicationNumber: "", country: "", submissionDate: null, completed: false }
+  patent: PreviousPatentDto = { id: 0, applicationNumber: "", country: "", submissionDate: '', completed: false }
   countries: CountryDto[];
   applicationNumber: FormControl = new FormControl('', [Validators.required, applicationNumberValidator])
   dateIsInPast: boolean = true;
 
-  constructor(
+  constructor(private patentService: PatentService,
     private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale('sr-Latn');
     this.countries = countries
@@ -46,14 +47,15 @@ export class PatentComponent {
   }
 
   dateChanged($event: MatDatepickerInputEvent<Date, Date | null>) {
-    this.patent.submissionDate = $event.value// new Date($event.value)
     console.log("---------------------------------------------- Date Changed ----------------")
     console.log(this.patent.submissionDate)
-    if (this.patent.submissionDate !== null && this.patent.submissionDate < new Date()){
+    if ($event.value !== null && $event.value < new Date()){
       this.dateIsInPast = true
     }else{
       this.dateIsInPast = false
     }
+    this.patent.submissionDate = this.patentService.convertDateToStringInPatent($event.value?.toLocaleString())//$event.value// new Date($event.value)
+    console.log(this.patent.submissionDate)
     this.check()
   }
 

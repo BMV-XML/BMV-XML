@@ -195,6 +195,7 @@ public class FusekiReader {
         String lastOperator = "";
         for (FilterDTO elem : elements) {
             conditionBuilder.append(lastOperator);
+            elem.setValue(elem.getValue().replace("/", "-"));
             switch (elem.getOperator()){
                 case "i": {
                     //lastOperator = "&&";

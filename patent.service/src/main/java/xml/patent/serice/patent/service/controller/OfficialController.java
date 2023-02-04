@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xml.patent.serice.patent.service.Application;
 import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.dto.*;
+import xml.patent.serice.patent.service.service.AuthenticationService;
 import xml.patent.serice.patent.service.service.OfficialService;
 import xml.patent.serice.patent.service.service.ReportService;
 
@@ -24,9 +26,18 @@ public class OfficialController {
     @Autowired
     private ReportService reportService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @GetMapping(value = "list", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<PatentDTO>> getListOfPatents(){
+    public ResponseEntity<List<PatentDTO>> getListOfPatents(
+            @RequestHeader(name = "username") String username,
+            @RequestHeader(name = "password") String password){
         try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             System.out.println("************************************** get list *****************");
             return new ResponseEntity<List<PatentDTO>>(officialService.getListOfPatent(), HttpStatus.OK);
         }catch (Exception e){
@@ -36,8 +47,14 @@ public class OfficialController {
     }
 
     @GetMapping(value = "get/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<FullPatentDTO> getPatent(@PathVariable String id){
+    public ResponseEntity<FullPatentDTO> getPatent(@PathVariable String id,
+                                                   @RequestHeader(name = "username") String username,
+                                                   @RequestHeader(name = "password") String password){
         try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             System.out.println("************************************** get patent *****************");
             return new ResponseEntity<FullPatentDTO>(officialService.getPatent(getPatentId(id)), HttpStatus.OK);
         }catch (Exception e){
@@ -47,9 +64,15 @@ public class OfficialController {
     }
 
 
-    @PostMapping(value = "search", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<PatentDTO>> getListOfPatentsSearched(@RequestBody List<SearchExpression> expressions){
+    @PostMapping(value = "search", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<PatentDTO>> getListOfPatentsSearched(@RequestBody List<SearchExpression> expressions,
+                                                                    @RequestHeader(name = "username") String username,
+                                                                    @RequestHeader(name = "password") String password){
         try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             System.out.println("************************************** get list - SEARCH *****************");
             List<String> searchBy = new ArrayList<>();
             for (SearchExpression e: expressions){
@@ -63,15 +86,15 @@ public class OfficialController {
         }
     }
 
-    @PostMapping(value = "filter", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<List<PatentDTO>> getListOfPatentsFiltered(@RequestBody List<FilterDTO> filter){
+    @PostMapping(value = "filter", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<PatentDTO>> getListOfPatentsFiltered(@RequestBody List<FilterDTO> filter,
+                                                                    @RequestHeader(name = "username") String username,
+                                                                    @RequestHeader(name = "password") String password){
         try {
-            for(FilterDTO f : filter){
-                System.out.println("*****");
-                System.out.println(f.getOperator());
-                System.out.println(f.getType());
-                System.out.println(f.getValue());
-            }
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             return new ResponseEntity<List<PatentDTO>>(officialService.getListOfPatentFiltered(filter), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
@@ -85,20 +108,15 @@ public class OfficialController {
     }
 
     @PostMapping(value="report", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO) throws Exception {
+    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO,
+                                            @RequestHeader(name = "username") String username,
+                                            @RequestHeader(name = "password") String password) throws Exception {
         System.out.println("********************************* report **************");
+        LoginDTO l = new LoginDTO(username, password);
+        l.setService(Application.OFFICIAL);
+        if (!authenticationService.authenticate(l))
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(reportService.generateReportPDF(rangeDTO), HttpStatus.OK);
-        /*
-        System.out.println(rangeDTO.getStartDate());
-        System.out.println(rangeDTO.getEndDate());
-        ReportDTO reportDTO = reportService.getReportForRange(rangeDTO);
-        int result = reportService.getNumberOfReportsForRange(rangeDTO);
-        System.out.println(result);
-        System.out.println(reportDTO.getApproved());
-        System.out.println(reportDTO.getDeclined());
-         */
-        //System.out.println(reportDTO.getApproved());
-        //System.out.println(reportDTO.getDeclined());
     }
 
     @GetMapping(value = "list/rdf")

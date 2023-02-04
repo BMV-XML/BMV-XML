@@ -3,49 +3,66 @@
   <br/>
   <mat-card-content>
     <form [formGroup]="registerForm" (ngSubmit)="register()">
-      <p class="input">
-        <mat-form-field [hideRequiredMarker]="true">
-          <input type="text" matInput placeholder="Ime" formControlName="name">
-          <mat-error *ngIf="nameFormControl.hasError('required')">
-            Ime mora da postoji
-          </mat-error>
-        </mat-form-field>
-      </p>
+      <div class="row">
+        <div class="col-6">
 
-      <p class="input">
-        <mat-form-field [hideRequiredMarker]="true">
-          <input type="text" matInput placeholder="Prezime" formControlName="surname">
-          <mat-error *ngIf="surnameFormControl.hasError('required')">
-            Prezime mora da postoji
-          </mat-error>
-        </mat-form-field>
-      </p>
-      <p class="input">
-        <mat-form-field [hideRequiredMarker]="true">
-          <input type="text" matInput placeholder="Korisničko ime" formControlName="username">
-          <mat-error *ngIf="usernameFormControl.hasError('required')">
-            Korisničko ime mora da postoji
-          </mat-error>
-        </mat-form-field>
-      </p>
+          <p class="input">
+            <mat-form-field [hideRequiredMarker]="true">
+              <input type="text" matInput placeholder="Ime" formControlName="name">
+              <mat-error *ngIf="!nameFormControl.hasError('required') && nameFormControl.hasError('pattern')">
+                Mora da počinje velikom slovom bez razmaka
+              </mat-error>
+              <mat-error *ngIf="nameFormControl.hasError('required')">
+                Ime mora da postoji
+              </mat-error>
+            </mat-form-field>
+          </p>
 
-      <p class="input">
-        <mat-form-field [hideRequiredMarker]="true">
-          <input type="password" matInput placeholder="Password" formControlName="password">
-          <mat-error *ngIf="passwordFormControl.hasError('required')">
-            Lozinka mora da postoji
-          </mat-error>
-        </mat-form-field>
-      </p>
+          <p class="input">
+            <mat-form-field [hideRequiredMarker]="true">
+              <input type="text" matInput placeholder="Prezime" formControlName="surname">
+              <mat-error *ngIf="!surnameFormControl.hasError('required') && surnameFormControl.hasError('pattern')">
+                Mora da počinje velikom slovom bez razmaka
+              </mat-error>
+              <mat-error *ngIf="surnameFormControl.hasError('required')">
+                Prezime mora da postoji
+              </mat-error>
+            </mat-form-field>
+          </p>
+        </div>
+        <div class="col-6">
+
+          <p class="input">
+            <mat-form-field [hideRequiredMarker]="true">
+              <input type="text" matInput placeholder="Korisničko ime" formControlName="username">
+              <mat-error *ngIf="!usernameFormControl.hasError('required') && usernameFormControl.hasError('pattern')">
+                Koristite samo slova i brojeve
+              </mat-error>
+              <mat-error *ngIf="usernameFormControl.hasError('required')">
+                Korisničko ime mora da postoji
+              </mat-error>
+            </mat-form-field>
+          </p>
+
+          <p class="input">
+            <mat-form-field [hideRequiredMarker]="true">
+              <input type="password" matInput placeholder="Password" formControlName="password">
+              <mat-error *ngIf="passwordFormControl.hasError('required')">
+                Lozinka mora da postoji
+              </mat-error>
+            </mat-form-field>
+          </p>
+
+        </div>
+      </div>
 
       <div>
         <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
-          <mat-radio-button value="1">patent</mat-radio-button>
+          <mat-radio-button value="1" [checked]="true">patent</mat-radio-button>
           <mat-radio-button value="2">žig</mat-radio-button>
           <mat-radio-button value="2">autorsko pravo</mat-radio-button>
         </mat-radio-group>
       </div>
-
 
       <button [disabled]="!registerForm.valid" class="button" type="submit" mat-raised-button color="primary">
         Registruj se

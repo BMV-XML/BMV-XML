@@ -18,11 +18,14 @@ import {MatSelect} from "@angular/material/select";
 import {capitalFirstLetterTextWithSpace, postalNumber, stringAndNumber} from "../../validators";
 import {RangeDto} from "../../models/range-dto";
 import { DateAdapter } from '@angular/material/core';
+import {MessageService} from "primeng/api";
+import {start} from "@popperjs/core";
 
 @Component({
   selector: 'app-patent-requests',
   templateUrl: './patent-requests.component.html',
-  styleUrls: ['./patent-requests.component.scss']
+  styleUrls: ['./patent-requests.component.scss'],
+  providers: [MessageService]
 })
 export class PatentRequestsComponent {
   patents: PatentDto[] = [];
@@ -30,8 +33,8 @@ export class PatentRequestsComponent {
     {name: "Podnosilac", value: "pod_ime"},
     {name: "Punomoćnik", value: "pun_ime"},
     {name: "Pronalazač", value: "pro_ime"},
-    {name: "Izdvojena", value: "additional"},
-    {name: "Dodatna", value: "child"},
+    {name: "Izdvojena", value: "child"},
+    {name: "Dodatna", value: "additional"},
     {name: "Prava prvenstva", value: "sibling"},
     {name: "Naslov", value: "naslov"},
     {name: "Datum prijave", value: "datum_prijave"},
@@ -70,6 +73,7 @@ export class PatentRequestsComponent {
   constructor(private patentService: PatentService,
               private router: Router, private _formBuilder: FormBuilder,
               public dialog: MatDialog,
+              private readonly messageService: MessageService,
               private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale('sr-Latn');
     this.patentService.getPatentList().subscribe(
@@ -171,10 +175,19 @@ export class PatentRequestsComponent {
         let parser = new xml2js.Parser();
         parser.parseString(res, (err, result) => {
           console.log("**********************")
-          console.log(result['List']['item'][0])
           this.patents = []
+          try{
+          console.log(result['List']['item'][0])
           for (let i of result['List']['item'])
             this.patents.push(i)
+          }catch {
+            this.messageService.add({
+              key: 'patent-list-message',
+              severity: 'warn',
+              summary: 'Neuspešno filtriranje',
+              detail: 'Nema rezultata.'
+            })
+          }
         });
       }
     )
@@ -283,12 +296,50 @@ export class PatentRequestsComponent {
 
   makeReport() {
     //alert("TODO: implement report")
-    let range: RangeDto = {
-      startDate: this.convertDateToString(this.range.controls.start.value?.toLocaleString()),
-      endDate:  this.convertDateToString(this.range.controls.end.value?.toLocaleString())
-
+    console.log("************** report ***************")
+    console.log(this.patentService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()))
+    console.log(this.range.controls.end.value)
+    console.log(new Date())
+    if (this.range.controls.start.value == null){
+      console.log("START NULL")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Početni datum mora da postoji.'
+      })
+      return
+    }else if (this.range.controls.end.value == null){
+      console.log("END NULL")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Krajnji datum mora da postoji.'
+      })
+      return
+    }else if (this.range.controls.start.value > new Date || this.range.controls.end.value > new Date){
+      console.log("Ne VALJA")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Datumi moraju biti u prošlosti.'
+      })
+      return
     }
-    alert(range.startDate);
+
+    let range: RangeDto = {
+      startDate: this.patentService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()),
+      endDate:  this.patentService.convertDateToStringInReport(this.range.controls.end.value?.toLocaleString())
+    }
+
+    this.messageService.add({
+      key: 'patent-list-message',
+      severity: 'success',
+      summary: 'Uspešno izveštavanje',
+      detail: 'Sačekajte malo za preuzimanje.'
+    })
 
     this.patentService.getReportForPeriod(range).subscribe(
       res => {
@@ -298,20 +349,6 @@ export class PatentRequestsComponent {
 
   }
 
-  private convertDateToString(param: string | undefined) {
-    if (param === undefined)
-      return ''
-    let elems = param.split(",")
-    let dateParts = elems[0].split("/")
-    let day : string = dateParts[1]
-    if (dateParts[1].length === 1)
-      day = '0' + dateParts[1]
-    let month : string = dateParts[0]
-    if (dateParts[0].length === 1)
-      month = '0' + dateParts[0]
-    return day + "." + month +"." + dateParts[2] + "."
-
-  }
 }
 
 

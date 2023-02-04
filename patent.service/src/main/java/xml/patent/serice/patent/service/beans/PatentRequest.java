@@ -94,16 +94,17 @@ public class PatentRequest {
             return true;
         if (commissioner.getGlobalEntity().contains(s))
             return true;
-        if (inventor.getGlobalEntity().contains(s))
+        if (inventor != null && inventor.getGlobalEntity().contains(s))
             return true;
         if (deliveryData.contains(s))
             return true;
         if (additionalPatent.contains(s))
             return true;
-        for (Patent p : priorityRights){
-            if (p.contains(s))
-                return true;
-        }
+        if (priorityRights != null)
+            for (Patent p : priorityRights){
+                if (p.contains(s))
+                    return true;
+            }
         return false;
     }
 }

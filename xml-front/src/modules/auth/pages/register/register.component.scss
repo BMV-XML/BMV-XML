@@ -5,12 +5,16 @@
 :host {
   display: flex;
   justify-content: center;
-  margin: 100px 0px;
+  margin: 70px 0px;
 }
 
 .mat-form-field {
   width: 100%;
   min-width: 300px;
+}
+
+mat-card {
+  width: 40% !important;
 }
 
 mat-card-title,
@@ -53,7 +57,7 @@ mat-form-field{
 }
 
 form{
-  width: 70%;
+  width: 90%;
 }
 
 mat-radio-button {
