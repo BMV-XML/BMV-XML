@@ -49,8 +49,7 @@ public class XHTMLTransformer {
     public File generateHTML(String documentId) {
 
         try {
-            String retrieved = existManager.retrieve(documentId);
-
+            String retrieved = existManager.retrieveString(documentId);
 
             // Initialize Transformer instance
             StreamSource transformSource = new StreamSource(new File(xslFile));

@@ -41,8 +41,8 @@ public class FusekiWriter {
         model.write(System.out, SparqlUtil.NTRIPLES);
 
         System.out.println("[INFO] Rendering model as RDF/XML...");
-//           model.write(System.out, SparqlUtil.RDF_XML);
-//        model.write(out, "RDF/JSON");
+           model.write(System.out, SparqlUtil.RDF_XML);
+        model.write(System.out, "RDF/JSON");
 
         // Creating the first named graph and updating it with RDF data
         System.out.println("[INFO] Writing the triples to a named graph \"" + GRAPH_URI + "\".");

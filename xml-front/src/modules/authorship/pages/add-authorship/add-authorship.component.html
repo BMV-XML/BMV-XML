@@ -7,8 +7,6 @@
           <ng-template matStepLabel>Podnosilac</ng-template>
   
           <app-entity (display)="submitterEvent($event)"></app-entity>
-          <mat-checkbox class="example-margin" (change)="openCommissionerFields($event)">Prijava se podnosi preko punomoćnika</mat-checkbox>
-          <app-commissioner (display)="commissionerEvent($event)" [commissioner]="openCommissioner"></app-commissioner>
   
           <div class="mt-5">
             <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
@@ -18,8 +16,27 @@
     </mat-step>
     <!-- PODNOSILAC -->
 
+    <!-- PUNOMOCNIK -->
+    <mat-step [completed]="isCommissionerCompleted">
+      <div class="step">
+        <form>
+          <ng-template matStepLabel>Punomoćnik</ng-template>
+  
+          <mat-checkbox class="example-margin" (change)="openCommissionerFields($event)">Prijava se podnosi preko punomoćnika</mat-checkbox>
+          <h1 *ngIf="openCommissioner">Punomoćnik</h1>
+          <app-commissioner (display)="commissionerEvent($event)" [commissioner]="openCommissioner"></app-commissioner>
+  
+          <div class="mt-5">
+            <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+            <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+          </div>
+        </form>
+      </div>
+    </mat-step>
+    <!-- PUNOMOCNIK -->
+
     <!-- AUTOR -->
-    <mat-step [completed]="isAuthorCompleted">
+    <mat-step [completed]="isAuthorCompleted()">
       <div class="step">
       <form>
         <section class="example-section">
@@ -32,7 +49,7 @@
   
         <div *ngIf="!isSubmitterTheAuthor">
           <section class="example-section">
-            <mat-checkbox class="example-margin" (change)="anonymusAuthor($event)">
+            <mat-checkbox class="example-margin" (change)="anonymusAuthor($event)" checked>
               Autor je anoniman
             </mat-checkbox>
           </section>
@@ -57,7 +74,6 @@
 
     <!-- AUTORSKO DJELO -->
     <mat-step [completed]="isAuthorsWorkCompleted">
-      <!--<button (click)="nextisCommissionerCompleted()" matStepperNext>xxxxxxxxxxxx</button>-->
       <div class="step">
       <form>
         <ng-template matStepLabel>Autorsko djelo</ng-template>
@@ -73,156 +89,38 @@
     </mat-step>
     <!-- AUTORSKO DJELO -->
 
-    <!--<mat-step [stepControl]="deliveryFormGroup">
+    <!-- PRILOZI -->
+    <mat-step [completed]="true">
       <div class="step">
-      <form [formGroup]="deliveryFormGroup">
-        <ng-template matStepLabel>Dostavljanje</ng-template>
-  
-        <div class="row">
-          <div class="col-3 mx-2">
-            <h2 class="mx-3">Adresa</h2>
-            <mat-form-field class="adr" appearance="fill">
-              <mat-label>Ulica</mat-label>
-              <input matInput formControlName="street" placeholder="Ćirila i Metodija"
-                     required>
-              <mat-error *ngIf="deliveryFormGroup.controls['street'].hasError('pattern') && !deliveryFormGroup.controls['street'].hasError('required')">
-                Naziv ulice počinje sa velikom slovom
-              </mat-error>
-              <mat-error *ngIf="deliveryFormGroup.controls['street'].hasError('required')">
-                Ulica je <strong>potrebno</strong>
-              </mat-error>
-            </mat-form-field>
-            <br/>
-            <mat-form-field class="adr" appearance="fill">
-              <mat-label> Grad</mat-label>
-              <input matInput formControlName="city" placeholder="Novi Sad"
-                     required>
-              <mat-error *ngIf="deliveryFormGroup.controls['city'].hasError('pattern') && !deliveryFormGroup.controls['city'].hasError('required')">
-                Naziv grada počinje sa velikom slovom
-              </mat-error>
-              <mat-error *ngIf="deliveryFormGroup.controls['city'].hasError('required')">
-                Grad je <strong>potrebno</strong>
-              </mat-error>
-            </mat-form-field>
+        <ng-template matStepLabel>Prilozi</ng-template>
+          <div class="mx-2 my-3">
+            <div class="my-5">
+              <p class="mb-2">Primer djela:</p>
+              <input type="file" (change)="selectExample($event)"><br/>
+            </div>
+            <div class="my-5">
+              <p class="mb-2">Opis djela:</p>
+              <input type="file" (change)="selectDescription($event)">
+            </div>
           </div>
-          <div class="col-3 mx-2">
-            <h2>&nbsp;</h2>
-            <mat-form-field class="adr" appearance="fill">
-              <mat-label>Broj</mat-label>
-              <input matInput formControlName="number" placeholder="11"
-                     required>
-              <mat-error *ngIf="deliveryFormGroup.controls['number'].hasError('pattern') && !deliveryFormGroup.controls['number'].hasError('required')">
-                Broj može da sadrži samo slova i brojeve
-              </mat-error>
-              <mat-error *ngIf="deliveryFormGroup.controls['number'].hasError('required')">
-                Grad je <strong>potrebno</strong>
-              </mat-error>
-            </mat-form-field>
-            <br/>
-            <mat-form-field class="adr" appearance="fill">
-              <mat-label>Poštanski broj</mat-label>
-              <input matInput formControlName="postalNumber" placeholder="21000"
-                     required>
-              <mat-error *ngIf="deliveryFormGroup.controls['postalNumber'].hasError('pattern') && !deliveryFormGroup.controls['postalNumber'].hasError('required')">
-                Poštanski broj sastoji od brojeva
-              </mat-error>
-              <mat-error *ngIf="deliveryFormGroup.controls['postalNumber'].hasError('required')">
-                Poštanski broj je <strong>potrebno</strong>
-              </mat-error>
-            </mat-form-field>
-            <br>
-  
-            <mat-form-field class="adr" appearance="fill">
-              <mat-label>Država</mat-label>
-              <input matInput formControlName="country" placeholder="Srbija"
-                     required>
-              <mat-error *ngIf="deliveryFormGroup.controls['country'].hasError('pattern') && !deliveryFormGroup.controls['country'].hasError('required')">
-                Naziv države počinje sa velikom slovom
-              </mat-error>
-              <mat-error *ngIf="deliveryFormGroup.controls['country'].hasError('required')">
-                Država je <strong>potrebno</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <section class="example-section">
-          <mat-checkbox class="example-margin" (change)="notifyMeWithLettersChange($event)">
-            Obavesti me preko pošte
-          </mat-checkbox>
-          <br/>
-          <mat-checkbox class="example-margin" (change)="notifyMeViaEmailChange($event)">
-            Obavesti me elektronskim putem
-          </mat-checkbox>
-        </section>
-        <div class="mt-5">
-          <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
-          <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
-        </div>
-  
-      </form>
-      </div>
-    </mat-step>
-    <mat-step [completed]="isAdditionalPatentCompleted">
-      <div class="step">
-        <form>
-          <ng-template matStepLabel>Dodatna prijava</ng-template>
-  
-  
-          <mat-radio-group class="my-2" (change)="additionalPatentOptionChanged($event)" aria-label="Select an option">
-            <mat-radio-button value="1" [checked]="true">Dodatna prijava</mat-radio-button>
-            <br/>
-            <mat-radio-button value="2">Izdvojena prijava</mat-radio-button>
-            <br/>
-            <mat-radio-button value="3">Osnovna prijava</mat-radio-button>
-          </mat-radio-group>
-  
-          <br/>
-  
-          <app-patent *ngIf="showAdditionalPatentForm" (previousPatent)="updatePatent($event)"></app-patent>
-  
+
           <div class="mt-5">
             <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
             <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
           </div>
-  
-        </form>
       </div>
     </mat-step>
-  
-    <mat-step [completed]="isPriorityCompleted()">
-  
-      <div class="step">
-      <form>
-        <ng-template matStepLabel>Prava prvenstva</ng-template>
-  
-        <ng-template #viewContainerRef>
-  
-        </ng-template>
-  
-        <br/>
-        <div class="mt-1 my-2">
-          <button class="mx-1" mat-stroked-button (click)="addPatent()"> Dodaj patent</button>
-          <button class="mx-1" mat-stroked-button (click)="removeChild()"> Skloni patent</button>
-        </div>
-  
-        <div class="mt-5">
-          <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
-          <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
-        </div>
-  
-      </form>
-      </div>
-    </mat-step>
+
     <mat-step>
       <div class="step">
-      <ng-template matStepLabel>Gotov</ng-template>
-      <p>Završili ste popunjavanje forme.</p>
-      <div class="my-5">
-        <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
-        <button mat-raised-button color="primary" (click)="submitRequest()">Pošalji</button>
+        <ng-template matStepLabel>Kraj</ng-template>
+        <p>Završili ste popunjavanje forme.</p>
+        <div class="my-5">
+          <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+          <button mat-raised-button color="primary" (click)="submitRequest()">Pošalji</button>
+        </div>
       </div>
-      </div>
-    </mat-step> -->
+    </mat-step>
 </mat-stepper>
   
 <p-toast position="top-right" key="request-message"></p-toast>

@@ -3,36 +3,30 @@ import { EntityDto } from "modules/patent/models/entity-dto"
 
 
 export interface AuthorshipRequestDto{
-  titles: string
-  commissioner: EntityDto
-  submitter: EntityDto
-  inventor: EntityDto
-  authors: AuthorDto[]
-  submitterIsTheInventor: boolean
-  inventorWantsToBeListed: boolean
-  commissionerForRepresentation: boolean
-  commissionerForLetters: boolean
-  commissionerForJointRepresentation: boolean
-
-//   address: AddressDto
-  notifyMeViaLetters: boolean
-  notifyMeViaEmails: boolean
-
-  additionalPatent: boolean
-  separatedPatent: boolean
-
-  authorsWork: AuthorsWorkDto
-
+  submitter: EntityDto | null
+  commissioner: EntityDto | null
+  authors: string | null
+  submitterIsAuthor: boolean
+  anonymusAuthor: boolean
+  authorsWork: AuthorsWorkDto | null
+  attachments: AttachmentsDto | null
 }
 
 export interface AuthorsWorkDto {
-  title: string
-  alternateTitle: string
+  title: string | null
+  alternateTitle: string | null
   isRemade: boolean
-  remadeTitle: string
-  name: string
-  surname: string
-  wayOfUsage: string
-  form: string
-  type: string
+  remadeTitle: string | null
+  name: string | null
+  surname: string | null
+  wayOfUsage: string | null
+  form: string | null
+  madeInWorkRelationship: boolean
+  type: string | null
+  completed: boolean
+}
+
+export interface AttachmentsDto {
+  descriptionPath: string | null
+  examplePath: string | null
 }

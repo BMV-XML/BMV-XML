@@ -38,7 +38,7 @@ public class PDFTransformer {
     }
 
     public File generatePDF(String documentId) throws Exception {
-        String retrieved = existManager.retrieve(documentId);
+        String retrieved = existManager.retrieveString(documentId);
 
         System.out.println("[INFO] " + PDFTransformer.class.getSimpleName());
 

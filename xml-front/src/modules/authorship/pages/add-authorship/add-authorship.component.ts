@@ -4,9 +4,11 @@ import { AuthorshipService } from 'modules/authorship/services/authorship.servic
 import { EntityDto } from 'modules/patent/models/entity-dto';
 import { capitalFirstLetterTextWithSpace, postalNumber, stringAndNumber } from 'modules/patent/validators';
 import { MessageService } from 'primeng/api';
-import { AuthorshipRequestDto, AuthorsWorkDto } from 'modules/authorship/models/authtorship-request-dto';
+import { AttachmentsDto, AuthorshipRequestDto, AuthorsWorkDto } from 'modules/authorship/models/authtorship-request-dto';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AuthorComponent } from 'modules/authorship/components/author/author.component';
+import { AuthorDto } from 'modules/authorship/models/author';
+import * as xml2js from "xml2js";
 
 @Component({
   selector: 'app-add-authorship',
@@ -17,14 +19,6 @@ import { AuthorComponent } from 'modules/authorship/components/author/author.com
 export class AddAuthorshipComponent {
 
   isLinear: boolean = true;
-
-  deliveryFormGroup = this._formBuilder.group({
-    street: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
-    number: ['', [Validators.required, stringAndNumber]],
-    postalNumber: ['', [Validators.required, postalNumber]],
-    city: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
-    country: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
-  })
 
   entity: EntityDto = {
     id:0,
@@ -53,52 +47,47 @@ export class AddAuthorshipComponent {
     surname: '',
     wayOfUsage: '',
     form: '',
-    type: ''
+    type: '',
+    madeInWorkRelationship: false,
+    completed: false
   }
 
   result : AuthorshipRequestDto = {
-    authors: [],
-    // address: {street: "", country: "", city: "", number: "", postalNumber: ""},
-    // previousPatent: this.previousPatent,
-    additionalPatent: true, separatedPatent: false,
-    notifyMeViaEmails: false, notifyMeViaLetters: false,
-    commissionerForJointRepresentation: false, commissionerForLetters: false, commissionerForRepresentation: false,
-    inventorWantsToBeListed: false, submitterIsTheInventor: false,
-    inventor: this.entity,
-    commissioner: this.entity,
-    submitter: this.entity,
-    authorsWork: this.authorsWork,
-    titles: ''
+    submitter: null,
+    commissioner: null,
+    authors: "",
+    submitterIsAuthor: true,
+    authorsWork: null,
+    anonymusAuthor: false,
+    attachments: null
   }
 
-  titlesXml: string = ''
-  // priorityPatent: PreviousPatentDto[] = []
+  authors: AuthorDto[] = []
 
-  // titles: TitleDto[] = []
+  attachments: AttachmentsDto = {
+    descriptionPath: "",
+    examplePath: ""
+  }
 
   // USLOVI ZA PRELAZAK NA NAREDNO POLJE
-  isSubmitterCompleted: boolean = true
-  isCommissionerCompleted: boolean = false;
-  isAuthorsWorkCompleted: boolean = false;
-  isAuthorCompleted: boolean = true;
+  isSubmitterCompleted: boolean = false  // false
+  isCommissionerCompleted: boolean = true;
+  isAuthorsWorkCompleted: boolean = false; // false
 
-  isSubmitterTheAuthor: boolean = true;
   openCommissioner: boolean = false;
-  isAuthorAnonymus: boolean = false;
+  isSubmitterTheAuthor: boolean = true;
+  isAuthorAnonymus: boolean = true;
+  autorCompleted: boolean = false;
 
   constructor(private _formBuilder: FormBuilder,
-              private authroshipService: AuthorshipService,
+              private authorshipService: AuthorshipService,
               private readonly messageService: MessageService) {
 
-    }
+  }
 
   @ViewChild("authorContainerRef", {read: ViewContainerRef}) vcr!: ViewContainerRef;
   ref!: ComponentRef<AuthorComponent>
   counter: number = 0
-
-  isApplicantCompleted(): boolean {
-    return true;
-  }
 
   submitterEvent($event: any) {
     this.isSubmitterCompleted = $event.completed;
@@ -107,28 +96,40 @@ export class AddAuthorshipComponent {
   }
 
   commissionerEvent($event: any) {
-    this.isCommissionerCompleted = $event.completed;
-    console.log(this.isCommissionerCompleted)
-    this.result.commissioner = $event
+    if (this.openCommissioner) {
+      this.isCommissionerCompleted = $event.completed;
+      console.log(this.isCommissionerCompleted)
+      this.result.commissioner = $event
+    }
+    else
+      this.isCommissionerCompleted = true
   }
 
   authorsWorkEvent($event: any) {
     this.isAuthorsWorkCompleted = $event.completed;
-    console.log(this.isSubmitterCompleted)
+    console.log(this.isAuthorsWorkCompleted)
     this.result.authorsWork = $event
   }
 
   openCommissionerFields($event: any) {
     this.openCommissioner = $event.checked;
+    this.isCommissionerCompleted = !$event.checked;
   }
 
-  // completeSubmitter() {
-  //   this.isSubmitterCompleted = true;
-  // }
+  isAuthorCompleted(): boolean {
+    if (this.isSubmitterTheAuthor)
+      return true;
+    if (this.isAuthorAnonymus)
+      return true;
+    
+    this.ref.instance.validForm.subscribe(
+      value => {
+        this.autorCompleted = value
+      }
+    )
 
-  // completeAuthorsWork() {
-  //   this.isAuthorsWorkCompleted = true;
-  // }
+    return this.autorCompleted;
+  }
 
   submitterIsAuthorChange($event: MatCheckboxChange) {
     this.isSubmitterTheAuthor = $event.checked;
@@ -144,17 +145,14 @@ export class AddAuthorshipComponent {
     this.ref.instance.author.id = this.counter
     this.ref.instance.id = this.counter
     this.counter++
-    console.log("id od applikanta")
+    console.log("id od autora")
     console.log(this.ref.instance.author.id)
     this.ref.instance.previousApplicant.subscribe(
       value => {
         if (value.completed)
             console.log(this.counter)
-        this.result.authors[value.id] = value
-        console.log("------------------ stanje ------------- ")
-        console.log("counnter: ")
-        console.log(this.counter)
-        console.log(this.result)
+        this.authors[value.id] = value
+        console.log(this.authors)
       }
     );
   }
@@ -162,12 +160,46 @@ export class AddAuthorshipComponent {
   removeAuthor() {
     const index = this.vcr.indexOf(this.ref.hostView)
     if (index != -1) this.vcr.remove(index)
-    if (this.result.authors.length === this.counter) {
+    if (this.authors.length === this.counter) {
         this.counter--
-        this.result.authors.pop()
+        this.authors.pop()
     }
     console.log("------------------ stanje ------------- ")
     console.log(this.result)
+  }
+
+  selectExample(event: any) {
+    const data = new FormData()
+    data.append('files', event.target.files[0])
+    this.authorshipService.setExampleFile(data).subscribe((res) => {
+      var parser = new xml2js.Parser();
+      parser.parseString(res, (err, result) => {
+          console.log("ono sto dobijem sa backa")
+          console.log(res)
+          console.log(result['AttachmentDTO']['examplePath'][0])
+          this.attachments.examplePath = result['AttachmentDTO']['examplePath'][0]
+      })
+    })
+  }
+
+  selectDescription(event: any) {
+    const data = new FormData()
+    data.append('files', event.target.files[0])
+    this.authorshipService.setDescriptionFile(data).subscribe({
+      next: (res: any) => {
+        this.attachments.descriptionPath = res.descriptionPath
+      }
+    })
+  }
+
+  submitRequest() {
+    this.result.attachments = this.attachments;
+    this.authorshipService.submitRequest(this.result, this.authors).subscribe(
+      (res: string) => {
+        console.log("```````````````````` RESULT ``````````````````````")
+        console.log(res)
+      }
+    )
   }
 
 }

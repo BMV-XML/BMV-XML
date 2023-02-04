@@ -15,15 +15,19 @@ export class AuthorComponent {
   id: number = 0
   alive: boolean = true
   author: AuthorDto = {
-      id:0, city: "", country: "", fax: "", email: "", number: "", postalNumber: "", street: "", name: "",
-      citizenship: "", surname: "", phone: "", alive: false, completed: false, yearOfDeath: ""
+    id: 0, city: "", country: "", postalNumber: "", street: "", name: "",
+    citizenship: "", surname: "", alive: false, completed: false, yearOfDeath: 0,
+    number: null,
+    pseudonym: ""
   }
 
   @Output() previousApplicant = new EventEmitter<AuthorDto>()
+  @Output() validForm = new EventEmitter<boolean>()
   nameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
   surnameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
   citizenshipFormControl = new FormControl('', [Validators.required, stringValidator])
-  yearOfDeath =  new FormControl('', [Validators.required])
+  yearOfDeath =  new FormControl(0, [Validators.required])
+  pseudonymFormControl = new FormControl('')
   secondFormGroup: FormGroup;
 
   constructor(private _formBuilder: FormBuilder) {
@@ -33,9 +37,6 @@ export class AuthorComponent {
         postalNumber: ['', [Validators.required, postalNumber]],
         city: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
         country: ['', [Validators.required, capitalFirstLetterTextWithSpace]],
-        phone: ['', [Validators.required, phoneValidator]],
-        fax: ['', [Validators.required]],//numberValidator
-        email: ['', [Validators.required, emailValidator]]
     });
   }
 
@@ -43,16 +44,20 @@ export class AuthorComponent {
     console.log("/////////////////////// Change ///////////////////////////")
     console.log(this.secondFormGroup.errors)
     console.log(this.secondFormGroup.valid)
+
     if (this.secondFormGroup.valid) {
         if (this.nameFormControl.valid && this.surnameFormControl.valid && this.citizenshipFormControl.valid) {
             this.setAuthor(true);
+            this.validForm.emit(true);
             this.previousApplicant.emit(this.author)
         }else {
             this.setAuthor(false);
+            this.validForm.emit(false);
             this.previousApplicant.emit(this.author);
         }
     } else {
         this.setAuthor(false)
+        this.validForm.emit(false);
         this.previousApplicant.emit(this.author);
         console.log(this.secondFormGroup.errors)
         console.log(this.secondFormGroup.valid)
@@ -68,17 +73,15 @@ export class AuthorComponent {
         citizenship: this.citizenshipFormControl.value,
         city: this.secondFormGroup.controls["city"].value,
         country: this.secondFormGroup.controls["country"].value,
-        email: this.secondFormGroup.controls["email"].value,
-        fax: this.secondFormGroup.controls["fax"].value,
         name: this.nameFormControl.value,
         number: this.secondFormGroup.controls["number"].value,
-        phone: this.secondFormGroup.controls["phone"].value,
         postalNumber: this.secondFormGroup.controls["postalNumber"].value,
         street: this.secondFormGroup.controls["street"].value,
         surname: this.surnameFormControl.value,
         completed: completed,
         alive: this.alive,
-        yearOfDeath: this.yearOfDeath.value
+        yearOfDeath: this.yearOfDeath.value,
+        pseudonym: this.pseudonymFormControl.value
     }
   }
 

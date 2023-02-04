@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../xsl/grddl.xsl"?>
 <Zahtjev xmlns="http://www.ftn.uns.ac.rs/authorship"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:base="http://www.ftn.uns.ac.rs/base-schame"
          xmlns:pred="http://www.ftn.uns.ac.rs/rdf/authorship/predicate/"
-    xsi:schemaLocation="http://www.ftn.uns.ac.rs/authorship file:/./data/zahtjev.xsd"
-    about="http://www.ftn.uns.ac.rs/rdf/authorship/A-1234/22">
+         xsi:schemaLocation="http://www.ftn.uns.ac.rs/authorship file:/./data/zahtjev.xsd"
+         about="http://www.ftn.uns.ac.rs/rdf/authorship/A-1234-22">
     <Podaci_o_zahtjevu>
-        <Broj_prijave>A-0004/22</Broj_prijave>
+        <Broj_prijave property="pred:id" datatype="pred:xs:string">A-1234-22</Broj_prijave>
         <Datum_prijave property="pred:datum_prijave" datatype="pred:xs:date">2022-11-30</Datum_prijave>
     </Podaci_o_zahtjevu>
     <Primalac xmlns="http://www.ftn.uns.ac.rs/base-schame">
@@ -40,7 +40,7 @@
         <Podnosilac_je_autor>DA</Podnosilac_je_autor>
     </Podnosilac>
     <Autorsko_djelo>
-        <Naslov>Kad jaganjci utihnu</Naslov>
+        <Naslov property="pred:naslov" datatype="pred:xs:string">Kad jaganjci utihnu</Naslov>
         <Vrsta>MUZICKO_DJELO</Vrsta>
         <Forma_zapisa>STAMPANI_TEKST</Forma_zapisa>
         <Stvoreno_u_radnom_odnosu>NE</Stvoreno_u_radnom_odnosu>

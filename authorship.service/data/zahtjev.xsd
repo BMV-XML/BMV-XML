@@ -22,6 +22,8 @@
                 <xs:element maxOccurs="unbounded" ref="Autor" minOccurs="0"/>
                 <xs:element ref="Prilozi"/>
             </xs:sequence>
+            <xs:attribute name="about"/>
+            <xs:attribute name="vocab"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="Podaci_o_zahtjevu">
@@ -60,7 +62,16 @@
     <xs:element name="Autorsko_djelo">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Naslov" type="xs:string"/>
+                <xs:element name="Naslov">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="Alternativni_naslov" type="xs:string" minOccurs="0"/>
                 <xs:element minOccurs="0" ref="Preradjeno_djelo"/>
                 <xs:element name="Vrsta" type="Vrsta_djela"/>
@@ -93,7 +104,7 @@
                 <xs:element minOccurs="0" name="Pseudonim" type="xs:string"/>
                 <xs:element minOccurs="0" name="Godina_smrti">
                     <xs:simpleType>
-                        <xs:restriction base="xs:positiveInteger">
+                        <xs:restriction base="xs:unsignedInt">
                             <xs:maxInclusive value="2023"/>
                             <xs:pattern value="[\-+]?[0-9]+"/>
                         </xs:restriction>
