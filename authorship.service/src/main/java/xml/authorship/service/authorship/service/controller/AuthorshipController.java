@@ -24,6 +24,7 @@ import static xml.authorship.service.authorship.service.util.SparqlUtil.*;
 
 @RestController
 @RequestMapping("authorship")
+@CrossOrigin
 public class AuthorshipController {
 
     @Autowired
@@ -86,7 +87,7 @@ public class AuthorshipController {
     public ResponseEntity<String> getJsonMetadataById(@RequestParam(name = "id") String id) {
         String result = authorshipRequestService.searchMetadataById(id, RDF_JSON);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentDispositionFormData("attachment", id + ".json");
+        headers.setContentDispositionFormData("attachment", "file.json");
         return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
@@ -94,8 +95,8 @@ public class AuthorshipController {
     public ResponseEntity<String> getRdfMetadataById(@RequestParam(name = "id") String id) {
         String result = authorshipRequestService.searchMetadataById(id, NTRIPLES);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentDispositionFormData("attachment", id + ".rdf");
-        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        headers.setContentDispositionFormData("attachment", "file.rdf");
+        return new ResponseEntity<>(result,headers, HttpStatus.OK);
     }
 
     @GetMapping(value = "get/all", produces = MediaType.APPLICATION_XML_VALUE)
@@ -118,7 +119,7 @@ public class AuthorshipController {
         }
     }
 
-    @PostMapping(value = "search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "search", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<SimpleAuthorshipDTO>> getListOfAuthorshipSearched(@RequestBody List<SearchDTO> expressions) {
         try {
             List<String> searchBy = new ArrayList<>();
@@ -129,12 +130,11 @@ public class AuthorshipController {
             return new ResponseEntity<>(authorshipRequestService.getListOfAuthorshipSearched(searchBy), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
-
-    // TODO: ne radi zato sto kod filtera budu samo () pa kao ne moze to biti prazno
-    @PostMapping(value = "filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    
+    @PostMapping(value = "filter", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<SimpleAuthorshipDTO>> getListOfPatentsFiltered(@RequestBody List<FilterDTO> filter) {
         try {
             for (FilterDTO f : filter) {
@@ -145,7 +145,7 @@ public class AuthorshipController {
             return new ResponseEntity<>(authorshipRequestService.getListOfAuthorshipFiltered(filter), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 

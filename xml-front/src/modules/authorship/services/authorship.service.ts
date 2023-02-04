@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { AuthorshipRequestDto } from '../models/authtorship-request-dto';
 import * as JsonToXML from "js2xmlparser";
 import { environment } from 'environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthorDto } from '../models/author';
+import { SearchBy } from 'modules/patent/models/search-by';
+import { SearchDTO } from '../models/search-dto';
+import { FilterDto } from 'modules/patent/models/filter-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +20,33 @@ export class AuthorshipService {
     this.parser = new DOMParser();
   }
 
-  //  getPatentList() {
-  //   // const log = JsonToXML.parse("root", loginObj);
-  //    return this.httpClient.get(this.api_path + "list", {responseType: 'text'});
-  //  }
+   getAuthorshipList() {
+     return this.httpClient.get(this.api_path + "authorship/get/all", {responseType: 'text'});
+   }
  
-  //  getPatentPDF(id: string) {
-  //    return this.httpClient.get(this.api_path + "transform/pdf/" + id.replace("/","-"), {responseType: 'text'});
-  //  }
+   getPDF(id: string) {
+     return this.httpClient.get(this.api_path + "transform/pdf/" + id, {responseType: 'blob'});
+   }
  
-  //  getPatentHTML(id: string) {
-  //    return this.httpClient.get(this.api_path + "transform/xhtml/" + id.replace("/","-"), {responseType: 'text'});
-  //  }
+   getHTML(id: string) {
+     return this.httpClient.get(this.api_path + "transform/xhtml/" + id, {responseType: 'blob'});
+   }
+
+   getRDF(id: string) {
+    const options = {
+      headers: new HttpHeaders().append('Content-Type', 'application/rdf+xml'),
+      responseType: 'blob' as 'json'
+    };
+     return this.httpClient.get(this.api_path + "authorship/getRdfMetadata?id=" + id, options);
+   }
+ 
+   getJSON(id: string) {
+    const options = {
+      headers: new HttpHeaders().append('Content-Type', 'application/json'),
+      responseType: 'blob' as 'json'
+    };
+     return this.httpClient.get(this.api_path + "authorship/getJsonMetadata?id=" + id, options);
+   }
  
   //  addSolution(solution: AddSolutionDto){
   //    const log = JsonToXML.parse("root", solution);
@@ -78,24 +96,15 @@ export class AuthorshipService {
  
   //  }
  
-  //  filteRequests(filter: FilterDto[]) {
-  //    const log = JsonToXML.parse("FilterDto", filter);
-  //    console.log(log)
-  //    return this.httpClient.post(this.api_path + "filter", log, {responseType: 'text'});
-  //  }
+   searchMetadata(filter: FilterDto[]) {
+     const log = JsonToXML.parse("FilterDTO", filter);
+     return this.httpClient.post(this.api_path + "authorship/filter", log, {responseType: 'text'});
+   }
  
-  //  getPatentRDF(id: any) {
-  //    return this.httpClient.get(this.api_path + "transform/rdf/" + id.replace("/","-"), {responseType: 'text'});
-  //  }
- 
-  //  getPatentJSON(id: any) {
-  //    return this.httpClient.get(this.api_path + "transform/json/" + id.replace("/","-"), {responseType: 'text'});
-  //  }
- 
-  //  searchPatentList(searchBy: SearchBy[]) {
-  //    const log = JsonToXML.parse("FilterDto", searchBy);
-  //    return this.httpClient.post(this.api_path + "search", log, {responseType: 'text'});
-  //  }
+   searchBasicData(searchBy: SearchDTO[]) {
+     const log = JsonToXML.parse("SearchDTO", searchBy);
+     return this.httpClient.post(this.api_path + "authorship/search", log, {responseType: 'text'});
+   }
  
   //  getReportForPeriod(range: RangeDto) {
   //    const log = JsonToXML.parse("range", range);

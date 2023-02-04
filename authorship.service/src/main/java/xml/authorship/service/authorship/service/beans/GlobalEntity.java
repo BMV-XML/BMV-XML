@@ -24,8 +24,10 @@ public abstract class GlobalEntity {
     abstract boolean contains(String s);
 
     protected boolean basicContains(String s) {
-        if (address.contains(s))
+        if (address != null && address.contains(s))
             return true;
-        return contact.contains(s);
+        if (contact != null && contact.contains(s))
+            return true;
+        return false;
     }
 }

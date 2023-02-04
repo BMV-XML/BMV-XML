@@ -21,6 +21,9 @@ export class Interceptor implements HttpInterceptor {
         //if (localStorage.getItem('password'))
         //  p = localStorage.getItem('password').toString()
         //let u : string = ((localStorage.getItem('username') !== null) ? '' : localStorage.getItem('username'));
+        if (req.url.includes("authorship/getRdfMetadata?id=") || req.url.includes("authorship/getJsonMetadata?id=")) {
+            return next.handle(req);
+        }
 
         if (!req.headers.has('myattr')) {
 

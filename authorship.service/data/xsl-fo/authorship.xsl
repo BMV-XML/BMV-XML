@@ -320,7 +320,7 @@
                                                     </fo:table-row>
                                                 </xsl:if>
                                                 <xsl:choose>
-                                                    <xsl:when test="not(aut:Godina_smrti)">
+                                                    <xsl:when test="aut:Godina_smrti[text() = 0]">
                                                         <fo:table-row>
                                                             <fo:table-cell border-bottom="1px" border-right="1px" padding="5px"><fo:block>DRŽAVLJANSTVO</fo:block></fo:table-cell>
                                                             <fo:table-cell border-bottom="1px" border-right="1px" padding="5px">

@@ -186,39 +186,35 @@ public class FusekiReader {
                 conditionBuilder.append("?authorship <http://www.ftn.uns.ac.rs/rdf/authorship/predicate/" + elem.getType() + "> ?" + elem.getType() + ". ");
             }
         }
-        if (elements.size() == 1) {
-            conditionBuilder.append("filter (");
-            int index = 0;
-            String lastOperator = "";
-            for (FilterDTO elem : elements) {
-                conditionBuilder.append(lastOperator);
-                switch (elem.getOperator()) {
-                    case "i": {
-                        //lastOperator = "&&";
-                        if (index != 0) conditionBuilder.append(" && ");
-                        conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
-                        break;
-                    }
-                    case "ili": {
-                        //lastOperator = "||";
-                        if (index != 0) conditionBuilder.append(" || ");
-                        conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
-                        break;
-                    }
-                    case "ne": {
-                        ///lastOperator = "&&";
-                        if (index != 0) conditionBuilder.append(" && ");
-                        conditionBuilder.append("!CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
-                        break;
-                    }
+        conditionBuilder.append("filter (");
+        int index = 0;
+        String lastOperator = "";
+        for (FilterDTO elem : elements) {
+            conditionBuilder.append(lastOperator);
+            switch (elem.getOperator()) {
+                case "i": {
+                    //lastOperator = "&&";
+                    if (index != 0) conditionBuilder.append(" && ");
+                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
                 }
-                index++;
+                case "ili": {
+                    //lastOperator = "||";
+                    if (index != 0) conditionBuilder.append(" || ");
+                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
+                }
+                case "ne": {
+                    ///lastOperator = "&&";
+                    if (index != 0) conditionBuilder.append(" && ");
+                    conditionBuilder.append("!CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    break;
+                }
             }
-            conditionBuilder.append(")");
+            index++;
         }
-        //String condition = "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/datum_prijave> ?date . " +
-        //"filter ( ?date  \"" + "2023-01-24" + "\"^^xs:date )";
-        //    "filter CONTAINS(UCASE(str(?date)), UCASE(\"" + searchBy + "\"))";
+        conditionBuilder.append(")");
+
         String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + GRAPH_URI,
                 conditionBuilder.toString());
 

@@ -25,6 +25,9 @@ import { CommissionerComponent } from './components/commissioner/commissioner.co
 import {MatDividerModule} from '@angular/material/divider';
 import { AuthorComponent } from './components/author/author.component';
 import { AuthorsWorkComponent } from './components/authors-work/authors-work.component';
+import { AuthorshipRequestsComponent } from './pages/authorship-requests/authorship-requests.component';
+import {MatChipsModule} from '@angular/material/chips';
+import { MetadataComponent } from './components/metadata/metadata.component';
 
 
 @NgModule({
@@ -32,7 +35,9 @@ import { AuthorsWorkComponent } from './components/authors-work/authors-work.com
     AddAuthorshipComponent,
     CommissionerComponent,
     AuthorComponent,
-    AuthorsWorkComponent
+    AuthorsWorkComponent,
+    AuthorshipRequestsComponent,
+    MetadataComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +60,8 @@ import { AuthorsWorkComponent } from './components/authors-work/authors-work.com
     MatSelectModule,
     SharedModule,
     ToastModule,
-    MatDividerModule
+    MatDividerModule,
+    MatChipsModule
   ]
 })
 export class AuthorshipModule { }

@@ -40,7 +40,7 @@
                         position: absolute;
                         bottom: 0;
                         right: 0;
-                        height: 180px;
+                        height: 230px;
                         width: 300px;
                         border: 1px solid black;
                     }
@@ -294,7 +294,7 @@
                                                 </tr>
                                             </xsl:if>
                                             <xsl:choose>
-                                                <xsl:when test="not(aut:Godina_smrti)">
+                                                <xsl:when test="aut:Godina_smrti[text() = 0]">
                                                     <tr>
                                                         <td>DRŽAVLJANSTVO</td>
                                                         <td>
