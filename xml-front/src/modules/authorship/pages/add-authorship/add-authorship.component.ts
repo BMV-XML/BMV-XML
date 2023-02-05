@@ -9,6 +9,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AuthorComponent } from 'modules/authorship/components/author/author.component';
 import { AuthorDto } from 'modules/authorship/models/author';
 import * as xml2js from "xml2js";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-authorship',
@@ -41,7 +42,7 @@ export class AddAuthorshipComponent {
   authorsWork: AuthorsWorkDto = {
     title: '',
     alternateTitle: '',
-    isRemade: false,
+    remade: false,
     remadeTitle: '',
     name: '',
     surname: '',
@@ -70,9 +71,9 @@ export class AddAuthorshipComponent {
   }
 
   // USLOVI ZA PRELAZAK NA NAREDNO POLJE
-  isSubmitterCompleted: boolean = true  // false
+  isSubmitterCompleted: boolean = false  // false
   isCommissionerCompleted: boolean = true;
-  isAuthorsWorkCompleted: boolean = true; // false
+  isAuthorsWorkCompleted: boolean = false; // false
 
   openCommissioner: boolean = false;
   isSubmitterTheAuthor: boolean = true;
@@ -81,7 +82,8 @@ export class AddAuthorshipComponent {
 
   constructor(private _formBuilder: FormBuilder,
               private authorshipService: AuthorshipService,
-              private readonly messageService: MessageService) {
+              private readonly messageService: MessageService,
+              private router: Router) {
 
   }
 
@@ -196,6 +198,22 @@ export class AddAuthorshipComponent {
       (res: string) => {
         console.log("```````````````````` RESULT ``````````````````````")
         console.log(res)
+        var parser = new xml2js.Parser();
+        parser.parseString(res, (err, result) => {
+          let success = result['StatusResponseDTO']['successful'][0]
+          if (success) {
+            this.messageService.add({
+              key: 'authorship-message',
+              severity: 'success',
+              summary: 'Uspešno kreiranje',
+              detail: 'Bićete preusmjereni za 3 sekunde.'
+            })
+            setTimeout(() => {
+              this.router.navigate(['authorship/soluted'])
+            }, 3000);
+            
+          }
+        })
       }
     )
   }

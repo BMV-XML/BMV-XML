@@ -243,7 +243,7 @@
                                         </fo:block>
                                     </fo:table-cell>
                                 </fo:table-row>
-                                <xsl:if test="//aut:Autorsko_djelo/aut:Stvoreno_u_radnom_odnosu[text() = 'DA']">
+                                <xsl:if test="//aut:Autorsko_djelo/aut:Preradjeno_djelo">
                                     <fo:table-row>
                                         <fo:table-cell border-bottom="1px" border-right="1px" padding="5px" number-columns-spanned="2" background-color="#ccc">
                                             <fo:block>&#160;</fo:block>

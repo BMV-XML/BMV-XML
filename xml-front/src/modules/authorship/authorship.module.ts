@@ -30,6 +30,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { MetadataComponent } from './components/metadata/metadata.component';
 import { SolutionComponent } from './components/solution/solution.component';
 import { InspectSolutionComponent } from './components/inspect-solution/inspect-solution.component';
+import { AuthorshipSolutionsComponent } from './pages/authorship-solutions/authorship-solutions.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { InspectSolutionComponent } from './components/inspect-solution/inspect-
     AuthorshipRequestsComponent,
     MetadataComponent,
     SolutionComponent,
-    InspectSolutionComponent
+    InspectSolutionComponent,
+    AuthorshipSolutionsComponent
   ],
   imports: [
     CommonModule,

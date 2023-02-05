@@ -234,7 +234,7 @@
                                     <xsl:value-of select="//aut:Autorsko_djelo/aut:Stvoreno_u_radnom_odnosu"/>
                                 </td>
                             </tr>
-                            <xsl:if test="//aut:Autorsko_djelo/aut:Stvoreno_u_radnom_odnosu[text() = 'DA']">
+                            <xsl:if test="//aut:Autorsko_djelo/aut:Preradjeno_djelo">
                                 <tr>
                                     <td colspan="2" style="background-color: #ccc;">&#160;</td>
                                 </tr>

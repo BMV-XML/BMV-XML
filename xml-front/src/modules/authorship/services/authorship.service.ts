@@ -99,10 +99,13 @@ export class AuthorshipService {
      });
    }
 
-  //  getPatent(requestId: string) {
-  //    return this.httpClient.get(this.api_path + "get/"+ requestId.replace("/", "-"), {responseType: 'text'});
+   getExampleFile(id: any) {
+     return this.httpClient.get(this.api_path + "authorship/get/example/" + id, {responseType: 'text'})
+   }
 
-  //  }
+   getDescriptionFile(id: any) {
+    return this.httpClient.get(this.api_path + "authorship/get/description/" + id, {responseType: 'text'})
+  }
 
    searchMetadata(filter: FilterDto[]) {
      const log = JsonToXML.parse("FilterDTO", filter);
@@ -122,8 +125,9 @@ export class AuthorshipService {
    convertDateToStringInReport(param: string | undefined) {
     if (param === undefined)
       return ''
-    let elems = param.split(",")
-    let dateParts = elems[0].split("/")
+    let elems = param.split(" ")
+    console.log(elems)
+    let dateParts = elems[0].split(".")
     let month : string = dateParts[1]
     if (dateParts[1].length === 1)
       month = '0' + dateParts[1]

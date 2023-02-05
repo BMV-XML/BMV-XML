@@ -11,7 +11,7 @@ public class AuthorsWorkDTO {
 
     private String title;
     private String alternateTitle;
-    private boolean isRemade;
+    private boolean remade;
     private String remadeTitle;
     private String name;
     private String surname;

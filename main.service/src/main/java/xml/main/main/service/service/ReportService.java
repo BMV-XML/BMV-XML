@@ -29,6 +29,7 @@ public class ReportService {
         int approved = 0;
         int declined = 0;
         for (RequestSolution s: solutions){
+            System.out.println(s.getApproved().name());
             if (s.getRequestDate().isBefore(start) || s.getRequestDate().isAfter(end))
                 continue;
             if (s.getApproved() == Checkbox.DA)
@@ -41,7 +42,7 @@ public class ReportService {
 
     public ReportDTO getAuthorshipReportForRange(RangeDTO rangeDTO) throws Exception {
         Solutions solutionList = solutionManager.retrieve();
-        List<RequestSolution> authorships = solutionList.getPatentList();
+        List<RequestSolution> authorships = solutionList.getAuthorshipList();
         return getApprovedAndDeclinedRequest(authorships, rangeDTO.getStartDateAsDate(), rangeDTO.getEndDateAsDate());
     }
 }

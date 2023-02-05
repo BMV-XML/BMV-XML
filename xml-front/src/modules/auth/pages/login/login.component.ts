@@ -4,7 +4,7 @@ import {LoginDto} from "../../models/login-dto";
 import * as xml2js from "xml2js";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AUTHORSHIP, OFFICIAL, PATENT, STAMP, PATENT_OFFICIAL, STAMP_OFFICIAL} from "../../types";
+import {AUTHORSHIP, OFFICIAL, PATENT, STAMP, PATENT_OFFICIAL, STAMP_OFFICIAL, AUTHORSHIP_OFFICIAL} from "../../types";
 import {MessageService} from "primeng/api";
 import {MatRadioChange} from "@angular/material/radio";
 
@@ -63,10 +63,13 @@ export class LoginComponent {
             else if (result['AuthTypeDTO']['type'][0] === STAMP)
               this.router.navigateByUrl("stamp/soluted")
             else if (result['AuthTypeDTO']['type'][0] === AUTHORSHIP){
-              this.router.navigateByUrl("authorship/add")
+              this.router.navigateByUrl("authorship/soluted")
             }
             else if (result['AuthTypeDTO']['type'][0] === STAMP_OFFICIAL){
               this.router.navigateByUrl("stamp/list")
+            }
+            else if (result['AuthTypeDTO']['type'][0] === AUTHORSHIP_OFFICIAL){
+              this.router.navigateByUrl("authorship/list")
             }
           } else {
             this.messageService.add({

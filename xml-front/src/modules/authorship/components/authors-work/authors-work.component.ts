@@ -19,12 +19,12 @@ export class AuthorsWorkComponent {
 
   @Output() display = new EventEmitter<AuthorsWorkDto>()
 
-  titleFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
+  titleFormControl = new FormControl('', [Validators.required])
   alternateTitleFormControl = new FormControl('', [capitalFirstLetterText])
   nameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
   surnameFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
   wayOfUsageFormControl = new FormControl('', [Validators.required])
-  remadeTitleFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
+  remadeTitleFormControl = new FormControl('', [Validators.required])
   workTypeFormControl = new FormControl('', [Validators.required])
   workFormFormControl = new FormControl('', [Validators.required])
 
@@ -93,7 +93,7 @@ export class AuthorsWorkComponent {
       type: this.workTypeFormControl.value,
       form: this.workFormFormControl.value,
       completed: completed,
-      isRemade: this.isRemade,
+      remade: this.isRemade,
       madeInWorkRelationship: this.madeInWorkRelationship
     }
 }

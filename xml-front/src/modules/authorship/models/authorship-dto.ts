@@ -3,4 +3,6 @@ export interface AuthorshipDTO {
   applicationDate: number[]
   submitter: string[]
   hasSolution: string[]
+  exampleFile: boolean
+  descriptionFile: boolean
 }

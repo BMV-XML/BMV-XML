@@ -14,7 +14,6 @@ export class AuthorshipHeaderComponent {
 
   logout() {
     this.headerService.logout()
-    this.router.navigate(["auth/login"])
   }
 
   addNewRequest() {
@@ -22,7 +21,7 @@ export class AuthorshipHeaderComponent {
   }
 
   getSolutions() {
-    return;
+    this.router.navigate(['authorship/soluted'])
   }
 
 }

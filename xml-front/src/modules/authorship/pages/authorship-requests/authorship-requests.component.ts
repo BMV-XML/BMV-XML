@@ -90,6 +90,15 @@ export class AuthorshipRequestsComponent {
     )
   }
 
+  openExampleFile($event: MouseEvent, id: any) {
+    $event.stopPropagation();
+    this.authorshipService.getExampleFile(id).subscribe(
+      res => {
+        window.open(res, "_blank");
+      }
+    )
+  }
+
   // ------------- SEARCH --------------
 
   terms: SearchDTO[] = [];
@@ -264,7 +273,7 @@ export class AuthorshipRequestsComponent {
     if (this.range.controls.start.value == null){
       console.log("START NULL")
       this.messageService.add({
-        key: 'patent-list-message',
+        key: 'authorship-list-message',
         severity: 'warn',
         summary: 'Neuspešna pretraga',
         detail: 'Početni datum mora da postoji.'
@@ -273,7 +282,7 @@ export class AuthorshipRequestsComponent {
     }else if (this.range.controls.end.value == null){
       console.log("END NULL")
       this.messageService.add({
-        key: 'patent-list-message',
+        key: 'authorship-list-message',
         severity: 'warn',
         summary: 'Neuspešna pretraga',
         detail: 'Krajnji datum mora da postoji.'
@@ -282,7 +291,7 @@ export class AuthorshipRequestsComponent {
     }else if (this.range.controls.start.value > new Date || this.range.controls.end.value > new Date){
       console.log("Ne VALJA")
       this.messageService.add({
-        key: 'patent-list-message',
+        key: 'authorship-list-message',
         severity: 'warn',
         summary: 'Neuspešna pretraga',
         detail: 'Datumi moraju biti u prošlosti.'
@@ -296,7 +305,7 @@ export class AuthorshipRequestsComponent {
     }
 
     this.messageService.add({
-      key: 'patent-list-message',
+      key: 'authorship-list-message',
       severity: 'success',
       summary: 'Uspešno',
       detail: 'Sačekajte malo za preuzimanje.'

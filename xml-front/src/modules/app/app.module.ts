@@ -15,6 +15,7 @@ import { SimpleHeaderComponent } from './components/simple-header/simple-header.
 import { AuthorshipHeaderComponent } from './components/authorship-header/authorship-header.component';
 import {StampHeaderComponent} from "./components/stamp-header/stamp-header.component";
 import { OfficialStampHeaderComponent } from './components/official-stamp-header/official-stamp-header.component';
+import { OfficialAuthorshipHeaderComponent } from './components/official-authorship-header/official-authorship-header.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { OfficialStampHeaderComponent } from './components/official-stamp-header
     SimpleHeaderComponent,
     AuthorshipHeaderComponent,
     StampHeaderComponent,
-    OfficialStampHeaderComponent
+    OfficialStampHeaderComponent,
+    OfficialAuthorshipHeaderComponent
   ],
   imports: [
     BrowserModule,

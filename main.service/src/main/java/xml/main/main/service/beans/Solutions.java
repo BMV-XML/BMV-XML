@@ -66,4 +66,13 @@ public class Solutions {
         }
         return res;
     }
+
+    public List<RequestSolution> getAuthorshipList() {
+        List<RequestSolution> res = new ArrayList<>();
+        for (RequestSolution requestSolution : this.solutions){
+            if (requestSolution.getRequestId().startsWith("A-"))
+                res.add(requestSolution);
+        }
+        return res;
+    }
 }

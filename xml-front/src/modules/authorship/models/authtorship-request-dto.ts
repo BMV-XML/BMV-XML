@@ -15,7 +15,7 @@ export interface AuthorshipRequestDto{
 export interface AuthorsWorkDto {
   title: string | null
   alternateTitle: string | null
-  isRemade: boolean
+  remade: boolean
   remadeTitle: string | null
   name: string | null
   surname: string | null

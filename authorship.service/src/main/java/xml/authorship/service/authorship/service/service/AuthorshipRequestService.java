@@ -370,6 +370,8 @@ public class AuthorshipRequestService {
         dto.setId(request.getAuthorshipId());
         dto.setApplicationDate(request.getAuthorshipData().getApplicationDate().getDate());
         dto.setSubmitter(request.getSubmitter().getGlobalEntity().getContact().getEmail());
+        dto.setDescriptionFile(request.getAttachments().getDescriptionPath() != null);
+        dto.setExampleFile(request.getAttachments().getExamplePath() != null);
         return dto;
     }
 
