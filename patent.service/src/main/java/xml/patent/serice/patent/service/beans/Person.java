@@ -44,4 +44,9 @@ public class Person extends GlobalEntity {
         }
         return false;
     }
+
+    @Override
+    public String getFullname() {
+        return name.getText() + " " + surname.getText();
+    }
 }

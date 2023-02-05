@@ -43,10 +43,12 @@ public class SolutionService {
     }
 
     public boolean hasSolution(String requestId) throws Exception {
+        System.out.println("  HAS SOLution " + requestId);
         Solutions solutions = solutionManager.retrieve();
         String[] elements = requestId.split("-");
         if (requestId.split("-").length == 3)
             requestId = elements[0]+"-"+elements[1]+"/"+elements[2];
+        if (solutions == null) return false;
         return solutions.doesRequestHaveSolution(requestId);
     }
 

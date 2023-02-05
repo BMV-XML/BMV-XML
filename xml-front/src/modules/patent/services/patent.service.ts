@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import * as JsonToXML from "js2xmlparser";
-import {AddSolutionDto} from "../models/add-solution-dto";
+import {AddSolutionDto} from "../../shared/models/add-solution-dto";
 import {PatentRequestDto} from "../models/patent-request-dto";
 import {TitleDto} from "../models/title-dto";
 import {PreviousPatentDto} from "../models/previous-patent-dto";
@@ -123,5 +123,21 @@ export class PatentService {
     if (dateParts[0].length === 1)
       day = '0' + dateParts[0]
     return month + "." + day +"." + dateParts[2] + "."
+  }
+
+  searchPatentListUser($event: SearchBy[]) {
+    const log = JsonToXML.parse("FilterDto", $event);
+    return this.httpClient.post(this.api_path + "patent/search/user", log, {responseType: 'text'});
+  }
+
+  filteRequestsUser($event: FilterDto[]) {
+
+    const log = JsonToXML.parse("FilterDto", $event);
+    console.log(log)
+    return this.httpClient.post(this.api_path + "patent/filter/user", log, {responseType: 'text'});
+  }
+
+  getPatentListUser() {
+    return this.httpClient.get(this.api_path + "patent/list/user", {responseType: 'text'});
   }
 }

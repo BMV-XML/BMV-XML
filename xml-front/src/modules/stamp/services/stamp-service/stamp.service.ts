@@ -6,6 +6,8 @@ import * as JsonToXML from "js2xmlparser";
 import {ApplicantsDto} from "../../models/applicants-dto";
 import {ColorsDto} from "../../models/colors-dto";
 import {GoodsAndClassesDto} from "../../models/goods-and-classes-dto";
+import {AddSolutionDto} from "../../../shared/models/add-solution-dto";
+import {SearchBy} from "../../../patent/models/search-by";
 
 @Injectable({
   providedIn: 'root'
@@ -68,4 +70,52 @@ export class StampService {
       console.log(log)
       return this.httpClient.post(this.api_stamp + "stamp", log, {responseType: 'text'});
   }
+
+    getStampList() {
+        return this.httpClient.get(this.api_stamp + "list", {responseType: 'text'});
+    }
+
+    getStampHTML(id: string) {
+        return this.httpClient.get(this.api_stamp + "transform/xhtml/" + id.replace("/","-"), {responseType: 'text'});
+    }
+
+    getStampPDF(id: string) {
+        return this.httpClient.get(this.api_stamp + "transform/pdf/" + id.replace("/","-"), {responseType: 'text'});
+    }
+
+    getStampRDF(id: string){
+        console.log("ID za RDF ")
+        console.log(id);
+        return this.httpClient.get(this.api_stamp + "transform/rdf/" + id.replace("/","-"), {responseType: 'text'});
+    }
+
+    getStampJSON(id: string){
+        console.log("ID za JSON ")
+        console.log(id);
+        return this.httpClient.get(this.api_stamp + "transform/json/" + id.replace("/","-"), {responseType: 'text'});
+    }
+
+    addSolution(solution: AddSolutionDto) {
+        const log = JsonToXML.parse("root", solution);
+        return this.httpClient.post(this.api_stamp + "solution/save", log, {responseType: 'text'});
+
+    }
+
+    getSolution(requestId: string) {
+        return this.httpClient.get(this.api_stamp + "solution/get/" + requestId.replace("/","-"), {responseType: 'text'});
+    }
+
+    getStamp(requestId: string) {
+        return this.httpClient.get(this.api_stamp + "get/"+ requestId.replace("/", "-"), {responseType: 'text'});
+    }
+
+    searchStampList(searchBy: SearchBy[]) {
+        const log = JsonToXML.parse("FilterDto", searchBy);
+        return this.httpClient.post(this.api_stamp + "search", log, {responseType: 'text'});
+
+    }
+
+    getAcceptedStampList() {
+        return this.httpClient.get(this.api_stamp + "stamp/list/soluted", {responseType: 'text'});
+    }
 }

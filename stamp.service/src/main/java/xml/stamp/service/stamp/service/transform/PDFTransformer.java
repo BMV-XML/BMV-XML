@@ -5,10 +5,13 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.xalan.processor.TransformerFactoryImpl;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 import xml.stamp.service.stamp.service.db.ExistManager;
+import xml.stamp.service.stamp.service.jaxb.JaxLoader;
+import xml.stamp.service.stamp.service.model.RequestForStamp;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -33,13 +36,20 @@ public class PDFTransformer {
     @Autowired
     private ExistManager existManager;
 
+    @Autowired
+    private JaxLoader loader;
+
     public PDFTransformer() throws IOException, SAXException {
         fopFactory = FopFactory.newInstance(new File("src/main/resources/fop.xconf"));
         transformerFactory = new TransformerFactoryImpl();
     }
 
     public void generatePDF(String documentId) throws Exception {
-        String retrieved = existManager.retrieve(documentId);
+        RequestForStamp retrievedObj = existManager.retrieve(documentId);
+
+        OutputStream os = new ByteArrayOutputStream();
+        os = loader.marshalling(retrievedObj, os);
+        String retrieved = os.toString();
 
         System.out.println("[INFO] " + PDFTransformer.class.getSimpleName());
 

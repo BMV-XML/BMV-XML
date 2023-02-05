@@ -6,6 +6,7 @@ import {FullPatentDto} from "../../models/full-patent-dto";
 import {AddSolutionComponent} from "../../components/add-solution/add-solution.component";
 import {ViewSolutionComponent} from "../../components/view-solution/view-solution.component";
 import {MatDialog} from "@angular/material/dialog";
+import {PATENT_OFFICIAL} from "../../../auth/types";
 
 class FullPatentDTO {
 }
@@ -99,9 +100,11 @@ export class FullPatentComponent {
   submitterPerson: boolean = false
   commissionerPerson: boolean = false
   inventorPerson: boolean = false
+  isOfficial: boolean;
 
   constructor(private patentService: PatentService, public dialog: MatDialog,
   private route: ActivatedRoute, private router: Router) {
+    this.isOfficial = localStorage.getItem("type") === PATENT_OFFICIAL
   }
 
   ngOnInit() {

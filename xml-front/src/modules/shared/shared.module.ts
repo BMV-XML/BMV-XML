@@ -9,13 +9,15 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatLegacyRadioModule} from "@angular/material/legacy-radio";
 import {MatInputModule} from "@angular/material/input";
 import {MatRadioModule} from "@angular/material/radio";
+import { PatentFilterTypeToStringPipe } from './pipes/patent-filter-type-to-string.pipe';
 
 
 
 @NgModule({
   declarations: [
     DateArrayToStringPipe,
-    EntityComponent
+    EntityComponent,
+    PatentFilterTypeToStringPipe
   ],
     imports: [
         CommonModule,
@@ -24,7 +26,7 @@ import {MatRadioModule} from "@angular/material/radio";
         MatInputModule,
         MatRadioModule
     ],
-  exports:[DateArrayToStringPipe, EntityComponent],
+    exports: [DateArrayToStringPipe, EntityComponent, PatentFilterTypeToStringPipe],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }
   ]

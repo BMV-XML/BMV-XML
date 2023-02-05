@@ -2,12 +2,14 @@ package xml.stamp.service.stamp.service.fuseki;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xml.stamp.service.stamp.service.util.AuthenticationUtilities;
 import xml.stamp.service.stamp.service.util.SparqlUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
+import static xml.stamp.service.stamp.service.util.SparqlUtil.NTRIPLES;
 
 @Component
 public class FusekiReader {
@@ -71,6 +75,33 @@ public class FusekiReader {
     public String readFile(String path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);
+    }
+
+    public String getMetadataJson(String graphUri, String sparqlQueryCondition) {
+        System.out.println("[INFO] Selecting the triples from the named graph \"" + graphUri + "\".");
+        String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + graphUri, sparqlQueryCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+        ResultSet results = query.execSelect();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ResultSetFormatter.outputAsJSON(out, results);
+        String json = new String(out.toByteArray(), StandardCharsets.UTF_8);
+        int indexOfSubStr = json.indexOf("bindings");
+        String file = String.format("{\n  %s", json.substring(indexOfSubStr - 1));
+        query.close();
+        return file;
+    }
+
+    public String getMetadataRdf(String graphUri, String sparqlQueryCondition) {
+        String sparqlQuery = SparqlUtil.constructData(authManager.getFullDataEndpoint() + graphUri, sparqlQueryCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+        Model model = query.execConstruct();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        model.write(out, NTRIPLES);
+
+        return out.toString();
     }
 }
 

@@ -1,4 +1,4 @@
-package xml.stamp.service.stamp.service.dto;
+package xml.stamp.service.stamp.service.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

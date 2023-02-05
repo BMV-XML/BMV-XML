@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-6">
+        <mat-form-field id="grid" class="example-chip-list" appearance="fill">
+            <mat-label>Termini za pretragu</mat-label>
+            <mat-chip-grid  #chipGrid aria-label="Unos termina">
+                <mat-chip-row *ngFor="let fruit of fruits"
+                              (removed)="remove(fruit)"
+                              [editable]="true"
+                              (edited)="edit(fruit, $event)"
+                              [aria-description]="'press enter to edit ' + fruit.name">
+                    {{fruit.name}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+                <input placeholder="Novi termin..."
+                       [matChipInputFor]="chipGrid"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="true"
+                       (matChipInputTokenEnd)="add($event)"/>
+            </mat-chip-grid>
+        </mat-form-field>
+    </div>
+    <div class="col-1 my-2 mx-4">
+        <button mat-raised-button (click)="search()">Pretraži</button>
+    </div>
+</div>
+
+
+
+
+<p-table [value]="stamps" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Code</th>
+            <th>Datum podnosenja</th>
+            <th>Podnosilac</th>
+            <th> PDF</th>
+            <th> HTML</th>
+            <th> RDF</th>
+            <th> JSON</th>
+            <th> Donesi rešenje</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stamp>
+        <tr (click)="getURL(stamp.id)">
+            <td>{{stamp.id[0]}}</td>
+            <td>{{stamp.applicationDate | dateArrayToString}}</td>
+            <td>{{stamp.applicant[0]}}</td>
+            <th>
+                <button pButton class="p-button-sm" (click)="getPDF($event, stamp.id[0])"> PDF</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" (click)="getHTML($event, stamp.id[0])"> HTML</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" (click)="getRDF($event, stamp.id[0])"> RDF</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" (click)="getJSON($event, stamp.id[0])"> JSON</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" *ngIf="stamp.hasSolution[0] === 'false'"
+                        (click)="openAddSolutionDialog($event, stamp.id[0])"> Dodaj rešenje
+                </button>
+
+                <button pButton class="p-button-sm" *ngIf="stamp.hasSolution[0] === 'true'"
+                        (click)="openViewStampSolutionDialog($event, stamp.id[0])"> Vidi rešenje
+                </button>
+
+            </th>
+        </tr>
+    </ng-template>
+</p-table>

@@ -1,8 +1,10 @@
+<!-- <app-stamp-header></app-stamp-header>  -->
+
 <mat-stepper [linear]="isLinear" #stepper>
     <mat-step [completed]="isApplicantCompleted()">
 
         <div class="step">
-            <form>
+            <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Podnosilac</ng-template>
 
                 <ng-template #applicantContainerRef>
@@ -26,7 +28,7 @@
 
     <mat-step [completed]="isLowerCompleted">
         <div class="step">
-            <form>
+            <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Punomoćnik</ng-template>
 
                 <app-entity (display)="addLower($event)"></app-entity>
@@ -41,7 +43,7 @@
 
     <mat-step [completed]="isCommonRepresentativeCompleted">
         <div class="step">
-            <form>
+            <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Zajednički predstavnik</ng-template>
 
                 <app-entity (display)="addCommonRepresentative($event)"></app-entity>
@@ -57,13 +59,13 @@
 
     <mat-step [completed]="isStampCompleted">
         <div class="step">
-            <form>
+            <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Podaci o žigu</ng-template>
 
                 <div>
                     <p>Vrsta žiga</p>
                     <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
-                        <mat-radio-button value="1">individualni</mat-radio-button>
+                        <mat-radio-button value="1" [checked]="true">individualni</mat-radio-button>
                         <mat-radio-button value="2">kolektivni</mat-radio-button>
                         <mat-radio-button value="3">žig garancije</mat-radio-button>
                     </mat-radio-group>
@@ -72,7 +74,7 @@
                 <div>
                     <p>Tip žiga</p>
                     <mat-radio-group (change)="optionChangedKind($event)" aria-label="Select an option">
-                        <mat-radio-button value="1">verbalni znak(znak u reči)</mat-radio-button>
+                        <mat-radio-button value="1" [checked]="true">verbalni znak(znak u reči)</mat-radio-button>
                         <mat-radio-button value="2">grafički znak</mat-radio-button>
                         <mat-radio-button value="3">kombinovani znak</mat-radio-button>
                         <mat-radio-button value="4">trodimenzionalni znak</mat-radio-button>
@@ -84,10 +86,10 @@
                         <input matInput formControlName="otherKindFormControl" placeholder="verbalni znak"
                                required (ngModelChange)="check()">
                         <mat-error
-                                *ngIf="formGroup.controls['otherKind'].hasError('pattern') && !formGroup.controls['otherKind'].hasError('required')">
+                                *ngIf="formGroup.controls['otherKindFormControl'].hasError('pattern') && !formGroup.controls['otherKindFormControl'].hasError('required')">
                             Tip se sastoji od slova i brojeva
                         </mat-error>
-                        <mat-error *ngIf="formGroup.controls['otherKind'].hasError('required')">
+                        <mat-error *ngIf="formGroup.controls['otherKindFormControl'].hasError('required')">
                             Tip <strong>potrebno</strong>
                         </mat-error>
                     </mat-form-field>
@@ -95,7 +97,7 @@
                 </div>
                 <div>
 
-                    <form>
+                    <form [formGroup]="formGroup">
                         <mat-form-field class="example-chip-list" appearance="fill">
                             <mat-label>Boje</mat-label>
                             <mat-chip-grid #chipGrid aria-label="Color selection">
@@ -119,7 +121,7 @@
                         </mat-form-field>
                     </form>
 
-                    <form>
+                    <form [formGroup]="formGroup">
                         <mat-form-field class="example-chip-list" appearance="fill">
                             <mat-label>Klase roba i usluga</mat-label>
                             <mat-chip-grid #chipGrid2 aria-label="Goods selection">
@@ -149,10 +151,10 @@
                         <input matInput formControlName="descriptionFormControl" placeholder="Znak je..."
                                required (ngModelChange)="check()">
                         <mat-error
-                                *ngIf="formGroup.controls['description'].hasError('pattern') && !formGroup.controls['otherKind'].hasError('required')">
+                                *ngIf="formGroup.controls['descriptionFormControl'].hasError('pattern') && !formGroup.controls['descriptionFormControl'].hasError('required')">
                             Opis se sastoji od slova i brojeva
                         </mat-error>
-                        <mat-error *ngIf="formGroup.controls['description'].hasError('required')">
+                        <mat-error *ngIf="formGroup.controls['descriptionFormControl'].hasError('required')">
                             Opis je <strong>potrebno</strong>
                         </mat-error>
                     </mat-form-field>
@@ -162,7 +164,7 @@
                         <input matInput formControlName="transliterationFormControl" placeholder=""
                                required (ngModelChange)="check()">
                         <mat-error
-                                *ngIf="formGroup.controls['transliteration'].hasError('pattern')">
+                                *ngIf="formGroup.controls['transliterationFormControl'].hasError('pattern')">
                             Transliteracija znaka se sastoji od slova i brojeva
                         </mat-error>
                     </mat-form-field>
@@ -172,21 +174,46 @@
                         <input matInput formControlName="translationFormControl" placeholder=""
                                required (ngModelChange)="check()">
                         <mat-error
-                                *ngIf="formGroup.controls['translation'].hasError('pattern')">
+                                *ngIf="formGroup.controls['translationFormControl'].hasError('pattern')">
                             Prevod znaka se sastoji od slova i brojeva
                         </mat-error>
                     </mat-form-field>
                 </div>
 
 
-                <div class="formInput fileInput">
-                    <img [src]="signPhoto"
-                         style="width: 300px; height: 300px; border-radius: 20%; object-fit: contain;"/>
-                    <label for="file" class="file-label">
-                        Promeni sliku:
-                        <mat-icon color="primary" class="icon">cloud_upload</mat-icon>
-                    </label>
-                    <input type="file" id="file" accept="image/*" style="display: none;" (change)="selectPhoto($event)">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="formInput fileInput">
+                            <img [src]="signPhoto"
+                                 style="width: 300px; height: 300px; border-radius: 20%; object-fit: contain;"/>
+                            <label for="file" class="file-label">
+                                Promeni sliku:
+                                <mat-icon color="primary" class="icon">cloud_upload</mat-icon>
+                            </label>
+                            <input type="file" id="file" accept="image/*" style="display: none;"
+                                   (change)="selectPhoto($event)">
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+
+                        <p>Prvenstvo</p>
+
+                        <mat-radio-group (change)="optionChangedPriority($event)" aria-label="Select an option">
+                            <mat-radio-button value="1">Da</mat-radio-button>
+                            <mat-radio-button value="2" [checked]="true">Ne</mat-radio-button>
+                        </mat-radio-group>
+
+                        <mat-form-field class="input m-2" appearance="fill" [hidden]="isHiddenYesPriority">
+                            <mat-label>Tip znaka</mat-label>
+                            <input matInput formControlName="priorityFormControl" placeholder="osnov za prioritet"
+                                   required (ngModelChange)="check()">
+                            <mat-error
+                                    *ngIf="formGroup.controls['priorityFormControl'].hasError('pattern') && !formGroup.controls['priorityFormControl'].hasError('required')">
+                                Tip se sastoji od slova i brojeva
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
                 </div>
 
 
@@ -200,7 +227,7 @@
 
     <mat-step [completed]="isFilesUploaded">
         <div class="step">
-            <form>
+            <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Prilozi</ng-template>
                 <p-table [value]="products" [tableStyle]="{'min-width': '50rem'}">
                     <ng-template pTemplate="header">
@@ -220,17 +247,20 @@
                                 </div>
 
                                 <div class="file-list" *ngIf="product.submittedAttachment==='DA'">
-                                     <a [href]="product.path" id = "p+{{product.position}}" target="_blank"> Pogledaj fajl</a>
+                                    <a [href]="product.path" id="p+{{product.position}}" target="_blank"> Pogledaj
+                                        fajl</a>
                                 </div>
 
                             </td>
                             <td>
-                                <div  class="formInput fileInput">
+                                <div class="formInput fileInput">
                                     <label for="files+{{product.position}}" class="file-label">
                                         Dodaj ili izmeni fajl:
                                         <mat-icon color="primary" class="icon">upload</mat-icon>
                                     </label>
-                                    <input type="file" id="files+{{product.position}}" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, .pdf" style="display: none;" (change)="selectFile($event, product)">
+                                    <input type="file" id="files+{{product.position}}"
+                                           accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, .pdf"
+                                           style="display: none;" (change)="selectFile($event, product)">
                                 </div>
                             </td>
                         </tr>

@@ -1,5 +1,7 @@
-<app-official-header *ngIf="isOfficial()"></app-official-header>
+<app-official-patent-header *ngIf="isOfficialPatent()"></app-official-patent-header>
 <app-patent-header *ngIf="isPatent()"></app-patent-header>
 <app-simple-header *ngIf="isNoOne()"></app-simple-header>
 <app-authorship-header *ngIf="isAuthorship()"></app-authorship-header>
+<app-stamp-header *ngIf="isStamp()"></app-stamp-header>
+<app-official-stamp-header *ngIf="isOfficialStamp()"></app-official-stamp-header>
 <router-outlet></router-outlet>

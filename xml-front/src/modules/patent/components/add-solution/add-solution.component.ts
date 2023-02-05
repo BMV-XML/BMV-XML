@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {MatRadioChange} from "@angular/material/radio";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PatentService} from "../../services/patent.service";
-import {AddSolutionDto} from "../../models/add-solution-dto";
+import {AddSolutionDto} from "../../../shared/models/add-solution-dto";
 import * as xml2js from "xml2js";
 
 @Component({

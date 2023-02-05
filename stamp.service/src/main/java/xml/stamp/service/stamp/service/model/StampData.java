@@ -67,4 +67,32 @@ public class StampData {
                 ", priority='" + priority + '\'' +
                 "}\n";
     }
+
+    public boolean contains(String s) {
+        if(type.toString().toLowerCase().contains(s))
+            return true;
+        if(kind.toString().toLowerCase().contains(s))
+            return true;
+        for(String color:colors){
+            if(color.toLowerCase().contains(s))
+                return true;
+        }
+        if(transliterationStamp.toLowerCase().contains(s))
+            return true;
+        if(translateStamp.toLowerCase().contains(s))
+            return true;
+        if(descriptionStamp.toLowerCase().contains(s))
+            return true;
+        for(String goods:goodsAndServicesClass){
+            if(goods.toLowerCase().contains(s))
+                return true;
+        }
+        if(priority.getReason().toLowerCase().contains(s))
+            return true;
+        if(stampApplicationNumber.contains(s))
+            return true;
+        if(dateOfApplication.getDate().toString().contains(s))
+            return true;
+        return false;
+    }
 }

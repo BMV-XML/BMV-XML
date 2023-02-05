@@ -29,46 +29,17 @@ import {start} from "@popperjs/core";
 })
 export class PatentRequestsComponent {
   patents: PatentDto[] = [];
-  type_options: SelectDto[] = [
-    {name: "Podnosilac", value: "pod_ime"},
-    {name: "Punomoćnik", value: "pun_ime"},
-    {name: "Pronalazač", value: "pro_ime"},
-    {name: "Izdvojena", value: "child"},
-    {name: "Dodatna", value: "additional"},
-    {name: "Prava prvenstva", value: "sibling"},
-    {name: "Naslov", value: "naslov"},
-    {name: "Datum prijave", value: "datum_prijave"},
-    {name: "Broj prijave", value: "broj_prijave"}
-  ]
-  operator_options: SelectDto[] = [ {name: 'i', value: "i"}, {name:'ili', value:'ili'}, {name:'ne', value:"ne"}]
 
-  lastFilter: FilterDto[] = []
-
-  searchFormGroup = this._formBuilder.group({
-    numberOperator: ['', []],
-    number: ['', []],
-    titleOperator: ['', []],
-    title: ['', []],
-    datumOperator: ['', []],
-    chosenDate: [null, []],
-    submitterOperator: ['', []],
-    submitter: ['', []],
-    inventorOperator: ['', []],
-    inventor: ['', []],
-    commissionerOperator: ['', []],
-    commissioner: ['', []],
-  })
-
-  filterFormGroup = this._formBuilder.group({
-    type: ['', [Validators.required]],
-    text: ['', [Validators.required]],
-  })
 
 
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
+  searchOrFiltered: boolean = false;
+  searched: boolean = true;
+  searchParams: SearchBy[] =[];
+  filterParams: FilterDto[] = [];
 
   constructor(private patentService: PatentService,
               private router: Router, private _formBuilder: FormBuilder,
@@ -78,7 +49,7 @@ export class PatentRequestsComponent {
     this.dateAdapter.setLocale('sr-Latn');
     this.patentService.getPatentList().subscribe(
       (res) => {
-        console.log("--------------")
+        console.log("------------------------------- LIST ----------------------------------------")
         console.log(res)
         let parser = new xml2js.Parser();
         parser.parseString(res, (err, result) => {
@@ -155,44 +126,7 @@ export class PatentRequestsComponent {
   }
 
 
-  filterRequests() {
-    console.log("-----------")
-    let nextFilter : FilterDto[] = []
-    let firstElement : FilterDto = {
-      operator: "i",
-      type: this.filterFormGroup.controls.type.value,
-      value: this.filterFormGroup.controls.text.value
-    }
-    nextFilter.push(firstElement)
-    for (let elem of this.refList){
-      nextFilter.push(elem.instance.getFilterElements())
-    }
-    console.log(nextFilter)
-    this.patentService.filteRequests(nextFilter).subscribe(
-      (res) => {
-        console.log("--------------")
-        console.log(res)
-        let parser = new xml2js.Parser();
-        parser.parseString(res, (err, result) => {
-          console.log("**********************")
-          this.patents = []
-          try{
-          console.log(result['List']['item'][0])
-          for (let i of result['List']['item'])
-            this.patents.push(i)
-          }catch {
-            this.messageService.add({
-              key: 'patent-list-message',
-              severity: 'warn',
-              summary: 'Neuspešno filtriranje',
-              detail: 'Nema rezultata.'
-            })
-          }
-        });
-      }
-    )
-    console.log(this.lastFilter)
-  }
+
 
   getRDF($event: MouseEvent, id: any) {
     $event.stopPropagation();
@@ -215,84 +149,6 @@ export class PatentRequestsComponent {
       }
     )
   }
-
-  fruits: SearchBy[] = [];
-  readonly separatorKeysCodes = [ENTER, COMMA, SPACE] as const;
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.fruits.push({name: value});
-    }
-    event.chipInput!.clear();
-  }
-
-  remove(fruit: SearchBy): void {
-    const index = this.fruits.indexOf(fruit);
-
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-    }
-  }
-
-  edit(fruit: SearchBy, event: MatChipEditedEvent) {
-    const value = event.value.trim();
-    if (!value) {
-      this.remove(fruit);
-      return;
-    }
-    const index = this.fruits.indexOf(fruit);
-    if (index >= 0) {
-      this.fruits[index].name = value;
-    }
-  }
-
-  search() {
-    this.patentService.searchPatentList(this.fruits).subscribe(
-      (res) => {
-        this.handleResponse(res)
-      }
-    )
-  }
-
-  private handleResponse(res: string) {
-    console.log("--------------")
-    console.log(res)
-    let parser = new xml2js.Parser();
-    parser.parseString(res, (err, result) => {
-      try {
-        console.log("**********************")
-        console.log(result['List']['item'][0])
-        this.patents = []
-        for (let i of result['List']['item'])
-          this.patents.push(i)
-      } catch (err) {
-        this.patents = []
-      }
-    });
-
-  }
-
-
-  @ViewChild("viewContainerRef", { read: ViewContainerRef }) vcr!: ViewContainerRef;
-  refList: ComponentRef<FilterComponent>[] = []
-
-  addFilterElement() {
-    let ref = this.vcr.createComponent(FilterComponent)
-    this.refList.push(ref)
-    ref.instance.operator_options = this.operator_options;
-    ref.instance.type_options = this.type_options;
-  }
-
-  removeFilterElement() {
-    if (this.refList.length == 0)
-      return
-    const index = this.vcr.indexOf(this.refList[this.refList.length-1].hostView)
-    if (index != -1) {this.vcr.remove(index); this.refList.pop()}
-  }
-
-  firstElement: FilterDto = {operator: "", type: "", value: ""}
-
 
   makeReport() {
     //alert("TODO: implement report")
@@ -349,23 +205,46 @@ export class PatentRequestsComponent {
 
   }
 
+  filter($event: FilterDto[]) {
+    this.patentService.filteRequests($event).subscribe(
+      (res) => {
+        this.searchOrFiltered = true;
+        this.searched = false;
+        this.filterParams = $event;
+        console.log("--------------")
+        console.log(res)
+        this.handleResponse(res)
+      }
+    )
+  }
+
+  search($event: SearchBy[]) {
+    this.patentService.searchPatentList($event).subscribe(
+      (res) => {
+        this.searchOrFiltered = true;
+        this.searched = true;
+        this.searchParams = $event;
+        this.handleResponse(res)
+      }
+    )
+  }
+
+  private handleResponse(res: string) {
+    console.log("--------------")
+    console.log(res)
+    let parser = new xml2js.Parser();
+    parser.parseString(res, (err, result) => {
+      try {
+        console.log("**********************")
+        console.log(result['List']['item'][0])
+        this.patents = []
+        for (let i of result['List']['item'])
+          this.patents.push(i)
+      } catch (err) {
+        this.patents = []
+      }
+    });
+
+  }
 }
 
-
-/*
-
-    this.lastFilter = {
-      numberOperator: this.searchFormGroup.controls.numberOperator.value,
-      number: this.searchFormGroup.controls.number.value,
-      titleOperator: this.searchFormGroup.controls.titleOperator.value,
-      title: this.searchFormGroup.controls.title.value,
-      datumOperator: this.searchFormGroup.controls.datumOperator.value,
-      datum: this.chosenDate,
-      submitterOperator: this.searchFormGroup.controls.submitterOperator.value,
-      submitter: this.searchFormGroup.controls.submitter.value,
-      inventorOperator: this.searchFormGroup.controls.inventorOperator.value,
-      inventor: this.searchFormGroup.controls.inventor.value,
-      commissionerOperator: this.searchFormGroup.controls.commissionerOperator.value,
-      commissioner: this.searchFormGroup.controls.commissioner.value,
-    }
- */

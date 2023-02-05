@@ -24,7 +24,7 @@ public class RequestForStampRepository {
         existManager.storeFromRequestForStamp(requestForStamp);
     }
 
-    public String getRequestForStampById(String documentId) throws Exception {
+    public RequestForStamp getRequestForStampById(String documentId) throws Exception {
         return existManager.retrieve(documentId);              /*"111.xml"*/
     }
 

@@ -7,21 +7,25 @@ import {AuthModule} from "../auth/auth.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RootComponent} from "./pages/root/root.component";
 import {HttpClientModule} from "@angular/common/http";
-import { OfficialHeaderComponent } from './components/official-header/official-header.component';
+import { OfficialPatentHeaderComponent } from './components/official-patent-header/official-patent-header.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PatentHeaderComponent } from './components/patent-header/patent-header.component';
 import {SharedModule} from "../shared/shared.module";
 import { SimpleHeaderComponent } from './components/simple-header/simple-header.component';
 import { AuthorshipHeaderComponent } from './components/authorship-header/authorship-header.component';
+import {StampHeaderComponent} from "./components/stamp-header/stamp-header.component";
+import { OfficialStampHeaderComponent } from './components/official-stamp-header/official-stamp-header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RootComponent,
-    OfficialHeaderComponent,
+    OfficialPatentHeaderComponent,
     PatentHeaderComponent,
     SimpleHeaderComponent,
-    AuthorshipHeaderComponent
+    AuthorshipHeaderComponent,
+    StampHeaderComponent,
+    OfficialStampHeaderComponent
   ],
   imports: [
     BrowserModule,

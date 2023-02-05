@@ -84,7 +84,7 @@ export class AddPatentComponent {
               private readonly messageService: MessageService) {}
 
   ngAfterViewInit(): void {
-    let xml = "<titles><title jezik='SR'>aaaa <b>bbbbb</b> cccccc</title><title jezik='HU'>XXXX</title></titles>";
+    let xml = "<titles><title jezik='SR'>aaaa bbbbb cccccc</title></titles>";
     let editor = document.querySelector("#editor");
     let specification = this.xonomyService.patentSpecification;
     Xonomy.render(xml, editor, specification);

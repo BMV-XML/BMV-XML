@@ -30,4 +30,9 @@ public class LegalEntity extends GlobalEntity {
         }
         return false;
     }
+
+    @Override
+    public String getFullname() {
+        return businessName.getText();
+    }
 }
