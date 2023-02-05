@@ -6,11 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import xml.stamp.service.stamp.service.dto.FullStampDTO;
-import xml.stamp.service.stamp.service.dto.SearchExpressionDTO;
-import xml.stamp.service.stamp.service.dto.SimpleViewStampDTO;
+import xml.stamp.service.stamp.service.Application;
+import xml.stamp.service.stamp.service.dto.*;
 import xml.stamp.service.stamp.service.dto.request.RequestForStampDTO;
+import xml.stamp.service.stamp.service.service.AuthenticationService;
 import xml.stamp.service.stamp.service.service.OfficialService;
+import xml.stamp.service.stamp.service.service.ReportService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,12 @@ public class OfficialController {
 
     @Autowired
     private OfficialService officialService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<SimpleViewStampDTO>> getListOfPatents(){
@@ -64,5 +71,20 @@ public class OfficialController {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+    }
+
+    @PostMapping(value="report", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO,
+                                            @RequestHeader(name = "username") String username,
+                                            @RequestHeader(name = "password") String password) throws Exception {
+        System.out.println("********************************* report **************");
+        LoginDTO l = new LoginDTO(username, password);
+        l.setService(Application.OFFICIAL);
+        System.out.println("  REPORT DATES");
+        System.out.println(rangeDTO.getStartDate());
+        System.out.println(rangeDTO.getEndDate());
+        if (!authenticationService.authenticate(l))
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(reportService.generateReportPDF(rangeDTO), HttpStatus.OK);
     }
 }

@@ -11,20 +11,29 @@ import {ViewStampSolutionComponent} from "../../components/view-stamp-solution/v
 import {SearchBy} from "../../../patent/models/search-by";
 import {COMMA, ENTER, SPACE} from "@angular/cdk/keycodes";
 import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
+import {FormControl, FormGroup} from "@angular/forms";
+import {MessageService} from "primeng/api";
+import {RangeDto} from "../../../patent/models/range-dto";
 
 @Component({
     selector: 'app-view-stamp',
     templateUrl: './view-stamp.component.html',
-    styleUrls: ['./view-stamp.component.scss']
+    styleUrls: ['./view-stamp.component.scss'],
+    providers:[MessageService]
 })
 export class ViewStampComponent {
     stamps: SimpleViewStampDto[] = [];
 
+    range = new FormGroup({
+        start: new FormControl<Date | null>(null),
+        end: new FormControl<Date | null>(null),
+    });
 
     constructor(private stampService: StampService,
                 public dialog: MatDialog,
                 private dateAdapter: DateAdapter<Date>,
-                private router: Router) {
+                private router: Router,
+                private messageService: MessageService) {
         this.stampService.getStampList().subscribe(
             (res) => {
                 console.log("--------------")
@@ -90,7 +99,7 @@ export class ViewStampComponent {
         )
     }
 
-    getURL(id:string) {
+    getURL(id: string) {
         console.log(id);
         this.router.navigateByUrl("stamp/full/" + id[0].replace("/", "-"))
     }
@@ -130,7 +139,6 @@ export class ViewStampComponent {
             console.log('The dialog was closed')
         })
     }
-
 
 
     fruits: SearchBy[] = [];
@@ -187,6 +195,60 @@ export class ViewStampComponent {
                 this.stamps = []
             }
         });
+    }
 
+
+    makeReport() {
+        console.log("************** report ***************")
+        console.log(this.stampService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()))
+        console.log(this.range.controls.end.value)
+        console.log(new Date())
+        if (this.range.controls.start.value == null) {
+            console.log("START NULL")
+            this.messageService.add({
+                key: 'stamp-list-message',
+                severity: 'warn',
+                summary: 'Neuspešna pretraga',
+                detail: 'Početni datum mora da postoji.'
+            })
+            return
+        } else if (this.range.controls.end.value == null) {
+            console.log("END NULL")
+            this.messageService.add({
+                key: 'stamp-list-message',
+                severity: 'warn',
+                summary: 'Neuspešna pretraga',
+                detail: 'Krajnji datum mora da postoji.'
+            })
+            return
+        } else if (this.range.controls.start.value > new Date || this.range.controls.end.value > new Date) {
+            console.log("Ne VALJA")
+            this.messageService.add({
+                key: 'stamp-list-message',
+                severity: 'warn',
+                summary: 'Neuspešna pretraga',
+                detail: 'Datumi moraju biti u prošlosti.'
+            })
+            return
+        }
+
+        let range: RangeDto = {
+            startDate: this.stampService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()),
+            endDate:  this.stampService.convertDateToStringInReport(this.range.controls.end.value?.toLocaleString())
+        }
+
+        this.messageService.add({
+            key: 'stamp-list-message',
+            severity: 'success',
+            summary: 'Uspešno izveštavanje',
+            detail: 'Sačekajte malo za preuzimanje.'
+        })
+
+        this.stampService.getReportForPeriod(range).subscribe(
+            res => {
+                console.log(res);
+                window.open(res, "_blank");
+            }
+        )
     }
 }

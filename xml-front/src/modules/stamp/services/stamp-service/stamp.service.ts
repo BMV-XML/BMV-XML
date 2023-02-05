@@ -8,6 +8,7 @@ import {ColorsDto} from "../../models/colors-dto";
 import {GoodsAndClassesDto} from "../../models/goods-and-classes-dto";
 import {AddSolutionDto} from "../../../shared/models/add-solution-dto";
 import {SearchBy} from "../../../patent/models/search-by";
+import {RangeDto} from "../../../patent/models/range-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -117,5 +118,25 @@ export class StampService {
 
     getAcceptedStampList() {
         return this.httpClient.get(this.api_stamp + "stamp/list/soluted", {responseType: 'text'});
+    }
+
+    convertDateToStringInReport(param: string | undefined) {
+        if (param === undefined)
+            return ''
+        let elems = param.split(",")
+        let dateParts = elems[0].split("/")
+        let month : string = dateParts[1]
+        if (dateParts[1].length === 1)
+            month = '0' + dateParts[1]
+        let day : string = dateParts[0]
+        if (dateParts[0].length === 1)
+            day = '0' + dateParts[0]
+        return month + "." + day +"." + dateParts[2] + "."
+    }
+
+    getReportForPeriod(range: RangeDto) {
+        const log = JsonToXML.parse("range", range);
+        return this.httpClient.post(this.api_stamp + "report", log, {responseType: 'text'});
+
     }
 }

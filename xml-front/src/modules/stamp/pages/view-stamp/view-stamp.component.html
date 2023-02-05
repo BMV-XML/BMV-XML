@@ -1,32 +1,55 @@
 <div class="row">
-    <div class="col-6">
-        <mat-form-field id="grid" class="example-chip-list" appearance="fill">
-            <mat-label>Termini za pretragu</mat-label>
-            <mat-chip-grid  #chipGrid aria-label="Unos termina">
-                <mat-chip-row *ngFor="let fruit of fruits"
-                              (removed)="remove(fruit)"
-                              [editable]="true"
-                              (edited)="edit(fruit, $event)"
-                              [aria-description]="'press enter to edit ' + fruit.name">
-                    {{fruit.name}}
-                    <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
-                        <mat-icon>cancel</mat-icon>
-                    </button>
-                </mat-chip-row>
-                <input placeholder="Novi termin..."
-                       [matChipInputFor]="chipGrid"
-                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                       [matChipInputAddOnBlur]="true"
-                       (matChipInputTokenEnd)="add($event)"/>
-            </mat-chip-grid>
-        </mat-form-field>
-    </div>
-    <div class="col-1 my-2 mx-4">
-        <button mat-raised-button (click)="search()">Pretraži</button>
-    </div>
+    <div class="col-9">
+        <div class="row">
+            <div class="col-11">
+                <mat-form-field id="grid" class="example-chip-list" appearance="fill">
+                    <mat-label>Termini za pretragu</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Unos termina">
+                        <mat-chip-row *ngFor="let fruit of fruits"
+                                      (removed)="remove(fruit)"
+                                      [editable]="true"
+                                      (edited)="edit(fruit, $event)"
+                                      [aria-description]="'press enter to edit ' + fruit.name">
+                            {{fruit.name}}
+                            <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                        <input placeholder="Novi termin..."
+                               [matChipInputFor]="chipGrid"
+                               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                               [matChipInputAddOnBlur]="true"
+                               (matChipInputTokenEnd)="add($event)"/>
+                    </mat-chip-grid>
+                </mat-form-field>
+            </div>
+            <div class="col-1 my-2 mx-4">
+                <button mat-raised-button (click)="search()">Pretraži</button>
+            </div>
+        </div>
 </div>
+        <div class="col-3">
+            <div class="row mx-3">
+                <mat-form-field appearance="fill">
+                    <mat-label>Unosite interval</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                        <input matStartDate formControlName="start" placeholder="Početni datum">
+                        <input matEndDate formControlName="end" placeholder="Krajnji datum">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
 
+                    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Početni datum nije validan
+                    </mat-error>
+                    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Krajnji datum nije validan
+                    </mat-error>
+                </mat-form-field>
 
+                <button class="" (click)="makeReport()" mat-raised-button>Preuzmi izveštaj</button>
+            </div>
+
+        </div>
+</div>
 
 
 <p-table [value]="stamps" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
@@ -72,3 +95,6 @@
         </tr>
     </ng-template>
 </p-table>
+
+<p-toast position="top-right" key="stamp-list-message"></p-toast>
+
