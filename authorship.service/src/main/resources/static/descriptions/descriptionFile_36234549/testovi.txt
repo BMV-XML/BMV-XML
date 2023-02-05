@@ -1,0 +1,65 @@
+import { HttpClient } from '@angular/common/http';
+import { fakeAsync, getTestBed, TestBed, tick } from '@angular/core/testing'
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { AuthService } from './auth.service'
+
+describe('AuthService', () => {
+  let authService: AuthService
+  let injector;
+  let httpMock: HttpTestingController;
+  let httpClient: HttpClient;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers:    [AuthService, HttpClient]
+    })
+    authService = TestBed.inject(AuthService)
+    
+    injector = getTestBed();
+    httpClient = TestBed.inject(HttpClient);
+    httpMock = TestBed.inject(HttpTestingController);
+  })
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('should be created', () => {
+    expect(authService).toBeTruthy()
+  })
+
+  it('login() should query url and get a jwt token', fakeAsync(() => {
+    let token = 'tokenvalue';
+    const auth: any = { username: 'email@gmail.com', password: 'asdf'};
+
+    authService.login(auth).subscribe({
+      next(res: any) {
+        token = res
+      }
+    });
+    const req = httpMock.expectOne('https://localhost:8080/uber/auth/login');
+    expect(req.request.method).toBe('POST');
+    req.flush(token);
+    tick();
+
+    expect(token).toBeDefined();
+    expect(token).toEqual('tokenvalue');
+
+  }));
+
+  it('should throw login error', () => {
+    const auth: any = { username: 'email@gmail.com', password: 'asdfghsdj'};
+    let error = '';
+    authService.login(auth).subscribe({error: (e) => error = e.statusText});
+    const req = httpMock.expectOne('https://localhost:8080/uber/auth/login');
+    expect(req.request.method).toBe('POST');
+    req.flush('Bad request', {
+      status: 400,
+      statusText: 'Bad request'
+    });
+
+    expect(error.toString().indexOf('Bad request') >= 0).toBeTruthy();
+  });
+})

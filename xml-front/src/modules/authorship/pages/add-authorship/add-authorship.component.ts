@@ -135,10 +135,12 @@ export class AddAuthorshipComponent {
 
   submitterIsAuthorChange($event: MatCheckboxChange) {
     this.isSubmitterTheAuthor = $event.checked;
+    this.result.submitterIsAuthor = this.isSubmitterTheAuthor;
   }
 
   anonymusAuthor($event: MatCheckboxChange) {
     this.isAuthorAnonymus = $event.checked;
+    this.result.anonymusAuthor = this.isAuthorAnonymus;
   }
 
 

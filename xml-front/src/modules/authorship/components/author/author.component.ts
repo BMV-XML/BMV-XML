@@ -45,8 +45,8 @@ export class AuthorComponent {
     console.log(this.secondFormGroup.errors)
     console.log(this.secondFormGroup.valid)
 
-    if (this.secondFormGroup.valid) {
-        if (this.nameFormControl.valid && this.surnameFormControl.valid && this.citizenshipFormControl.valid) {
+    if ((this.yearOfDeath.value != null &&  this.yearOfDeath.value > 0) || this.secondFormGroup.valid) {
+        if (this.nameFormControl.valid && this.surnameFormControl.valid) {
             this.setAuthor(true);
             this.validForm.emit(true);
             this.previousApplicant.emit(this.author)
