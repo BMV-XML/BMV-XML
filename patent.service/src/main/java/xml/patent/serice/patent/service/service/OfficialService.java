@@ -48,6 +48,7 @@ public class OfficialService {
         p.setId(pr.getPatentId());
         p.setApplicationDate(pr.getPatentData().getApplicationDate().getDate());
         p.setSubmitter(pr.getSubmitter().getGlobalEntity().getContact().getEmail());
+        p.setSubmitterFullname(pr.getSubmitter().getFullname());
         return p;
     }
 
@@ -135,15 +136,23 @@ public class OfficialService {
     }
 
     public void getListOfPatentRdf() throws IOException {
+        fusekiReader.filter();
+
+
         //fusekiReader.executeQuery(null);
         //fusekiReader.searchByTitle();
         //fusekiReader.searchByApplicationNumber("p-2");
         //fusekiReader.searchByDate("2023-01-24");
+
+        /*
         List<FilterElements> elements = new ArrayList<>();
         elements.add(new FilterElements("naslov", "ili", "aaa"));
         elements.add(new FilterElements("pod_ime", "ili", "Mark"));
         //elements.add(new FilterElements("broj_prijave", "i", "P-23"));
         elements.add(new FilterElements("sibling", "i", "P-1234-23"));
+
+
+         */
         /*
         System.out.println("PODNOSILAC");
         fusekiReader.searchByUser("pod_ime", "Marko Markovic");
@@ -156,4 +165,43 @@ public class OfficialService {
         //fusekiReader.search(graphUri);
         //fusekiReader.run();
     }
+
+    public List<PatentDTO> getListOfPatentUser() throws Exception {
+        List<PatentRequest> requests = existManager.retrieveCollection();
+        List<PatentDTO> results = new ArrayList<>();
+        for (PatentRequest pr : requests){
+            PatentDTO p = convertPatentRequestToPatentDTO(pr);
+            if (p.isHasSolution())
+                results.add(p);
+        }
+        return results;
+    }
+
+    public List<PatentDTO> getListOfPatentSearchedUser(List<String> searchBy) throws Exception {
+        List<PatentRequest> requests = existManager.retrieveCollection();
+        List<PatentDTO> result = new ArrayList<>();
+        for (PatentRequest request: requests){
+            if (request.contains(searchBy)){
+                PatentDTO p = convertPatentRequestToPatentDTO(request);
+                if (p.isHasSolution()) {
+                    result.add(p);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<PatentDTO> getListOfPatentFilteredUser(List<FilterDTO> filter) throws Exception {
+        HashSet<String> patents = fusekiReader.search(filter);
+        List<PatentDTO> resultDto = new ArrayList<>();
+        System.out.println("-------------------- filter results ---------------------");
+        for (String elem : patents){
+            PatentDTO p = convertPatentRequestToPatentDTO(existManager.retrieve(elem));
+            if (p.isHasSolution()) {
+                resultDto.add(p);
+            }
+        }
+        return resultDto;
+    }
+
 }

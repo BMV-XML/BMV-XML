@@ -52,7 +52,7 @@ public class OfficialController {
                                                    @RequestHeader(name = "password") String password){
         try {
             LoginDTO l = new LoginDTO(username, password);
-            l.setService(Application.OFFICIAL);
+            l.setService(Application.PATENT);
             if (!authenticationService.authenticate(l))
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             System.out.println("************************************** get patent *****************");
@@ -118,7 +118,6 @@ public class OfficialController {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(reportService.generateReportPDF(rangeDTO), HttpStatus.OK);
     }
-
     @GetMapping(value = "list/rdf")
     String getListOfPatentRdf(){
         try {

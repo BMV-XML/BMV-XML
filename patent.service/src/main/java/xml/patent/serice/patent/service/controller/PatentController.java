@@ -8,16 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xml.patent.serice.patent.service.Application;
 import xml.patent.serice.patent.service.beans.PatentRequest;
-import xml.patent.serice.patent.service.dto.LoginDTO;
-import xml.patent.serice.patent.service.dto.StatusDTO;
+import xml.patent.serice.patent.service.dto.*;
 import xml.patent.serice.patent.service.dto.request.PatentRequestDTO;
 import xml.patent.serice.patent.service.exception.NotValidException;
 import xml.patent.serice.patent.service.jaxb.LoaderValidation;
 import xml.patent.serice.patent.service.service.AuthenticationService;
+import xml.patent.serice.patent.service.service.OfficialService;
 import xml.patent.serice.patent.service.service.PatentRequestService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "patent")
@@ -32,23 +33,8 @@ public class PatentController {
     @Autowired
     private LoaderValidation loaderValidation;
 
-    /*
-    @PostMapping(value = "/xml", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> savePatentRequest(@RequestBody String patentRequest){
-        try {
-            PatentRequest patentRequestOnj = loaderValidation.unmarshalling(patentRequest);
-            //if (!authenticationService.authenticate(new LoginDTO(username, password)))
-             //   return new ResponseEntity<>("No AUTH", HttpStatus.UNAUTHORIZED);
-            System.out.println("----------------------------------------");
-            System.out.println(patentRequest);
-            String response = patentRequestService.savePatentRequest(patentRequestOnj);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Exception", HttpStatus.OK);
-        }
-        return new ResponseEntity<String>("radi", HttpStatus.OK);
-    }*/
-
+    @Autowired
+    private OfficialService officialService;
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<StatusDTO> savePatentRequest(@RequestBody PatentRequestDTO patentRequest,
@@ -71,31 +57,58 @@ public class PatentController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    //ne radi :)
-    @GetMapping(value = "fusekiSearch/{name}")
-    public ResponseEntity<String> searchFromRDF(@PathVariable("name") String name) {
-        ArrayList<String> result = null;
+    @GetMapping(value = "list/user", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<PatentDTO>> getListOfPatents(
+            @RequestHeader(name = "username") String username,
+            @RequestHeader(name = "password") String password){
         try {
-            result = patentRequestService.searchByMetadata(name);
-        } catch (IOException e) {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.PATENT);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            System.out.println("************************************** get list  -  user *****************");
+            return new ResponseEntity<List<PatentDTO>>(officialService.getListOfPatentUser(), HttpStatus.OK);
+        }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>("Exception", HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
-        String output="";
-        for(String s: result){
-            output +="\n" + s;
+    }
+
+    @PostMapping(value = "search/user", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<PatentDTO>> getListOfPatentsSearched(@RequestBody List<SearchExpression> expressions,
+                                                                    @RequestHeader(name = "username") String username,
+                                                                    @RequestHeader(name = "password") String password){
+        try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.PATENT);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            System.out.println("************************************** get list - SEARCH *****************");
+            List<String> searchBy = new ArrayList<>();
+            for (SearchExpression e: expressions){
+                System.out.println(e.getName());
+                searchBy.add(e.getName());
+            }
+            return new ResponseEntity<List<PatentDTO>>(officialService.getListOfPatentSearchedUser(searchBy), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
-        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "filter/user", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<PatentDTO>> getListOfPatentsFiltered(@RequestBody List<FilterDTO> filter,
+                                                                    @RequestHeader(name = "username") String username,
+                                                                    @RequestHeader(name = "password") String password){
+        try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.PATENT);
+            if (!authenticationService.authenticate(l))
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<List<PatentDTO>>(officialService.getListOfPatentFilteredUser(filter), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
     }
 }

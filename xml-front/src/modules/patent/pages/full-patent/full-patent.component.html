@@ -7,12 +7,16 @@
     </div>
     <div class="col-4">
 
-      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'false'"
+      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'false' && isOfficial"
               (click)="openAddSolutionDialog($event)"> Dodaj rešenje
       </button>
-      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'true'"
+      <button pButton class="p-button-sm" *ngIf="patent.hasSolution[0] === 'true' && isOfficial"
               (click)="openViewSolutionDialog($event)"> Vidi rešenje
       </button>
+      <p-badge *ngIf="patent.hasSolution[0] === 'true' && patent.solution.approved[0] === 'true' && !isOfficial" size="large" severity="success" [value]="'Prihvaćen'"></p-badge>
+      <p-badge *ngIf="patent.hasSolution[0] === 'true' && patent.solution.approved[0] === 'false' && !isOfficial" size="large" severity="warning" [value]="'Odbijen'"></p-badge>
+
+
     </div>
   </div>
 
