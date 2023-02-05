@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.*;
 @XmlTransient
 @XmlSeeAlso({Person.class, LegalEntity.class})
 @XmlRootElement(namespace = "http://www.ftn.uns.ac.rs/base-schame")
-public class GlobalEntity {
+public abstract class GlobalEntity {
 
     @XmlElement(name="Adresa", required = true)
     protected Address address;
@@ -26,5 +26,14 @@ public class GlobalEntity {
                 "address=" + address +
                 ", contact=" + contact +
                 '}';
+    }
+
+    abstract boolean contains(String s);
+    protected boolean basicContains(String s){
+        if (address.contains(s))
+            return true;
+        if (contact.contains(s))
+            return true;
+        return false;
     }
 }

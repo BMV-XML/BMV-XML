@@ -63,7 +63,7 @@
                 <div>
                     <p>Vrsta žiga</p>
                     <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
-                        <mat-radio-button value="1">individualni</mat-radio-button>
+                        <mat-radio-button value="1" [checked]="true">individualni</mat-radio-button>
                         <mat-radio-button value="2">kolektivni</mat-radio-button>
                         <mat-radio-button value="3">žig garancije</mat-radio-button>
                     </mat-radio-group>
@@ -72,7 +72,7 @@
                 <div>
                     <p>Tip žiga</p>
                     <mat-radio-group (change)="optionChangedKind($event)" aria-label="Select an option">
-                        <mat-radio-button value="1">verbalni znak(znak u reči)</mat-radio-button>
+                        <mat-radio-button value="1" [checked]="true">verbalni znak(znak u reči)</mat-radio-button>
                         <mat-radio-button value="2">grafički znak</mat-radio-button>
                         <mat-radio-button value="3">kombinovani znak</mat-radio-button>
                         <mat-radio-button value="4">trodimenzionalni znak</mat-radio-button>
@@ -179,14 +179,39 @@
                 </div>
 
 
-                <div class="formInput fileInput">
-                    <img [src]="signPhoto"
-                         style="width: 300px; height: 300px; border-radius: 20%; object-fit: contain;"/>
-                    <label for="file" class="file-label">
-                        Promeni sliku:
-                        <mat-icon color="primary" class="icon">cloud_upload</mat-icon>
-                    </label>
-                    <input type="file" id="file" accept="image/*" style="display: none;" (change)="selectPhoto($event)">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="formInput fileInput">
+                            <img [src]="signPhoto"
+                                 style="width: 300px; height: 300px; border-radius: 20%; object-fit: contain;"/>
+                            <label for="file" class="file-label">
+                                Promeni sliku:
+                                <mat-icon color="primary" class="icon">cloud_upload</mat-icon>
+                            </label>
+                            <input type="file" id="file" accept="image/*" style="display: none;"
+                                   (change)="selectPhoto($event)">
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+
+                        <p>Prvenstvo</p>
+
+                        <mat-radio-group (change)="optionChangedPriority($event)" aria-label="Select an option">
+                            <mat-radio-button value="1">Da</mat-radio-button>
+                            <mat-radio-button value="2" [checked]="true">Ne</mat-radio-button>
+                        </mat-radio-group>
+
+                        <mat-form-field class="input m-2" appearance="fill" [hidden]="isHiddenYesPriority">
+                            <mat-label>Tip znaka</mat-label>
+                            <input matInput formControlName="priorityFormControl" placeholder="osnov za prioritet"
+                                   required (ngModelChange)="check()">
+                            <mat-error
+                                    *ngIf="formGroup.controls['priorityText'].hasError('pattern') && !formGroup.controls['priorityText'].hasError('required')">
+                                Tip se sastoji od slova i brojeva
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
                 </div>
 
 
@@ -220,17 +245,20 @@
                                 </div>
 
                                 <div class="file-list" *ngIf="product.submittedAttachment==='DA'">
-                                     <a [href]="product.path" id = "p+{{product.position}}" target="_blank"> Pogledaj fajl</a>
+                                    <a [href]="product.path" id="p+{{product.position}}" target="_blank"> Pogledaj
+                                        fajl</a>
                                 </div>
 
                             </td>
                             <td>
-                                <div  class="formInput fileInput">
+                                <div class="formInput fileInput">
                                     <label for="files+{{product.position}}" class="file-label">
                                         Dodaj ili izmeni fajl:
                                         <mat-icon color="primary" class="icon">upload</mat-icon>
                                     </label>
-                                    <input type="file" id="files+{{product.position}}" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, .pdf" style="display: none;" (change)="selectFile($event, product)">
+                                    <input type="file" id="files+{{product.position}}"
+                                           accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, .pdf"
+                                           style="display: none;" (change)="selectFile($event, product)">
                                 </div>
                             </td>
                         </tr>

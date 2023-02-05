@@ -21,4 +21,12 @@ public class Recepient {
 
     @XmlElement(name = "Naziv", required = true, namespace = "http://www.ftn.uns.ac.rs/base-schame")
     private String name;
+
+    public boolean contains(String s) {
+        if(address.contains(s))
+            return true;
+        if(name.contains(s))
+            return true;
+        return false;
+    }
 }

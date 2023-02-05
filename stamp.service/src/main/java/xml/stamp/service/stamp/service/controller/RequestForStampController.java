@@ -6,10 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
-import xml.stamp.service.stamp.service.dto.RequestForStampDTO;
+import xml.stamp.service.stamp.service.dto.request.RequestForStampDTO;
 import xml.stamp.service.stamp.service.dto.StatusDTO;
 import xml.stamp.service.stamp.service.exceptions.NotValidException;
 import xml.stamp.service.stamp.service.model.RequestForStamp;
+import xml.stamp.service.stamp.service.service.OfficialService;
 import xml.stamp.service.stamp.service.service.RequestForStampService;
 
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class RequestForStampController {
     @Autowired
     private RequestForStampService service;
 
-
+    @Autowired
+    private OfficialService officialService;
 
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
@@ -45,18 +47,51 @@ public class RequestForStampController {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// KONTROLNA TACKA
+
     @PostMapping(value = "/xml", consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> saveRequestForStamp(@RequestBody RequestForStamp requestForStamp) throws Exception{
         String response = service.saveRequestForStamp(requestForStamp);
         return new ResponseEntity<String>("radi", HttpStatus.OK);
     }
 
+    /*
     @GetMapping(value = "get/document/{id}", consumes = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getRequestForStampById(@PathVariable String id) throws Exception {
         System.out.println("id: " + id);
         String response = service.getRequestForStampById(id);
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
+     */
+
+
+
+
+
+
+
+
+
 
     @GetMapping(value = "filter", consumes = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> filter() throws Exception {

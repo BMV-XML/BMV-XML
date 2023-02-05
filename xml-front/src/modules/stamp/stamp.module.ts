@@ -31,11 +31,19 @@ import { ApplicantComponent } from './components/applicant/applicant.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatTableModule} from "@angular/material/table";
+import { ViewStampComponent } from './pages/view-stamp/view-stamp.component';
+import { AddStampSolutionComponent } from './components/add-stamp-solution/add-stamp-solution.component';
+import { ViewStampSolutionComponent } from './components/view-stamp-solution/view-stamp-solution.component';
+import { FullStampComponent } from './pages/full-stamp/full-stamp.component';
 
 @NgModule({
     declarations: [
         AddStampComponent,
-        ApplicantComponent
+        ApplicantComponent,
+        ViewStampComponent,
+        AddStampSolutionComponent,
+        ViewStampSolutionComponent,
+        FullStampComponent
     ],
     imports: [
         CommonModule,

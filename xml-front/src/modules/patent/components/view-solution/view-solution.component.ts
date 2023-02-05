@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {PatentService} from "../../services/patent.service";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
-import {SolutionDto} from "../../models/solution-dto";
+import {SolutionDto} from "../../../shared/models/solution-dto";
 import * as xml2js from "xml2js";
 
 @Component({

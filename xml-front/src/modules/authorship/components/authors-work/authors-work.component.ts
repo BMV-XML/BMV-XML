@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AuthorsWorkDto } from 'modules/authorship/models/authtorship-request-dto';
 import { capitalFirstLetterText } from 'modules/patent/validators';
 
 @Component({
@@ -10,11 +11,13 @@ import { capitalFirstLetterText } from 'modules/patent/validators';
 })
 export class AuthorsWorkComponent {
 
-  types: string[] = ["Kniževno djelo", "Muzičko djelo", "Likovno djelo", "Računarski program", "Drugo"]
+  types: string[] = ["Književno djelo", "Muzičko djelo", "Likovno djelo", "Računarski program", "Drugo"]
   forms: string[] = ["Štampani tekst", "Optički disk", "Drugo"]
-  // form: string = ''
+  
   madeInWorkRelationship: boolean = false;
   isRemade: boolean = false;
+
+  @Output() display = new EventEmitter<AuthorsWorkDto>()
 
   titleFormControl = new FormControl('', [Validators.required, capitalFirstLetterText])
   alternateTitleFormControl = new FormControl('', [capitalFirstLetterText])
@@ -25,7 +28,20 @@ export class AuthorsWorkComponent {
   workTypeFormControl = new FormControl('', [Validators.required])
   workFormFormControl = new FormControl('', [Validators.required])
 
-  constructor() {}
+  formGroup: FormGroup;
+
+  constructor() {
+    this.formGroup = new FormGroup({
+      title: this.titleFormControl,
+      alternateTitle: this.alternateTitleFormControl,
+      name: this.nameFormControl,
+      surname: this.surnameFormControl,
+      wayOfUsage: this.wayOfUsageFormControl,
+      remadeTitle: this.remadeTitleFormControl,
+      workType: this.workFormFormControl,
+      workForm: this.workFormFormControl
+    })
+  }
 
   madeInWorkRelationshipChange($event: MatCheckboxChange) {
     this.madeInWorkRelationship = $event.checked;
@@ -35,8 +51,51 @@ export class AuthorsWorkComponent {
     this.isRemade = $event.checked;
   }
 
-  check() {
-    return true;
+  isValidBasic(): boolean {
+    if (this.titleFormControl.valid && this.wayOfUsageFormControl.valid && this.workFormFormControl.valid && this.workTypeFormControl.valid)
+      return true;
+    return false;
   }
+
+  isValidRemade(): boolean {
+    if (this.nameFormControl.valid && this.surnameFormControl.valid && this.remadeTitleFormControl.valid)
+      return true;
+    return false;
+  }
+
+  check() {
+    if(!this.isRemade) {
+      if (this.isValidBasic()) {
+        this.display.emit(this.createEntityDto(true));
+      }
+      else {
+        this.display.emit(this.createEntityDto(false));
+      }
+    }
+    else {
+      if (this.isValidBasic() && this.isValidRemade()) {
+          this.display.emit(this.createEntityDto(true));
+      }
+      else {
+        this.display.emit(this.createEntityDto(false));
+      }
+    }
+  }
+
+  private createEntityDto(completed: boolean): AuthorsWorkDto {
+    return {
+      title: this.titleFormControl.value,
+      alternateTitle: this.alternateTitleFormControl.value,
+      name: this.nameFormControl.value,
+      surname: this.surnameFormControl.value,
+      wayOfUsage: this.wayOfUsageFormControl.value,
+      remadeTitle: this.remadeTitleFormControl.value,
+      type: this.workTypeFormControl.value,
+      form: this.workFormFormControl.value,
+      completed: completed,
+      isRemade: this.isRemade,
+      madeInWorkRelationship: this.madeInWorkRelationship
+    }
+}
 
 }

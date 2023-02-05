@@ -47,7 +47,9 @@ public class SolutionManager extends ExistManager{
             col.storeResource(res);
             System.out.println("[INFO] Done.");
 
-        } finally {
+        } catch (NullPointerException e){
+            col = getOrCreateCollection(collectionId);
+        }finally {
             closeConnection(col, res);
         }
     }
@@ -77,8 +79,13 @@ public class SolutionManager extends ExistManager{
 
                 return solutionLoader.unmarshalling((String) res.getContent());
             }
-        } finally {
+        }
+        catch (NullPointerException e){
+            col = getOrCreateCollection(collectionId);
+        }
+        finally {
             closeConnection(col, res);
         }
+        return null;
     }
 }

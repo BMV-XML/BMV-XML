@@ -29,6 +29,11 @@
                 Prezime je <strong>potrebno</strong>
             </mat-error>
         </mat-form-field>
+        <mat-form-field class="entity" appearance="fill">
+            <mat-label>Pseudonim</mat-label>
+            <input matInput [formControl]="pseudonymFormControl" placeholder="Petrović"
+                    (ngModelChange)="check()">
+        </mat-form-field>
         <mat-form-field class="entity" *ngIf="alive" appearance="fill">
             <mat-label>Državljanstvo</mat-label>
             <input matInput [formControl]="citizenshipFormControl" placeholder="srpska"
@@ -112,45 +117,6 @@
                 </mat-error>
                 <mat-error *ngIf="secondFormGroup.controls['country'].hasError('required')">
                     Država je <strong>potrebno</strong>
-                </mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="col-3 unit" style="margin-left: 15%">
-            <h2>Kontakt</h2>
-            <mat-form-field class="input" appearance="fill">
-                <mat-label>Broj telefona</mat-label>
-                <input matInput formControlName="phone" placeholder="+38161579259"
-                       required (ngModelChange)="check()">
-                <mat-error *ngIf="secondFormGroup.controls['phone'].hasError('pattern') && !secondFormGroup.controls['phone'].hasError('required')">
-                    Format telefona +38168727886
-                </mat-error>
-                <mat-error *ngIf="secondFormGroup.controls['phone'].hasError('required')">
-                    Telefon je <strong>potrebno</strong>
-                </mat-error>
-            </mat-form-field>
-            <br/>
-            <mat-form-field class="input" appearance="fill">
-                <mat-label>Broj faksa</mat-label>
-                <input matInput formControlName="fax" placeholder="024689589"
-                       required (ngModelChange)="check()">
-                <mat-error *ngIf="secondFormGroup.controls['fax'].hasError('pattern') && !secondFormGroup.controls['fax'].hasError('required')">
-                    Format broja faksa: 02416895
-                </mat-error>
-                <mat-error *ngIf="secondFormGroup.controls['fax'].hasError('required')">
-                    Broj faksa je <strong>potrebno</strong>
-                </mat-error>
-            </mat-form-field>
-            <br/>
-            <mat-form-field class="input" appearance="fill">
-                <mat-label>Email</mat-label>
-                <input matInput formControlName="email" placeholder="example@gmail.com"
-                       required (ngModelChange)="check()">
-                <mat-error *ngIf="secondFormGroup.controls['email'].hasError('email') && !secondFormGroup.controls['email'].hasError('required')">
-                    Format email-a: petar@gmail.com
-                </mat-error>
-                <mat-error *ngIf="secondFormGroup.controls['email'].hasError('required')">
-                    Email je <strong>potrebno</strong>
                 </mat-error>
             </mat-form-field>
         </div>

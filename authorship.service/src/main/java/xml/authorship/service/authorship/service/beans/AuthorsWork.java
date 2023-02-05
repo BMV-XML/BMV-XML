@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.*;
 public class AuthorsWork {
 
     @XmlElement(name = "Naslov", required = true)
-    private String title;
+    private Predicate title;
 
     @XmlElement(name = "Alternativni_naslov")
     private String alternateTitle;
@@ -44,4 +44,18 @@ public class AuthorsWork {
 
     @XmlElement(name = "Nacin_koriscenja", required = true)
     private String wayOfUsage;
+
+    public boolean contains(String s) {
+        if (title.getText().toLowerCase().contains(s))
+            return true;
+        if (alternateTitle != null && alternateTitle.toLowerCase().contains(s))
+            return true;
+        if (workType.name().toLowerCase().contains(s))
+            return true;
+        if (recordForm.name().toLowerCase().contains(s))
+            return true;
+        if (wayOfUsage.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

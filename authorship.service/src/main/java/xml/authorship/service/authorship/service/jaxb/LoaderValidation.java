@@ -10,10 +10,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.StringReader;
 
 @Component
 public class LoaderValidation {
@@ -32,7 +34,7 @@ public class LoaderValidation {
             unmarshaller.setEventHandler(new MyValidationEventHandler());
 
             System.out.println("Unmarshall done");
-            return (AuthorshipRequest) unmarshaller.unmarshal(new File(file));
+            return (AuthorshipRequest) unmarshaller.unmarshal(new StreamSource(new StringReader(file)));
         } catch (Exception e) {
             throw new RuntimeException("Jaxb unmarshalling exception");
         }
@@ -41,8 +43,8 @@ public class LoaderValidation {
     public OutputStream marshalling(AuthorshipRequest authorshipRequest, OutputStream outputStream) {
         try{
 
-            JAXBContext context = JAXBContext.newInstance("xml.authorship.service.authorship.service.beans");
-
+            JAXBContext context = JAXBContext.newInstance(AuthorshipRequest.class);
+            // "xml.authorship.service.authorship.service.beans.AuthorshipRequest"
             Marshaller marshaller = context.createMarshaller();
             //marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://www.ftn.uns.ac.rs/patent file:/./data/zahtjev.xsd");
 
@@ -54,10 +56,6 @@ public class LoaderValidation {
         } catch (JAXBException e) {
             throw new RuntimeException("Jaxb marshalling exception");
         }
-    }
-
-    private void changeAuthorsWorkName(AuthorsWork work) {
-        work.setTitle("Novi naslovvv");
     }
 
 }

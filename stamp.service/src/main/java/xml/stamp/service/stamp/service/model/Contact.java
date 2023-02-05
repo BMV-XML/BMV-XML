@@ -32,4 +32,14 @@ public class Contact {
                 ", email='" + email + '\'' +
                 "}\n";
     }
+
+    public boolean contains(String s) {
+        if (phoneNumber.toLowerCase().contains(s))
+            return true;
+        if (faxNumber.toLowerCase().contains(s))
+            return true;
+        if (email.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

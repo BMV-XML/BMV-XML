@@ -20,6 +20,8 @@ import javax.xml.transform.OutputKeys;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ExistManager {
@@ -109,10 +111,9 @@ public class ExistManager {
             System.out.println("[INFO] Retrieving the collection: " + collectionId);
             col = getOrCreateCollection(collectionId);
 
-            /*
-             *  create new XMLResource with a given id
-             *  an id is assigned to the new resource if left empty (null)
-             */
+            //   create new XMLResource with a given id
+             //  an id is assigned to the new resource if left empty (null)
+
             System.out.println("[INFO] Inserting the document: " + documentId);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
 
@@ -128,7 +129,9 @@ public class ExistManager {
         }
     }
 
-    public String retrieve(String documentId) throws Exception {
+
+
+    public RequestForStamp retrieve(String documentId) throws Exception {
         createConnection();
         Collection col = null;
         XMLResource res = null;
@@ -144,14 +147,14 @@ public class ExistManager {
 
             if (res == null) {
                 System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
-                return "";
+                return null;
             } else {
 
                 System.out.println("[INFO] Showing the document as XML resource: ");
                 System.out.println(res.getContent());
 
                 RequestForStamp requestForStamp = loader.unmarshalling((String) res.getContent());
-                return (String) res.getContent();
+                return requestForStamp;
             }
         } finally {
             closeConnection(col, res);
@@ -276,4 +279,31 @@ public class ExistManager {
         }
     }
 
+    public List<RequestForStamp> retrieveCollection() throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        List<RequestForStamp> result = new ArrayList<>();
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] ************** RETRIVE collection");
+            //System.out.println(col.getResourceCount());
+            for (String s : col.listResources())
+                result.add(retrieve(s));
+            return result;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        finally {
+            closeConnection(col, res);
+        }
+
+    }
 }

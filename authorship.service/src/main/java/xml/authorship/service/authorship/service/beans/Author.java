@@ -14,36 +14,33 @@ import javax.xml.bind.annotation.*;
 @AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Autor", propOrder = {
-        "name",
-        "surname",
+        "person",
         "pseudonym",
-        "address",
-        "citizenship",
         "yearOfDeath",
         "anonymousAuthor"
 })
 @XmlRootElement(name = "Autor")
 public class Author {
 
-    @XmlElement(name = "Ime")
-    private String name;
-
-    @XmlElement(name = "Prezime")
-    private String surname;
+    @XmlElement(name = "Osoba")
+    private Person person;
 
     @XmlElement(name = "Pseudonim")
     private String pseudonym;
 
-    @XmlElement(name = "Adresa")
-    private Address address;
-
-    @XmlElement(name = "Drzavljanstvo")
-    private String citizenship;
-
-    @XmlElement(name = "Godina smrti")
+    @XmlElement(name = "Godina_smrti")
     private int yearOfDeath;
 
     @XmlElement(name = "Anonimni_autor", required = true)
     private Checkbox anonymousAuthor;
 
+    public boolean contains(String s) {
+        if (person.contains(s))
+            return true;
+        if (pseudonym.toLowerCase().contains(s))
+            return true;
+        if (String.valueOf(yearOfDeath).contains(s))
+            return true;
+        return false;
+    }
 }

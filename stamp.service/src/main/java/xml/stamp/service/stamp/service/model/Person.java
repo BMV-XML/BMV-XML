@@ -38,4 +38,20 @@ public class Person extends GlobalEntity {
                 ", contact=" + contact +
                 "}\n";
     }
+
+    @Override
+    public boolean contains(String s){
+        if (basicContains(s))
+            return true;
+        if (name.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        if (surname.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        if (citizenship.toLowerCase().contains(s)){
+            return true;
+        }
+        return false;
+    }
 }
