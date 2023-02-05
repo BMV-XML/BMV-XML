@@ -13,7 +13,7 @@ export class LoginGuard implements CanActivate {
       this.router.navigate(['/patent/add'])
       return false
     }else if (localStorage.getItem('type') === STAMP) {
-      this.router.navigate(['/stamp/solved'])
+      this.router.navigate(['/stamp/soluted'])
       return false
     }else if (localStorage.getItem('type') === PATENT_OFFICIAL) {
       this.router.navigate(['/patent/list'])
