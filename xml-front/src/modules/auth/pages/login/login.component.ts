@@ -90,7 +90,7 @@ export class LoginComponent {
       this.chosenRole = PATENT
     else if ($event.value === '2')
       this.chosenRole = STAMP
-    else
-      this.chosenRole = "AUTHORSHIP"
+    else if ($event.value === '3')
+      this.chosenRole = AUTHORSHIP
   }
 }

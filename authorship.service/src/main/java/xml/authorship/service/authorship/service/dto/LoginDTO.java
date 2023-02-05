@@ -11,4 +11,10 @@ public class LoginDTO {
 
     private String username;
     private String password;
+    private String service = "AUTHORSHIP";
+
+    public LoginDTO(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

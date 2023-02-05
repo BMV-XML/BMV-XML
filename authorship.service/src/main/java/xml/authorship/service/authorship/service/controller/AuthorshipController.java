@@ -8,10 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import xml.authorship.service.authorship.service.Application;
 import xml.authorship.service.authorship.service.beans.AuthorshipRequest;
 import xml.authorship.service.authorship.service.dto.*;
 import xml.authorship.service.authorship.service.service.AuthenticationService;
 import xml.authorship.service.authorship.service.service.AuthorshipRequestService;
+import xml.authorship.service.authorship.service.service.SolutionService;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,9 @@ public class AuthorshipController {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private SolutionService solutionService;
 
 
     /**
@@ -61,27 +66,18 @@ public class AuthorshipController {
         }
     }
 
-    @PostMapping(value = "/example/file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_XML_VALUE)
+    // TODO: putanja do fajla treba da bude kao http://localhost...
+    @PostMapping(value = "/example/file", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<AttachmentsDTO> setExampleFile(@RequestPart("files") MultipartFile[] multiPartFiles) throws IOException {
         AttachmentsDTO dto = authorshipRequestService.setExampleFile(multiPartFiles);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/description/file", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {"application/xml"})
+    @PostMapping(value = "/description/file", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<AttachmentsDTO> setDescriptionFile(@RequestPart("files") MultipartFile[] multiPartFiles) throws IOException {
         AttachmentsDTO dto = authorshipRequestService.setDescriptionFile(multiPartFiles);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
-//    @GetMapping(value = "fusekiSearch/{name}")  // TODO: nezz da li radi
-//    public ResponseEntity<String> searchFromRDF(@PathVariable("name") String name) throws IOException {
-//        ArrayList<String> result = authorshipRequestService.searchByMetadata(name);
-//        StringBuilder output = new StringBuilder();
-//        for (String s : result) {
-//            output.append("\n").append(s);
-//        }
-//        return new ResponseEntity<>(output.toString(), HttpStatus.OK);
-//    }
 
     @GetMapping(value = "getJsonMetadata", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getJsonMetadataById(@RequestParam(name = "id") String id) {
@@ -133,15 +129,10 @@ public class AuthorshipController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @PostMapping(value = "filter", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<List<SimpleAuthorshipDTO>> getListOfPatentsFiltered(@RequestBody List<FilterDTO> filter) {
         try {
-            for (FilterDTO f : filter) {
-                System.out.println(f.getOperator());
-                System.out.println(f.getType());
-                System.out.println(f.getValue());
-            }
             return new ResponseEntity<>(authorshipRequestService.getListOfAuthorshipFiltered(filter), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,8 +140,7 @@ public class AuthorshipController {
         }
     }
 
-    // TODO: NE RADI
-    @PostMapping(value = "addSolution", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "addSolution", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Boolean> addSolution(@RequestBody NewSolutionDTO dto,
                                                @RequestHeader(name = "username") String username,
                                                @RequestHeader(name = "password") String password) {
@@ -158,17 +148,40 @@ public class AuthorshipController {
 //            if (!authenticationService.authenticate(new LoginDTO(username, password)))
 //                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             dto.setUsername(username);
-            return new ResponseEntity<>(authorshipRequestService.addSolution(dto), HttpStatus.OK);
+            return new ResponseEntity<>(solutionService.addSolution(dto), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
-//    @PostMapping(value="report", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-//    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO) throws Exception {
-//        return new ResponseEntity<>(reportService.generateReportPDF(rangeDTO), HttpStatus.OK);
-//    }
+    @GetMapping(value = "solution/get/{id}", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<SolutionDTO> addSolution(@PathVariable String id,
+                                                   @RequestHeader(name = "username") String username,
+                                                   @RequestHeader(name = "password") String password){
+        try{
+//            LoginDTO l = new LoginDTO(username, password);
+//            l.setService(Application.OFFICIAL);
+//            if (!authenticationService.authenticate(l))
+//                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(solutionService.getSolution(id), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="report", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<String> getReport(@RequestBody RangeDTO rangeDTO,
+                                            @RequestHeader(name = "username") String username,
+                                            @RequestHeader(name = "password") String password) throws Exception {
+
+//        LoginDTO l = new LoginDTO(username, password);
+//        l.setService(Application.OFFICIAL);
+//        if (!authenticationService.authenticate(l))
+//            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(authorshipRequestService.generateReportPDF(rangeDTO), HttpStatus.OK);
+    }
 
 
 }

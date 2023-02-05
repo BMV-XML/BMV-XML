@@ -23,6 +23,9 @@ public class LoginController {
     @PostMapping(value = "auth", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<AuthTypeDTO> login(@RequestBody LoginDTO loginDTO) throws Exception {
         System.out.println("************************************ AUTH *************************************");
+        System.out.println(loginDTO.getUsername());
+        System.out.println(loginDTO.getPassword());
+        System.out.println(loginDTO.getService());
         boolean auth = userService.hasAuthority(loginDTO.getUsername(), loginDTO.getPassword(), ServiceType.valueOf(loginDTO.getService()));
         String type = userService.getAuthority(loginDTO.getUsername(), loginDTO.getPassword());
         return ResponseEntity.ok(new AuthTypeDTO(auth, type));
@@ -37,6 +40,7 @@ public class LoginController {
     @PostMapping(value = "register", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<SuccessDTO> register(@RequestBody RegisterDTO registerDTO) throws Exception {
         System.out.println("************************************ REGISTER *************************************");
+        System.out.println(registerDTO.getService());
         try{
             userService.register(registerDTO.getUsername(), registerDTO.getPassword(), ServiceType.valueOf(registerDTO.getService()), registerDTO.getName(), registerDTO.getSurname());
             return new ResponseEntity(new SuccessDTO(true), HttpStatus.OK);

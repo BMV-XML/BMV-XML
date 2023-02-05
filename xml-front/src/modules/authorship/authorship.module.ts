@@ -28,6 +28,8 @@ import { AuthorsWorkComponent } from './components/authors-work/authors-work.com
 import { AuthorshipRequestsComponent } from './pages/authorship-requests/authorship-requests.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { MetadataComponent } from './components/metadata/metadata.component';
+import { SolutionComponent } from './components/solution/solution.component';
+import { InspectSolutionComponent } from './components/inspect-solution/inspect-solution.component';
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { MetadataComponent } from './components/metadata/metadata.component';
     AuthorComponent,
     AuthorsWorkComponent,
     AuthorshipRequestsComponent,
-    MetadataComponent
+    MetadataComponent,
+    SolutionComponent,
+    InspectSolutionComponent
   ],
   imports: [
     CommonModule,

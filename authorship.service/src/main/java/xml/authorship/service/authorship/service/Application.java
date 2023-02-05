@@ -11,6 +11,8 @@ import java.io.IOException;
 public class Application {
 
 	public static String IMAGE_DIR;
+	public static String AUTHORSHIP = "AUTHORSHIP";
+	public static String OFFICIAL = "ALL";
 
     public static void main(String[] args) throws IOException {
 		IMAGE_DIR = new File(".").getCanonicalPath() + "\\src\\main\\resources\\static\\";

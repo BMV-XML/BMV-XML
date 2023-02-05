@@ -6,7 +6,7 @@ import * as xml2js from "xml2js";
 import {RegisterDto} from "../../models/register-dto";
 import {MatRadioChange} from "@angular/material/radio";
 import {MessageService} from "primeng/api";
-import {PATENT, STAMP} from "../../types";
+import {AUTHORSHIP, PATENT, STAMP} from "../../types";
 
 @Component({
   selector: 'app-register',
@@ -96,7 +96,7 @@ export class RegisterComponent {
       this.chosenRole = PATENT
     else if ($event.value === '2')
       this.chosenRole = STAMP
-    else
-      this.chosenRole = "AUTHORSHIP"
+    else if ($event.value === '3')
+      this.chosenRole = AUTHORSHIP
   }
 }

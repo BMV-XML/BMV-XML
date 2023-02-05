@@ -12,6 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PatentHeaderComponent } from './components/patent-header/patent-header.component';
 import {SharedModule} from "../shared/shared.module";
 import { SimpleHeaderComponent } from './components/simple-header/simple-header.component';
+import { AuthorshipHeaderComponent } from './components/authorship-header/authorship-header.component';
 import {StampHeaderComponent} from "./components/stamp-header/stamp-header.component";
 import { OfficialStampHeaderComponent } from './components/official-stamp-header/official-stamp-header.component';
 
@@ -22,6 +23,7 @@ import { OfficialStampHeaderComponent } from './components/official-stamp-header
     OfficialPatentHeaderComponent,
     PatentHeaderComponent,
     SimpleHeaderComponent,
+    AuthorshipHeaderComponent,
     StampHeaderComponent,
     OfficialStampHeaderComponent
   ],
