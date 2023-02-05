@@ -28,7 +28,7 @@
                 <xs:element name="Vrsta">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="3"/>
+                            <xs:minLength value="1"/>
                             <xs:maxLength value="30"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -36,7 +36,7 @@
                 <xs:element name="Izgled_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="5"/>
+                            <xs:minLength value="0"/>
                             <xs:maxLength value="100"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -44,7 +44,7 @@
                 <xs:element maxOccurs="unbounded" name="Boja_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="4"/>
+                            <xs:minLength value="1"/>
                             <xs:maxLength value="50"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -68,7 +68,7 @@
                 <xs:element name="Opis_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="5"/>
+                            <xs:minLength value="1"/>
                             <xs:maxLength value="500"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -107,14 +107,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="Osnovna_taksa" type="xs:double"/>
-                <xs:element name="Taksa_za_klasu">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:positiveInteger">
-                            <xs:minInclusive value="1"/>
-                            <xs:maxInclusive value="45"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
+                <xs:element name="Taksa_za_klasu" type="xs:double"> </xs:element>
                 <xs:element name="Taksa_za_graficko_resenje" type="xs:double"/>
                 <xs:element name="Ukupno" type="xs:double"/>
             </xs:sequence>

@@ -1,6 +1,6 @@
-<!-- <app-stamp-header></app-stamp-header>  -->
-
 <mat-stepper [linear]="isLinear" #stepper>
+
+
     <mat-step [completed]="isApplicantCompleted()">
 
         <div class="step">
@@ -58,6 +58,7 @@
 
 
     <mat-step [completed]="isStampCompleted">
+
         <div class="step">
             <form [formGroup]="formGroup">
                 <ng-template matStepLabel>Podaci o žigu</ng-template>
@@ -205,7 +206,7 @@
                         </mat-radio-group>
 
                         <mat-form-field class="input m-2" appearance="fill" [hidden]="isHiddenYesPriority">
-                            <mat-label>Tip znaka</mat-label>
+                            <mat-label>Osnov</mat-label>
                             <input matInput formControlName="priorityFormControl" placeholder="osnov za prioritet"
                                    required (ngModelChange)="check()">
                             <mat-error
@@ -224,6 +225,7 @@
             </form>
         </div>
     </mat-step>
+
 
     <mat-step [completed]="isFilesUploaded">
         <div class="step">
@@ -285,3 +287,4 @@
         </div>
     </mat-step>
 </mat-stepper>
+<p-toast position="top-right" key="add-stamp-message"></p-toast>

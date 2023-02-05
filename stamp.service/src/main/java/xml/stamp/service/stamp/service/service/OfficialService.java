@@ -39,6 +39,8 @@ public class OfficialService {
     private SimpleViewStampDTO convertRequestForStampToStampDTO(RequestForStamp requestForStamp) throws URISyntaxException {
         System.out.println(requestForStamp);
         SimpleViewStampDTO p = new SimpleViewStampDTO();
+        System.out.println(" REEEEEEE QQQQ");
+        System.out.println(requestForStamp);
         boolean has = solutionService.getIfHasSolution(requestForStamp.getStampId());
         System.out.println(has);
         p.setHasSolution(has);
@@ -153,12 +155,13 @@ public class OfficialService {
     public List<SimpleViewStampDTO> getListSolutedOfStamp() throws Exception {
         List<RequestForStamp> requests = existManager.retrieveCollection();
         List<SimpleViewStampDTO> results = new ArrayList<>();
+        System.out.println(" Ukupan broj zahteva za prikaz: " + requests.size());
         for (RequestForStamp requestForStamp : requests) {
             SimpleViewStampDTO stampDTO = convertRequestForStampToStampDTO(requestForStamp);
             if(stampDTO.isHasSolution())
                 results.add(stampDTO);
         }
-        System.out.println(" Ukupan broj zahteva za prikaz: " + results.size());
+
         return results;
     }
 }

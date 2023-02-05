@@ -16,6 +16,7 @@ import * as xml2js from "xml2js";
 import {ApplicantsDto} from "../../models/applicants-dto";
 import {ColorsDto} from "../../models/colors-dto";
 import {GoodsAndClassesDto} from "../../models/goods-and-classes-dto";
+import {Message, MessageService} from "primeng/api";
 
 export interface PeriodicElement {
     name: string;
@@ -29,13 +30,14 @@ export interface PeriodicElement {
 @Component({
     selector: 'app-add-stamp',
     templateUrl: './add-stamp.component.html',
-    styleUrls: ['./add-stamp.component.scss']
+    styleUrls: ['./add-stamp.component.scss'],
+    providers: [MessageService]
 })
 export class AddStampComponent {
 
     isLinear = true;
-    isLowerCompleted: boolean = true
-    isCommonRepresentativeCompleted: boolean = true
+    isLowerCompleted: boolean = false;
+    isCommonRepresentativeCompleted: boolean = false
     isHiddenOtherKind: boolean = true;
     isHiddenYesPriority: boolean = true;
     isStampCompleted: boolean = true;
@@ -53,7 +55,8 @@ export class AddStampComponent {
 
     constructor(private _formBuilder: FormBuilder,
                 private readonly sanitizer: DomSanitizer,
-                private readonly stampService: StampService) {
+                private readonly stampService: StampService,
+                private messageService: MessageService) {
         this.formGroup = this._formBuilder.group({
             otherKindFormControl: ['', [Validators.required, stringAndNumber]],
             descriptionFormControl: ['', [Validators.required, stringAndNumber]],
@@ -108,15 +111,15 @@ export class AddStampComponent {
         },
         recepient: {street: "", city: "", number: "", country: "", postalNumber: "", name: ""},
         attachmentData: {
-            exampleStamp: {path: "", submittedAttachment: "NE", name:"", position:""},
-            listOfGoodsAndServices: {path: "", submittedAttachment: "NE", name:"", position:""},
-            authority: {path: "", submittedAttachment: "NE", name:"", position:""},
-            generalAuthorityAddedBefore: {path: "", submittedAttachment: "NE", name:"", position:""},
-            authorityWillBeAddedAfter: {path: "", submittedAttachment: "NE", name:"", position:""},
-            generalActOnCollectiveStampOrGuaranteeStamp: {path: "", submittedAttachment: "NE", name:"", position:""},
-            proofOfRightOfPriority: {path: "", submittedAttachment: "NE", name:"", position:""},
+            exampleStamp: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            listOfGoodsAndServices: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            authority: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            generalAuthorityAddedBefore: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            authorityWillBeAddedAfter: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            generalActOnCollectiveStampOrGuaranteeStamp: {path: "", submittedAttachment: "NE", name: "", position: ""},
+            proofOfRightOfPriority: {path: "", submittedAttachment: "NE", name: "", position: ""},
 
-            proofOfTaxPayment: {path: "", submittedAttachment: "NE", name:"", position:""},
+            proofOfTaxPayment: {path: "", submittedAttachment: "NE", name: "", position: ""},
         }
     }
 
@@ -205,12 +208,14 @@ export class AddStampComponent {
         this.result.lowyer = $event
         this.isLowerCompleted = $event.completed;
         console.log(this.isLowerCompleted)
+        this.isLowerCompleted = true;
     }
 
     addCommonRepresentative($event: EntityDto) {
         this.result.commonRepresentative = $event
         this.isCommonRepresentativeCompleted = $event.completed
         console.log(this.isCommonRepresentativeCompleted)
+        this.isCommonRepresentativeCompleted = true;
     }
 
     optionChanged($event: MatRadioChange): void {
@@ -241,21 +246,21 @@ export class AddStampComponent {
         }
     }
 
-    check() {
+   /* check() {
         if (this.formGroup.valid) {
             console.log(this.otherKindFormControl.value)
-            if (this.otherKindFormControl.valid)
-                this.result.stamp.kind = this.otherKindFormControl.value
-            if (this.descriptionFormControl.valid)
-                this.result.stamp.description = this.descriptionFormControl.value
-            if (this.transliterationFormControl.valid)
-                this.result.stamp.transliteration = this.transliterationFormControl.value
-            if (this.translationFormControl.valid)
-                this.result.stamp.translation = this.translationFormControl.value
-            if (this.result.stamp.priority === "DA" && this.priorityFormControl.valid)
+            //  if (this.otherKindFormControl.valid)
+            this.result.stamp.kind = this.otherKindFormControl.value
+            //  if (this.descriptionFormControl.valid)
+            this.result.stamp.description = this.descriptionFormControl.value
+            //  if (this.transliterationFormControl.valid)
+            this.result.stamp.transliteration = this.transliterationFormControl.value
+            //  if (this.translationFormControl.valid)
+            this.result.stamp.translation = this.translationFormControl.value
+            if (this.result.stamp.priority === "DA")
                 this.result.stamp.priority = this.priorityFormControl.value;
         }
-    }
+    }*/
 
     colorAlreadyAdded(color: string): boolean {
         for (let c of this.colorsDto.colors) {
@@ -278,7 +283,7 @@ export class AddStampComponent {
     }
 
     removeColor(color: string): void {
-        const index = this.result.stamp.colors.indexOf(color);
+        const index = this.colorsDto.colors.indexOf(color);
         if (index >= 0) {
             this.colorsDto.colors.splice(index, 1);
         }
@@ -403,6 +408,24 @@ export class AddStampComponent {
     submitRequest() {
         this.stampService.submitRequest(this.result, this.applicantsDto, this.colorsDto, this.goodsAndClasses).subscribe(res => {
             console.log(res);
+            let parser = new xml2js.Parser();
+            parser.parseString(res, (err, result) => {
+                console.log("**********************")
+                if (result['StatusDTO']['successful'][0] === 'true') {
+                    this.messageService.add({
+                        key: 'add-stamp-message',
+                        severity: 'success',
+                        summary: 'Uspešno ste podneli zahtev'
+                    })
+                } else {
+                    this.messageService.add({
+                        key: 'add-stamp-message',
+                        severity: 'warn',
+                        summary: 'Nismo uspeli da sačuvamo zahtev',
+                        detail: 'Proverite podatke koji ste dali ili pokušajte malo kasnije da podneste zahtev.'
+                    })
+                }
+            })
         })
     }
 
@@ -416,16 +439,26 @@ export class AddStampComponent {
             this.isHiddenYesPriority = true;
         }
     }
+
+    check() {
+        console.log("SEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEt")
+        console.log(this.otherKindFormControl.value)
+        console.log(this.formGroup.controls["otherKindFormControl"].value)
+        if (this.formGroup.controls["otherKindFormControl"].valid){
+            console.log("UDJEEEEE")
+            this.result.stamp.kind = this.formGroup.controls["otherKindFormControl"].value
+            console.log(this.result.stamp.kind)
+        }
+        if (this.formGroup.controls["descriptionFormControl"].valid)
+            this.result.stamp.description = this.formGroup.controls["descriptionFormControl"].value
+        if (this.formGroup.controls["transliterationFormControl"].valid)
+            this.result.stamp.transliteration = this.formGroup.controls["transliterationFormControl"].value
+        if (this.formGroup.controls["translationFormControl"].valid)
+            this.result.stamp.translation = this.formGroup.controls["translationFormControl"].value
+        if (this.result.stamp.priority === "DA")
+            this.result.stamp.priority = this.formGroup.controls["priorityFormControl"].value;
+    }
+
 }
 
 
-/*
-* Primerak znaka', attachmentDto: this.result.attachmentData.exampleStamp},
-        {position: 2, name: 'Spisak robe i usluga', attachmentDto: this.result.attachmentData.listOfGoodsAndServices},
-        {position: 3, name: 'Punomoćje', attachmentDto: this.result.attachmentData.authority},
-        {position: 4, name: 'Generalno punomoćje ranije priloženo', attachmentDto: this.result.attachmentData.generalAuthorityAddedBefore},
-        {position: 5, name: 'Punomoćje će biti naknadno dostavljeno', attachmentDto:this.result.attachmentData.authorityWillBeAddedAfter},
-        {position: 6, name: 'Opšti akt o kolektivnom/žigu garancije', attachmentDto:this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp},
-        {position: 7, name: 'Dokaz o pravu prvenstva', attachmentDto:this.result.attachmentData.proofOfRightOfPriority},
-        {position: 8, name: 'Dokaz o uplati takse',
-* */

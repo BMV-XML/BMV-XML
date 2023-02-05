@@ -190,6 +190,7 @@ public class RequestForStampService {
         Priority priority = new Priority();
         if(stampRequest.getStamp().getPriority().equals("")){
             priority.setCheckbox(Checkbox.NE);
+            priority.setReason("");
         }else{
             priority.setCheckbox(Checkbox.DA);
             priority.setReason(stampRequest.getStamp().getPriority());

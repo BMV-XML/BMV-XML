@@ -27,11 +27,11 @@
     <div class="row mt-4 podnosilac" *ngFor="let app of stamp.applicants[0].applicants">
         <h3>Podnosilac</h3>
         <div class="col-3 podnosilac-okvir">
-            <div [hidden]="app.person[0]">
+            <div [hidden]="app.person[0]==='false'">
                 <label>Ime: {{app.name[0]}} {{app.surname[0]}}</label><br/>
                 <label>Državljanstvo: {{app.citizenship[0]}}</label><br/>
             </div>
-            <div [hidden]="!app.person[0]">
+            <div [hidden]="app.person[0]==='true'">
                 <label>{{app.businessName[0]}}</label><br/>
             </div>
         </div>
@@ -51,11 +51,11 @@
     <div class="row mt-4 podnosilac">
         <h3>Punomoćnik</h3>
         <div class="col-3 podnosilac-okvir">
-            <div [hidden]="stamp.lowyer[0].person[0]">
+            <div [hidden]="stamp.lowyer[0].person[0]==='false'">
                 <label>Ime: {{stamp.lowyer[0].name[0]}} {{stamp.lowyer[0].surname[0]}}</label><br/>
                 <label>Državljanstvo: {{stamp.lowyer[0].citizenship[0]}}</label><br/>
             </div>
-            <div [hidden]="!stamp.lowyer[0].person[0]">
+            <div [hidden]="stamp.lowyer[0].person[0]==='true'">
                 <label>{{stamp.lowyer[0].businessName[0]}}</label><br/>
             </div>
         </div>
@@ -77,11 +77,11 @@
         <div class="row mt-4 podnosilac">
             <h3>Zajednički predstavnik</h3>
             <div class="col-3 podnosilac-okvir">
-                <div [hidden]="stamp.commonRepresentative[0].person[0]">
+                <div [hidden]="stamp.commonRepresentative[0].person[0]==='false'">
                     <label>Ime: {{stamp.commonRepresentative[0].name[0]}} {{stamp.commonRepresentative[0].surname[0]}}</label><br/>
                     <label>Državljanstvo: {{stamp.commonRepresentative[0].citizenship[0]}}</label><br/>
                 </div>
-                <div [hidden]="!stamp.commonRepresentative[0].person[0]">
+                <div [hidden]="stamp.commonRepresentative[0].person[0]==='true'">
                     <label>{{stamp.commonRepresentative[0].businessName[0]}}</label><br/>
                 </div>
             </div>
