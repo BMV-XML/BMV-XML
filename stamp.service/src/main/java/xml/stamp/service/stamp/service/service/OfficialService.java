@@ -150,4 +150,15 @@ public class OfficialService {
         return result;
     }
 
+    public List<SimpleViewStampDTO> getListSolutedOfStamp() throws Exception {
+        List<RequestForStamp> requests = existManager.retrieveCollection();
+        List<SimpleViewStampDTO> results = new ArrayList<>();
+        for (RequestForStamp requestForStamp : requests) {
+            SimpleViewStampDTO stampDTO = convertRequestForStampToStampDTO(requestForStamp);
+            if(stampDTO.isHasSolution())
+                results.add(stampDTO);
+        }
+        System.out.println(" Ukupan broj zahteva za prikaz: " + results.size());
+        return results;
+    }
 }

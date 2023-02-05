@@ -46,7 +46,7 @@ export class ViewStampComponent {
 
     getHTML($event: MouseEvent, id: string) {
         $event.stopPropagation();
-        this.stampService.getPatentHTML(id).subscribe(
+        this.stampService.getStampHTML(id).subscribe(
             (res) => {
                 console.log("*************************************** html ***************************************")
                 console.log(res)

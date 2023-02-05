@@ -75,7 +75,7 @@ export class StampService {
         return this.httpClient.get(this.api_stamp + "list", {responseType: 'text'});
     }
 
-    getPatentHTML(id: string) {
+    getStampHTML(id: string) {
         return this.httpClient.get(this.api_stamp + "transform/xhtml/" + id.replace("/","-"), {responseType: 'text'});
     }
 
@@ -113,5 +113,9 @@ export class StampService {
         const log = JsonToXML.parse("FilterDto", searchBy);
         return this.httpClient.post(this.api_stamp + "search", log, {responseType: 'text'});
 
+    }
+
+    getAcceptedStampList() {
+        return this.httpClient.get(this.api_stamp + "stamp/list/soluted", {responseType: 'text'});
     }
 }

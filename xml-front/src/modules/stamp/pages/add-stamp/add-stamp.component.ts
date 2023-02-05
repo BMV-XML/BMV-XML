@@ -55,11 +55,11 @@ export class AddStampComponent {
                 private readonly sanitizer: DomSanitizer,
                 private readonly stampService: StampService) {
         this.formGroup = this._formBuilder.group({
-            otherKind: ['', [Validators.required, stringAndNumber]],
-            description: ['', [Validators.required, stringAndNumber]],
-            transliteration: ['', [stringAndNumber]],
-            translation: ['', [stringAndNumber]],
-            priorityText: ['', [stringAndNumber]]
+            otherKindFormControl: ['', [Validators.required, stringAndNumber]],
+            descriptionFormControl: ['', [Validators.required, stringAndNumber]],
+            transliterationFormControl: ['', [stringAndNumber]],
+            translationFormControl: ['', [stringAndNumber]],
+            priorityFormControl: ['', [stringAndNumber]]
         });
 
         this.filteredColors = this.colorCtrl.valueChanges.pipe(startWith(null),

@@ -61,7 +61,7 @@ export class LoginComponent {
             else if (result['AuthTypeDTO']['type'][0] === PATENT_OFFICIAL)
               this.router.navigateByUrl("patent/list")
             else if (result['AuthTypeDTO']['type'][0] === STAMP)
-              this.router.navigateByUrl("stamp/add")
+              this.router.navigateByUrl("stamp/soluted")
             else if (result['AuthTypeDTO']['type'][0] === AUTHORSHIP){
               this.router.navigateByUrl("authorship/add")
             }

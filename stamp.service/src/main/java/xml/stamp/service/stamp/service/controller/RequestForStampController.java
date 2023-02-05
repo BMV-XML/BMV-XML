@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
+import xml.stamp.service.stamp.service.dto.SimpleViewStampDTO;
 import xml.stamp.service.stamp.service.dto.request.RequestForStampDTO;
 import xml.stamp.service.stamp.service.dto.StatusDTO;
 import xml.stamp.service.stamp.service.exceptions.NotValidException;
@@ -15,6 +16,7 @@ import xml.stamp.service.stamp.service.service.RequestForStampService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -44,7 +46,16 @@ public class RequestForStampController {
         }
     }
 
-
+    @GetMapping(value = "/list/soluted", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<List<SimpleViewStampDTO>> getListOfPatents(){
+        try {
+            System.out.println("************************************** get list *****************");
+            return new ResponseEntity<List<SimpleViewStampDTO>>(officialService.getListSolutedOfStamp(), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+    }
 
 
 

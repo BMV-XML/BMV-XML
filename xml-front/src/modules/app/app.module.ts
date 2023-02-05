@@ -12,6 +12,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PatentHeaderComponent } from './components/patent-header/patent-header.component';
 import {SharedModule} from "../shared/shared.module";
 import { SimpleHeaderComponent } from './components/simple-header/simple-header.component';
+import {StampHeaderComponent} from "./components/stamp-header/stamp-header.component";
+import { OfficialStampHeaderComponent } from './components/official-stamp-header/official-stamp-header.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { SimpleHeaderComponent } from './components/simple-header/simple-header.
     RootComponent,
     OfficialHeaderComponent,
     PatentHeaderComponent,
-    SimpleHeaderComponent
+    SimpleHeaderComponent,
+    StampHeaderComponent,
+    OfficialStampHeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -1,18 +1,11 @@
 import {NgModule} from "@angular/core";
-import {AddPatentComponent} from "../patent/pages/add-patent/add-patent.component";
-import {PatentRequestsComponent} from "../patent/pages/patent-requests/patent-requests.component";
-import {AddSolutionComponent} from "../patent/components/add-solution/add-solution.component";
-import {ViewSolutionComponent} from "../patent/components/view-solution/view-solution.component";
-import {EntityComponent} from "../shared/components/entity/entity.component";
-import {PatentComponent} from "../patent/components/patent/patent.component";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
-import {PatentRoutes} from "../patent/patent.routes";
 import {TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatRadioModule} from "@angular/material/radio";
-import {MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
+import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BadgeModule} from "primeng/badge";
@@ -35,6 +28,7 @@ import { ViewStampComponent } from './pages/view-stamp/view-stamp.component';
 import { AddStampSolutionComponent } from './components/add-stamp-solution/add-stamp-solution.component';
 import { ViewStampSolutionComponent } from './components/view-stamp-solution/view-stamp-solution.component';
 import { FullStampComponent } from './pages/full-stamp/full-stamp.component';
+import { ViewAcceptedRequestComponent } from './pages/view-accepted-request/view-accepted-request.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +37,8 @@ import { FullStampComponent } from './pages/full-stamp/full-stamp.component';
         ViewStampComponent,
         AddStampSolutionComponent,
         ViewStampSolutionComponent,
-        FullStampComponent
+        FullStampComponent,
+        ViewAcceptedRequestComponent
     ],
     imports: [
         CommonModule,

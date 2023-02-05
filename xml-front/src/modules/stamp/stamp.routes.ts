@@ -4,6 +4,7 @@ import {PATENT_OFFICIAL, STAMP, STAMP_OFFICIAL} from "../auth/types";
 import {AddStampComponent} from "./pages/add-stamp/add-stamp.component";
 import {ViewStampComponent} from "./pages/view-stamp/view-stamp.component";
 import {FullStampComponent} from "./pages/full-stamp/full-stamp.component";
+import {ViewAcceptedRequestComponent} from "./pages/view-accepted-request/view-accepted-request.component";
 
 export const StampRoutes: Routes = [
     {
@@ -23,9 +24,12 @@ export const StampRoutes: Routes = [
     {
         path:'full/:id',
         pathMatch: 'full',
-        component: FullStampComponent,
-        canActivate: [RoleGuard],
-        data:{expectedRole: STAMP_OFFICIAL}
+        component: FullStampComponent
+    },
+    {
+        path:'soluted',
+        pathMatch: 'full',
+        component: ViewAcceptedRequestComponent
     }
 
 ]

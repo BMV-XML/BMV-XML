@@ -45,14 +45,14 @@
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:minLength value="4"/>
-                            <xs:maxLength value="20"/>
+                            <xs:maxLength value="50"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
                 <xs:element minOccurs="0" name="Transliteracija_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                             <xs:maxLength value="50"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -60,7 +60,7 @@
                 <xs:element minOccurs="0" name="Prevod_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="1"/>
+                            <xs:minLength value="0"/>
                             <xs:maxLength value="50"/>
                         </xs:restriction>
                     </xs:simpleType>
@@ -68,27 +68,21 @@
                 <xs:element name="Opis_znaka">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="20"/>
+                            <xs:minLength value="5"/>
                             <xs:maxLength value="500"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
                 <xs:element maxOccurs="unbounded" name="Klase_robe_i_usluga">
                     <xs:simpleType>
-                        <xs:restriction base="xs:positiveInteger">
-                            <xs:minInclusive value="1"/>
-                            <xs:maxInclusive value="45"/>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="700"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
                 <xs:element name="Prvenstvo" type="Prvenstvo"/>
-                <xs:element name="Broj_prijave_ziga">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="Ž-[0-9]{4,10}/[0-9]{2}"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
+                <xs:element name="Broj_prijave_ziga" type="xs:string"> </xs:element>
                 <xs:element name="Datum_prijave">
                     <xs:complexType>
                         <xs:simpleContent>

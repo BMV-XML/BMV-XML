@@ -1,0 +1,34 @@
+<!-- <app-stamp-header></app-stamp-header>  -->
+
+<p-table [value]="stamps" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Code</th>
+            <th>Datum podnosenja</th>
+            <th>Podnosilac</th>
+            <th> PDF</th>
+            <th> HTML</th>
+
+            <th> Rešenje</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stamp>
+        <tr (click)="getURL(stamp.id)">
+            <td>{{stamp.id[0]}}</td>
+            <td>{{stamp.applicationDate | dateArrayToString}}</td>
+            <td>{{stamp.applicant[0]}}</td>
+            <th>
+                <button pButton class="p-button-sm" (click)="getPDF($event, stamp.id[0])"> PDF</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" (click)="getHTML($event, stamp.id[0])"> HTML</button>
+            </th>
+            <th>
+                <button pButton class="p-button-sm" *ngIf="stamp.hasSolution[0] === 'true'"
+                        (click)="openViewStampSolutionDialog($event, stamp.id[0])"> Vidi rešenje
+                </button>
+
+            </th>
+        </tr>
+    </ng-template>
+</p-table>
