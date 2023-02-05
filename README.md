@@ -11,7 +11,7 @@ Servis za patente - pokreće se kao spring boot projekat i radi na portu 8082
 Main servis - pokreće se kao spring boot projekat i radi na portu 8084
 Servis za autorsko pravo - pokreće se kao spring boot projekat i radi na portu 8086
 
-Frontend - pre pokretanja odraditi npm install pa pokrenuti projekat komandom npm start, aplikacija radi na portu 4200
+Frontend(http://localhost:4200/auth/login) - pre pokretanja odraditi npm install pa pokrenuti projekat komandom npm start, aplikacija radi na portu 4200
 Građani se mogu registrovati na servise, dok se službenik unosi direkno u bazu za potrebe testiranja.
 
 *** Napomena ***
