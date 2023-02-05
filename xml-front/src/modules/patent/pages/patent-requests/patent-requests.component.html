@@ -1,28 +1,9 @@
-
-<div class="filter" [formGroup]="searchFormGroup">
-
-  <div class="row" [formGroup]="filterFormGroup">
-    <div class="col-1 input">
-    </div>
-    <div class="col-2 input">
-      <mat-form-field [ngStyle]="{'width': '200px'}" appearance="fill">
-        <mat-label>Tip</mat-label>
-        <mat-select formControlName="type">
-          <mat-option *ngFor="let op of type_options" [value]="op.value">
-            {{op.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2 input">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Tekst</mat-label>
-        <input formControlName="text" matInput placeholder="xxxxxx">
-      </mat-form-field>
-    </div>
-
-    <div class="col-3"></div>
-    <div class="col-2">
+<div class="row">
+  <div class="col-9">
+    <app-search-filter (filterElements)="filter($event)" (searchElements)="search($event)"></app-search-filter>
+  </div>
+  <div class="col-3">
+    <div class="row mx-3">
       <mat-form-field appearance="fill">
         <mat-label>Unosite interval</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -35,161 +16,12 @@
         <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Početni datum nije validan</mat-error>
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Krajnji datum nije validan</mat-error>
       </mat-form-field>
-    </div>
-    <div class="col-1">
-      <div class="px-2 py-2">
-      <button class="mx-5" (click)="makeReport()" mat-raised-button>Preuzmi izveštaj</button>
-      </div>
-    </div>
-  </div>
-  <ng-template #viewContainerRef>
-  </ng-template>
-  <div class="row mb-4">
-    <div class="col-2">
-      <button mat-raised-button (click)="addFilterElement()">Dodaj element</button>
-    </div>
-    <div class="col-2">
-      <button mat-raised-button (click)="removeFilterElement()">Skloni element</button>
-    </div>
-    <div class="col-1">
-      <button mat-raised-button (click)="filterRequests()">Filter</button>
-    </div>
-  </div>
-  <!--
-  <div class="row">
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="numberOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2 input">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Broj prijave</mat-label>
-        <input matInput placeholder="P-0000/00" formControlName="number">
-      </mat-form-field>
-    </div>
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="titleOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2 input">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Naslov</mat-label>
-        <input matInput placeholder="naslov" formControlName="title">
-      </mat-form-field>
-    </div>
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="datumOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2 input">
-      <mat-form-field class="mx-1" appearance="fill">
-        <mat-label>Izaberi datum</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="chosenDate">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-    <div class="col-1 mx-3 my-2 input">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="submitterOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2 input">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Podnosilac</mat-label>
-        <input matInput placeholder="Petar" formControlName="submitter">
-      </mat-form-field>
-    </div>
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="commissionerOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Punomoćnik</mat-label>
-        <input matInput placeholder="Petra" formControlName="commissioner">
-      </mat-form-field>
-    </div>
-    <div class="col-1 input">
-      <mat-form-field [ngStyle]="{'width': '100px'}" appearance="fill">
-        <mat-label>Operator</mat-label>
-        <mat-select formControlName="inventorOperator">
-          <mat-option *ngFor="let op of options" [value]="op">
-            {{op}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-2">
-      <mat-form-field class="input" appearance="fill">
-        <mat-label>Pronalazač</mat-label>
-        <input matInput placeholder="Lazar" formControlName="inventor">
-      </mat-form-field>
-    </div>
-    <div class="col-1 my-2 mx-4">
-      <button mat-raised-button (click)="filterRequests()">Filter</button>
-    </div>
-  </div>
-  -->
 
-  <div class="row">
-    <div class="col-6">
-      <mat-form-field id="grid" class="example-chip-list" appearance="fill">
-        <mat-label>Termini za pretragu</mat-label>
-        <mat-chip-grid  #chipGrid aria-label="Unos termina">
-          <mat-chip-row *ngFor="let fruit of fruits"
-                        (removed)="remove(fruit)"
-                        [editable]="true"
-                        (edited)="edit(fruit, $event)"
-                        [aria-description]="'press enter to edit ' + fruit.name">
-            {{fruit.name}}
-            <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-          <input placeholder="Novi termin..."
-                 [matChipInputFor]="chipGrid"
-                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                 [matChipInputAddOnBlur]="true"
-                 (matChipInputTokenEnd)="add($event)"/>
-        </mat-chip-grid>
-      </mat-form-field>
+      <button class="" (click)="makeReport()" mat-raised-button>Preuzmi izveštaj</button>
     </div>
-    <div class="col-1 my-2 mx-4">
-      <button mat-raised-button (click)="search()">Pretraži</button>
+    <div class="row mt-3">
+      <app-show-last-searched-values *ngIf="searchOrFiltered" [isSearched]="searched"
+                                     [searchParams]="searchParams" [filterParams]="filterParams"></app-show-last-searched-values>
     </div>
   </div>
 </div>

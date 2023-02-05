@@ -28,6 +28,9 @@ import {ToastModule} from "primeng/toast";
 import { FullPatentComponent } from './pages/full-patent/full-patent.component';
 import {MatChipsModule} from "@angular/material/chips";
 import { FilterComponent } from './components/filter/filter.component';
+import { PatentListComponent } from './pages/patent-list/patent-list.component';
+import { SearchFilterComponent } from './components/search-filter/search-filter.component';
+import { ShowLastSearchedValuesComponent } from './components/show-last-searched-values/show-last-searched-values.component';
 
 
 
@@ -39,7 +42,10 @@ import { FilterComponent } from './components/filter/filter.component';
     ViewSolutionComponent,
     PatentComponent,
     FullPatentComponent,
-    FilterComponent
+    FilterComponent,
+    PatentListComponent,
+    SearchFilterComponent,
+    ShowLastSearchedValuesComponent
   ],
   imports: [
     CommonModule,

@@ -193,6 +193,10 @@ public class FusekiReader {
         conditionBuilder.append("filter (");
         int index = 0;
         String lastOperator = "";
+        /*
+                "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/sibling> ?sibling ." +
+                "filter (?sibling = <http://www.ftn.uns.ac.rs/rdf/patent/P-32123344-23>)"
+         */
         for (FilterDTO elem : elements) {
             conditionBuilder.append(lastOperator);
             elem.setValue(elem.getValue().replace("/", "-"));
@@ -200,18 +204,27 @@ public class FusekiReader {
                 case "i": {
                     //lastOperator = "&&";
                     if (index != 0) conditionBuilder.append(" && ");
-                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    if (elem.getType().equals("sibling") || elem.getType().equals("child") || elem.getType().equals("additional"))
+                        addHrefSearch(conditionBuilder, elem);
+                    else
+                        conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
                     break;
                 }
                 case "ili": {
                     //lastOperator = "||";
                     if (index != 0) conditionBuilder.append(" || ");
-                    conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    if (elem.getType().equals("sibling") || elem.getType().equals("child") || elem.getType().equals("additional"))
+                        addHrefSearch(conditionBuilder, elem);
+                    else
+                        conditionBuilder.append("CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
                     break;
                 }case "ne": {
                     ///lastOperator = "&&";
                     if (index != 0) conditionBuilder.append(" && ");
-                    conditionBuilder.append("!CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
+                    if (elem.getType().equals("sibling") || elem.getType().equals("child") || elem.getType().equals("additional"))
+                        addHrefSearch(conditionBuilder, elem);
+                    else
+                        conditionBuilder.append("!CONTAINS(UCASE(str(?" + elem.getType() + ")), UCASE('" + elem.getValue() + "'))");
                     break;
                 }
             }
@@ -239,6 +252,14 @@ public class FusekiReader {
         }
         query.close();
         return foundPatents;
+    }
+
+    private void addHrefSearch(StringBuilder conditionBuilder, FilterDTO elem) {
+        /*
+                "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/sibling> ?sibling ." +
+                "filter (?sibling = <http://www.ftn.uns.ac.rs/rdf/patent/P-32123344-23>)"
+         */
+        conditionBuilder.append("?" + elem.getType() + " = <http://www.ftn.uns.ac.rs/rdf/patent/"+ elem.getValue() + ">");
     }
 
     public List<String> searchByUser(String type, String searchBy){
@@ -282,6 +303,35 @@ public class FusekiReader {
         }
         query.close();
         return foundPatents;
+    }
+
+    public void filter() {
+        StringBuilder sb = new StringBuilder();
+        String condition =
+                "?patent <http://www.ftn.uns.ac.rs/rdf/patent/predicate/sibling> ?sibling ." +
+                "filter (?sibling = <http://www.ftn.uns.ac.rs/rdf/patent/P-32123344-23>)";
+        sb.append(condition);
+
+        condition = sb.toString();
+        //condition = StringSubstitutor.replace(condition, params, "{{", "}}");
+        String sparqlQuery = SparqlUtil.selectData(authManager.getFullDataEndpoint() + GRAPH_URI,
+                condition);
+
+        QueryExecution query = QueryExecutionFactory.sparqlService(authManager.getFullQueryEndpoint(), sparqlQuery);
+
+        ResultSet results = query.execSelect();
+        List<String> foundPatents = new ArrayList<>();
+        while (results.hasNext()) {
+            QuerySolution querySolution = results.next();
+            String[] patentUrl = querySolution.getResource("patent").toString().split("/");
+            foundPatents.add(patentUrl[patentUrl.length-1]);
+        }
+        System.out.println("***********************************");
+        for (String founds : foundPatents){
+            System.out.println(founds);
+        }
+        query.close();
+        //return foundPatents;
     }
 }
 

@@ -20,4 +20,8 @@ public class Submitter {
     private GlobalEntity globalEntity;
     @XmlElement(name = "Podnosilac_je_i_pronalazac", required = true)
     private Checkbox submitterTheInventor;
+
+    public String getFullname() {
+        return globalEntity.getFullname();
+    }
 }

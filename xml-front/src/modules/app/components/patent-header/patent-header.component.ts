@@ -16,4 +16,12 @@ export class PatentHeaderComponent {
     this.headerService.logout()
     this.router.navigate(["auth/login"])
   }
+
+  addPatent() {
+    this.router.navigate(["patent/add"])
+  }
+
+  viewPatents() {
+    this.router.navigate(["patent/view"])
+  }
 }

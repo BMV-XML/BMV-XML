@@ -4,6 +4,7 @@ import {PatentRequestsComponent} from "./pages/patent-requests/patent-requests.c
 import {RoleGuard} from "../auth/guards/role/role.guard";
 import {OFFICIAL, PATENT, PATENT_OFFICIAL} from "../auth/types";
 import {FullPatentComponent} from "./pages/full-patent/full-patent.component";
+import {PatentListComponent} from "./pages/patent-list/patent-list.component";
 
 export const PatentRoutes: Routes = [
   {
@@ -19,6 +20,13 @@ export const PatentRoutes: Routes = [
     component: PatentRequestsComponent,
     canActivate: [RoleGuard],
     data: {expectedRole: PATENT_OFFICIAL}
+  },
+  {
+    path: 'view',
+    pathMatch: 'full',
+    component: PatentListComponent,
+    canActivate: [RoleGuard],
+    data: {expectedRole: PATENT}
   },{
   path:'full/:id',
     pathMatch: 'full',

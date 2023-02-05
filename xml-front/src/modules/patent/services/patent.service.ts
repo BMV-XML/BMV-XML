@@ -124,4 +124,20 @@ export class PatentService {
       day = '0' + dateParts[0]
     return month + "." + day +"." + dateParts[2] + "."
   }
+
+  searchPatentListUser($event: SearchBy[]) {
+    const log = JsonToXML.parse("FilterDto", $event);
+    return this.httpClient.post(this.api_path + "patent/search/user", log, {responseType: 'text'});
+  }
+
+  filteRequestsUser($event: FilterDto[]) {
+
+    const log = JsonToXML.parse("FilterDto", $event);
+    console.log(log)
+    return this.httpClient.post(this.api_path + "patent/filter/user", log, {responseType: 'text'});
+  }
+
+  getPatentListUser() {
+    return this.httpClient.get(this.api_path + "patent/list/user", {responseType: 'text'});
+  }
 }

@@ -1,0 +1,66 @@
+
+<div class="filter" [formGroup]="searchFormGroup">
+
+  <div class="row" [formGroup]="filterFormGroup">
+    <div class="col-1 input">
+    </div>
+    <div class="col-2 input">
+      <mat-form-field [ngStyle]="{'width': '200px'}" appearance="fill">
+        <mat-label>Tip</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let op of type_options" [value]="op.value">
+            {{op.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-2 input">
+      <mat-form-field class="input" appearance="fill">
+        <mat-label>Tekst</mat-label>
+        <input formControlName="text" matInput placeholder="xxxxxx">
+      </mat-form-field>
+    </div>
+
+  </div>
+  <ng-template #viewContainerRef>
+  </ng-template>
+  <div class="row mb-4">
+    <div class="col-2">
+      <button mat-raised-button (click)="addFilterElement()">Dodaj element</button>
+    </div>
+    <div class="col-2">
+      <button mat-raised-button (click)="removeFilterElement()">Skloni element</button>
+    </div>
+    <div class="col-1">
+      <button mat-raised-button (click)="filterRequests()">Filter</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-7">
+      <mat-form-field id="grid" class="example-chip-list" appearance="fill">
+        <mat-label>Termini za pretragu</mat-label>
+        <mat-chip-grid  #chipGrid aria-label="Unos termina">
+          <mat-chip-row *ngFor="let fruit of fruits"
+                        (removed)="remove(fruit)"
+                        [editable]="true"
+                        (edited)="edit(fruit, $event)"
+                        [aria-description]="'press enter to edit ' + fruit.name">
+            {{fruit.name}}
+            <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Novi termin..."
+                 [matChipInputFor]="chipGrid"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="true"
+                 (matChipInputTokenEnd)="add($event)"/>
+        </mat-chip-grid>
+      </mat-form-field>
+    </div>
+    <div class="col-1 my-2 mx-4">
+      <button mat-raised-button (click)="search()">Pretraži</button>
+    </div>
+  </div>
+</div>

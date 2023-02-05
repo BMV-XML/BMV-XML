@@ -1,0 +1,13 @@
+<div class="mt-4 data" *ngIf="isSearched">
+  Pretraga po: <br/>
+  <label *ngFor="let lab of searchParams">
+    {{lab.name}}, &nbsp;
+  </label>
+</div>
+
+<div class="mt-4 data" *ngIf="!isSearched">
+  Filter po:
+  <div *ngFor="let lab of filterParams">
+    {{lab.type | patentFilterTypeToString}} : {{lab.value}}
+  </div>
+</div>

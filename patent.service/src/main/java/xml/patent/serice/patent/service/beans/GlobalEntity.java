@@ -21,6 +21,8 @@ public abstract class GlobalEntity {
 
     abstract boolean contains(String s);
 
+    public abstract String getFullname();
+
     protected boolean basicContains(String s){
         if (address.contains(s))
             return true;

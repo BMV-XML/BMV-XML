@@ -39,6 +39,9 @@ public class Solutions {
 
     public boolean doesRequestHaveSolution(String requestId) {
         System.out.println("SOLUTIONS:");
+        if (solutions == null){
+            return false;
+        }
         for (RequestSolution s : solutions){
             System.out.println(s.getRequestId());
             if (s.getRequestId().equals(requestId))
