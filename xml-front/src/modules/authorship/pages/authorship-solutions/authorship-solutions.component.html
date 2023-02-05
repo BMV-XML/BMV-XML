@@ -1,1 +1,103 @@
-<p>authorship-solutions works!</p>
+<div class="search">
+
+    <div class="row" [formGroup]="filterFormGroup">
+        <div class="col-1 input">
+        </div>
+        <div class="col-2 input">
+            <mat-form-field [ngStyle]="{'width': '200px'}" appearance="fill">
+                <mat-label>Tip</mat-label>
+                <mat-select formControlName="type">
+                    <mat-option *ngFor="let op of types" [value]="op.value">
+                        {{op.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-2 input">
+            <mat-form-field class="input" appearance="fill">
+                <mat-label>Tekst</mat-label>
+                <input formControlName="text" matInput placeholder="xxxxxx">
+            </mat-form-field>
+        </div>
+        
+        <div class="py-2 col-2">
+            <button mat-raised-button color="primary" style="padding: 15px;" (click)="searchMetadata()">Pretraži po metapodacima</button>
+        </div>
+    </div>
+    <ng-template #viewContainerRef></ng-template>
+    <div class="row mb-4" >
+        <div class="col-1"></div>
+        <div class="col-2">
+            <button mat-raised-button (click)="addFilterElement()">Dodaj element</button>
+        </div>
+        <div class="col-2">
+            <button mat-raised-button (click)="removeFilterElement()">Skloni element</button>
+        </div>
+    </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="row mt-5">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <mat-form-field id="grid" class="example-chip-list" appearance="fill">
+            <mat-label>Pojmovi za pretragu</mat-label>
+            <mat-chip-grid  #chipGrid aria-label="Unos pojmova">
+                <mat-chip-row *ngFor="let term of terms"
+                (removed)="remove(term)"
+                            [editable]="true"
+                            (edited)="edit(term, $event)"
+                            [aria-description]="'press enter to edit ' + term.expression">
+                {{term.expression}}
+                <button matChipRemove [attr.aria-label]="'remove ' + term.expression">
+                <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+            <input placeholder="Unesite pojam..."
+                    [matChipInputFor]="chipGrid"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event)"/>
+            </mat-chip-grid>
+        </mat-form-field>
+        <button mat-raised-button class="mx-4 mb-3" (click)="search()" color="primary">Pretraži</button>
+    </div>
+    <!-- <div class="col-1 my-2 mx-4">
+    
+    </div> -->
+    <div class="col-3"></div>
+</div>
+
+<p-table [value]="authorships" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Datum podnosenja</th>
+        <th>Podnosilac</th>
+        <th> PDF</th>
+        <th> HTML</th>
+        <th> Rešenje</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-authorship>
+      <tr (click)="getURL(authorship.id)">
+        <td>{{authorship.id[0]}}</td>
+        <td>{{authorship.applicationDate | date:"dd.MM.yyyy."}}</td>
+        <td>{{authorship.submitter[0]}}</td>
+        <td>
+          <button mat-stroked-button color="primary" (click)="getPDF($event, authorship.id[0])"> PDF</button>
+        </td>
+        <td>
+          <button mat-stroked-button style="color: #CA4CF5;" (click)="getHTML($event, authorship.id[0])"> HTML</button>
+        </td>
+        <td>
+          <button mat-raised-button color="primary"
+                  (click)="openInspectSolutionDialog($event, authorship.id[0])"> Vidi rešenje
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+</p-table>
+
+<p-toast position="top-right" key="authorship-list-message"></p-toast>

@@ -94,8 +94,6 @@
         <th>ID</th>
         <th>Datum podnosenja</th>
         <th>Podnosilac</th>
-        <th>Opis</th>
-        <th>Primer</th>
         <th> PDF</th>
         <th> HTML</th>
         <th> RDF</th>
@@ -108,8 +106,6 @@
         <td>{{authorship.id[0]}}</td>
         <td>{{authorship.applicationDate | date:"dd.MM.yyyy."}}</td>
         <td>{{authorship.submitter[0]}}</td>
-        <td>/</td>
-        <td>/</td>
         <td>
           <button mat-stroked-button color="primary" (click)="getPDF($event, authorship.id[0])"> PDF</button>
         </td>

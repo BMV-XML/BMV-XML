@@ -26,8 +26,4 @@ public class SimpleAuthorshipDTO {
 
     private boolean hasSolution;
 
-    private boolean exampleFile;
-
-    private boolean descriptionFile;
-
 }

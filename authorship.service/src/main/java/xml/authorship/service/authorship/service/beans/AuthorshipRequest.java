@@ -82,9 +82,11 @@ public class AuthorshipRequest {
             return true;
         if (authorsWork.contains(s))
             return true;
-        for (Author a : authors){
-            if (a.contains(s))
-                return true;
+        if (authors != null) {
+            for (Author a : authors) {
+                if (a.contains(s))
+                    return true;
+            }
         }
         return false;
     }

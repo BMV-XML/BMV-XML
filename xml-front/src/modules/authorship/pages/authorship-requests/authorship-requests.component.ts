@@ -90,15 +90,6 @@ export class AuthorshipRequestsComponent {
     )
   }
 
-  openExampleFile($event: MouseEvent, id: any) {
-    $event.stopPropagation();
-    this.authorshipService.getExampleFile(id).subscribe(
-      res => {
-        window.open(res, "_blank");
-      }
-    )
-  }
-
   // ------------- SEARCH --------------
 
   terms: SearchDTO[] = [];
@@ -319,8 +310,8 @@ export class AuthorshipRequestsComponent {
 
   }
 
-  getURL(id: string) {
-    // this.router.navigateByUrl("patent/full/" + id[0].replace("/", "-"))
+  getURL(id: any) {
+    return;
   }
 
 }

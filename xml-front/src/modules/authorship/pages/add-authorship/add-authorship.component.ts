@@ -203,7 +203,7 @@ export class AddAuthorshipComponent {
           let success = result['StatusResponseDTO']['successful'][0]
           if (success) {
             this.messageService.add({
-              key: 'authorship-message',
+              key: 'request-message',
               severity: 'success',
               summary: 'Uspešno kreiranje',
               detail: 'Bićete preusmjereni za 3 sekunde.'

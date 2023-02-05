@@ -122,6 +122,10 @@ export class AuthorshipService {
      return this.httpClient.post(this.api_path + "authorship/report", log, {responseType: 'text'});
    }
 
+   getAcceptedAuthorships() {
+    return this.httpClient.get(this.api_path + "authorship/list/soluted", {responseType: 'text'});
+   }
+
    convertDateToStringInReport(param: string | undefined) {
     if (param === undefined)
       return ''

@@ -370,8 +370,6 @@ public class AuthorshipRequestService {
         dto.setId(request.getAuthorshipId());
         dto.setApplicationDate(request.getAuthorshipData().getApplicationDate().getDate());
         dto.setSubmitter(request.getSubmitter().getGlobalEntity().getContact().getEmail());
-        dto.setDescriptionFile(request.getAttachments().getDescriptionPath() != null);
-        dto.setExampleFile(request.getAttachments().getExamplePath() != null);
         return dto;
     }
 
@@ -397,13 +395,7 @@ public class AuthorshipRequestService {
     }
 
     public AttachmentsDTO setExampleFile(MultipartFile[] multiPartFiles) throws IOException {
-        String filePath = addFile(generateFileId(), EXAMPLES_PATH, multiPartFiles, "exampleFile");
-        int index = filePath.indexOf("exampleFile");
-        String name = filePath.substring(index);
-//        name = name.replace("\\", "/");
-        System.out.println("name : " + name);
-        String path = "http://localhost:8086/resources/" + name;
-        System.out.println("path :" + path);
+        String path = addFile(generateFileId(), EXAMPLES_PATH, multiPartFiles, "exampleFile");
         AttachmentsDTO dto = new AttachmentsDTO();
         dto.setExamplePath(path);
         return dto;
