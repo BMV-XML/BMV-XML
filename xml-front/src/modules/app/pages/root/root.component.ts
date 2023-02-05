@@ -23,10 +23,6 @@ export class RootComponent {
     })
   }
 
-  isOfficial(){
-    return this.role === OFFICIAL || this.role === PATENT_OFFICIAL
-  }
-
   isPatent(){
     return this.role === PATENT
   }
@@ -45,5 +41,9 @@ export class RootComponent {
 
   isNoOne() {
     return this.role === 'null' || !this.role
+  }
+
+  isOfficialPatent() {
+    return this.role === OFFICIAL || this.role === PATENT_OFFICIAL
   }
 }

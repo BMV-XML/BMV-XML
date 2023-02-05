@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OfficialHeaderComponent } from './official-header.component';
+import { OfficialPatentHeaderComponent } from './official-patent-header.component';
 
 describe('OfficialHeaderComponent', () => {
-  let component: OfficialHeaderComponent;
-  let fixture: ComponentFixture<OfficialHeaderComponent>;
+  let component: OfficialPatentHeaderComponent;
+  let fixture: ComponentFixture<OfficialPatentHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OfficialHeaderComponent ]
+      declarations: [ OfficialPatentHeaderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(OfficialHeaderComponent);
+    fixture = TestBed.createComponent(OfficialPatentHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

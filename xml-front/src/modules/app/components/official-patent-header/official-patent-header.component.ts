@@ -4,11 +4,11 @@ import {Router} from "@angular/router";
 import {PATENT, PATENT_OFFICIAL} from "../../../auth/types";
 
 @Component({
-  selector: 'app-official-header',
-  templateUrl: './official-header.component.html',
-  styleUrls: ['./official-header.component.scss']
+  selector: 'app-official-patent-header',
+  templateUrl: './official-patent-header.component.html',
+  styleUrls: ['./official-patent-header.component.scss']
 })
-export class OfficialHeaderComponent {
+export class OfficialPatentHeaderComponent {
   requests: string;
 
   constructor(private headerService: HeaderService, private router: Router) {
