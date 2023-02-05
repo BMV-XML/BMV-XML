@@ -4,8 +4,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatRadioChange } from '@angular/material/radio';
 import { AuthorshipService } from 'modules/authorship/services/authorship.service';
 import { AddSolutionComponent } from 'modules/patent/components/add-solution/add-solution.component';
-import { AddSolutionDto } from 'modules/patent/models/add-solution-dto';
 import * as xml2js from "xml2js";
+import {AddSolutionDto} from "../../../shared/models/add-solution-dto";
 
 @Component({
   selector: 'app-solution',

@@ -7,8 +7,8 @@ import { AuthorDto } from '../models/author';
 import { SearchBy } from 'modules/patent/models/search-by';
 import { SearchDTO } from '../models/search-dto';
 import { FilterDto } from 'modules/patent/models/filter-dto';
-import { AddSolutionDto } from 'modules/patent/models/add-solution-dto';
 import { RangeDto } from 'modules/patent/models/range-dto';
+import {AddSolutionDto} from "../../shared/models/add-solution-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,11 @@ export class AuthorshipService {
    getAuthorshipList() {
      return this.httpClient.get(this.api_path + "authorship/get/all", {responseType: 'text'});
    }
- 
+
    getPDF(id: string) {
      return this.httpClient.get(this.api_path + "transform/pdf/" + id, {responseType: 'blob'});
    }
- 
+
    getHTML(id: string) {
      return this.httpClient.get(this.api_path + "transform/xhtml/" + id, {responseType: 'blob'});
    }
@@ -41,7 +41,7 @@ export class AuthorshipService {
     };
      return this.httpClient.get(this.api_path + "authorship/getRdfMetadata?id=" + id, options);
    }
- 
+
    getJSON(id: string) {
     const options = {
       headers: new HttpHeaders().append('Content-Type', 'application/json'),
@@ -49,19 +49,19 @@ export class AuthorshipService {
     };
      return this.httpClient.get(this.api_path + "authorship/getJsonMetadata?id=" + id, options);
    }
- 
+
    addSolution(solution: AddSolutionDto){
      const log = JsonToXML.parse("root", solution);
      return this.httpClient.post(this.api_path + "authorship/addSolution", log, {responseType: 'text'});
- 
+
    }
- 
+
    getSolution(requestId: string) {
      //requestId = "P-9856-23"
      return this.httpClient.get(this.api_path + "authorship/solution/get/" + requestId, {responseType: 'text'});
- 
+
    }
- 
+
    submitRequest(result: AuthorshipRequestDto, authors: AuthorDto[]) {
      console.log("*************************************************************")
      console.log(authors)
@@ -78,7 +78,7 @@ export class AuthorshipService {
    }
 
    setExampleFile(data: any) {
-     return this.httpClient.post(this.api_path + "authorship/example/file", data, 
+     return this.httpClient.post(this.api_path + "authorship/example/file", data,
      {
        responseType: 'text',
        headers: {
@@ -89,7 +89,7 @@ export class AuthorshipService {
    }
 
    setDescriptionFile(data: any) {
-     return this.httpClient.post(this.api_path + "authorship/description/file", data, 
+     return this.httpClient.post(this.api_path + "authorship/description/file", data,
      {
         responseType: 'text',
         headers: {
@@ -98,22 +98,22 @@ export class AuthorshipService {
         }
      });
    }
- 
+
   //  getPatent(requestId: string) {
   //    return this.httpClient.get(this.api_path + "get/"+ requestId.replace("/", "-"), {responseType: 'text'});
- 
+
   //  }
- 
+
    searchMetadata(filter: FilterDto[]) {
      const log = JsonToXML.parse("FilterDTO", filter);
      return this.httpClient.post(this.api_path + "authorship/filter", log, {responseType: 'text'});
    }
- 
+
    searchBasicData(searchBy: SearchDTO[]) {
      const log = JsonToXML.parse("SearchDTO", searchBy);
      return this.httpClient.post(this.api_path + "authorship/search", log, {responseType: 'text'});
    }
- 
+
    getReportForPeriod(range: RangeDto) {
      const log = JsonToXML.parse("range", range);
      return this.httpClient.post(this.api_path + "authorship/report", log, {responseType: 'text'});

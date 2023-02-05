@@ -2,9 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthorshipService } from 'modules/authorship/services/authorship.service';
 import { ViewSolutionComponent } from 'modules/patent/components/view-solution/view-solution.component';
-import { SolutionDto } from 'modules/patent/models/solution-dto';
 import { PatentService } from 'modules/patent/services/patent.service';
 import * as xml2js from "xml2js";
+import {SolutionDto} from "../../../shared/models/solution-dto";
 
 @Component({
   selector: 'app-inspect-solution',

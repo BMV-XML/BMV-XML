@@ -22,6 +22,7 @@ public class LoginController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<AuthTypeDTO> login(@RequestBody LoginDTO loginDTO){
         System.out.println("LOGIN");
+        loginDTO.setService("AUTHORSHIP");
         try {
             AuthTypeDTO authTypeDTO = authenticationService.getAuthType(loginDTO);
             if (authTypeDTO.isSuccessful() && authTypeDTO.getType().equals("ALL"))
