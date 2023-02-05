@@ -126,7 +126,9 @@ public class OfficialService {
         HashSet<String> patents = fusekiReader.search(filter);
         ///Stream<String> result = patents.stream().distinct();
         List<PatentDTO> resultDto = new ArrayList<>();
+        System.out.println("-------------------- filter results ---------------------");
         for (String elem : patents){
+            System.out.println(resultDto);
             resultDto.add(convertPatentRequestToPatentDTO(existManager.retrieve(elem)));
         }
         return resultDto;

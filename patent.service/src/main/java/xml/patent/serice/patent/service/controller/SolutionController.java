@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xml.patent.serice.patent.service.Application;
 import xml.patent.serice.patent.service.dto.AddSolutionDTO;
 import xml.patent.serice.patent.service.dto.LoginDTO;
 import xml.patent.serice.patent.service.dto.PatentDTO;
@@ -34,7 +35,9 @@ public class SolutionController {
                                                        @RequestHeader(name = "username") String username,
                                                        @RequestHeader(name = "password") String password){
         try{
-            if (!authenticationService.authenticate(new LoginDTO(username, password)))
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             addSolutionDTO.setUsername(username);
             return new ResponseEntity<>(solutionService.addSolution(addSolutionDTO), HttpStatus.OK);
@@ -49,7 +52,9 @@ public class SolutionController {
                                                    @RequestHeader(name = "username") String username,
                                                    @RequestHeader(name = "password") String password){
         try{
-            if (!authenticationService.authenticate(new LoginDTO(username, password))) //auth na all ne na patent!!!!
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.OFFICIAL);
+            if (!authenticationService.authenticate(l))
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             return new ResponseEntity<>(solutionService.getSolution(patentId), HttpStatus.OK);
         }catch (Exception e){

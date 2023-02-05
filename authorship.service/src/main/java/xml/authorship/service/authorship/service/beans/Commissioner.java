@@ -11,19 +11,12 @@ import javax.xml.bind.annotation.*;
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name="Punomocnik", propOrder = {
-        "name",
-        "surname",
-        "address"
+        "person"
 })
 @XmlRootElement(name = "Punomocnik")
 public class Commissioner {
 
-    @XmlElement(name = "Ime", required = true)
-    private String name;
+    @XmlElement(name = "Osoba", required = true)
+    private Person person;
 
-    @XmlElement(name = "Prezime", required = true)
-    private String surname;
-
-    @XmlElement(name = "Adresa", required = true)
-    private Address address;
 }

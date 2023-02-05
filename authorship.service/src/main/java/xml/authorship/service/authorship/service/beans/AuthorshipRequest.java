@@ -1,14 +1,11 @@
 package xml.authorship.service.authorship.service.beans;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.time.LocalDate;
+import java.util.List;
 
+@ToString
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +17,7 @@ import java.time.LocalDate;
         "submitter",
         "commissioner",
         "authorsWork",
-        "author",
+        "authors",
         "attachments"
 })
 @XmlRootElement(name = "Zahtjev")
@@ -42,7 +39,7 @@ public class AuthorshipRequest {
     private AuthorsWork authorsWork;
 
     @XmlElement(name = "Autor")
-    private Author author;
+    private List<Author> authors;
 
 //    @XmlElement(name = "ID", required = true)
 //    private String id;
@@ -55,8 +52,40 @@ public class AuthorshipRequest {
     private Attachments attachments;
 
 
-    @XmlAttribute(name="about", required = true)
+    @XmlAttribute(name="about")  // TODO nezz cemu sluzi
     @XmlSchemaType(name="anyURI")
     private String about;
 
+    @XmlAttribute(name="vocab")
+    @XmlSchemaType(name="anyURI")
+    private String vocab;
+
+
+    public String getAuthorshipId() {
+        return authorshipData.getID().getText();
+    }
+
+    public boolean contain(List<String> searchBy) {
+        for (String s : searchBy){
+            if (!contains(s.toLowerCase()))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean contains(String s){
+        if (authorshipData.contains(s))
+            return true;
+        if (submitter.getGlobalEntity().contains(s))
+            return true;
+        if (commissioner != null && commissioner.getPerson().contains(s))
+            return true;
+        if (authorsWork.contains(s))
+            return true;
+        for (Author a : authors){
+            if (a.contains(s))
+                return true;
+        }
+        return false;
+    }
 }

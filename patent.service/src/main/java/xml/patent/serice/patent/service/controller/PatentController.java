@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import xml.patent.serice.patent.service.Application;
 import xml.patent.serice.patent.service.beans.PatentRequest;
 import xml.patent.serice.patent.service.dto.LoginDTO;
 import xml.patent.serice.patent.service.dto.StatusDTO;
@@ -31,6 +32,7 @@ public class PatentController {
     @Autowired
     private LoaderValidation loaderValidation;
 
+    /*
     @PostMapping(value = "/xml", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> savePatentRequest(@RequestBody String patentRequest){
         try {
@@ -45,13 +47,19 @@ public class PatentController {
             return new ResponseEntity<>("Exception", HttpStatus.OK);
         }
         return new ResponseEntity<String>("radi", HttpStatus.OK);
-    }
+    }*/
 
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<StatusDTO> savePatentRequest(@RequestBody PatentRequestDTO patentRequest) {
+    public ResponseEntity<StatusDTO> savePatentRequest(@RequestBody PatentRequestDTO patentRequest,
+                                                       @RequestHeader(name = "username") String username,
+                                                       @RequestHeader(name = "password") String password) {
         System.out.println(patentRequest);
         try {
+            LoginDTO l = new LoginDTO(username, password);
+            l.setService(Application.PATENT);
+            if (!authenticationService.authenticate(l))
+               return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             this.patentRequestService.savePatentRequest(patentRequest);
             return new ResponseEntity<>(new StatusDTO(true, "", 0), HttpStatus.OK);
         } catch (NotValidException notValidException){

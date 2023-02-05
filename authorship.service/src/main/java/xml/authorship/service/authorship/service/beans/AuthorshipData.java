@@ -23,4 +23,8 @@ public class AuthorshipData {
 
     @XmlElement(name = "Datum_prijave", required = true)
     private DatePredicate applicationDate;
+
+    public boolean contains(String s) {
+        return ID.getText().toLowerCase().contains(s);
+    }
 }

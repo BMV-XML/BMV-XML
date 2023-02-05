@@ -13,6 +13,7 @@ import {PatentComponent} from "../../components/patent/patent.component";
 import {capitalFirstLetterTextWithSpace, postalNumber, stringAndNumber} from "../../validators";
 import {PatentService} from "../../services/patent.service";
 import {MessageService} from "primeng/api";
+import {FilterComponent} from "../../components/filter/filter.component";
 
 declare const Xonomy: any
 
@@ -51,7 +52,7 @@ export class AddPatentComponent {
     street: "",
     surname: ""
   }
-  previousPatent: PreviousPatentDto = {applicationNumber: "", submissionDate: null, country: "",completed: false,id: -1}
+  previousPatent: PreviousPatentDto = {applicationNumber: "", submissionDate: '', country: "",completed: false,id: -1}
   result : PatentRequestDto = {
     priorityPatent: "", titles: "",
     address: {street: "", country: "", city: "", number: "", postalNumber: ""},
@@ -264,12 +265,28 @@ export class AddPatentComponent {
   }
 
   @ViewChild("viewContainerRef", { read: ViewContainerRef }) vcr!: ViewContainerRef;
-  ref!: ComponentRef<PatentComponent>
+  //ref!: ComponentRef<PatentComponent>
+  refList: ComponentRef<PatentComponent>[] = []
   counter: number = 0
 
   addPatent() {
+    let ref = this.vcr.createComponent(PatentComponent)
+    this.refList.push(ref)
+    ref.instance.id = this.counter
+    ref.instance.patent.id = this.counter
+    this.counter++
+    ref.instance.previousPatent.subscribe(
+      value =>{
+        if (value.completed)
+          this.priorityPatent[value.id] = value
+
+        console.log("------------------ stanje ------------- ")
+        console.log(this.priorityPatent)
+      }
+    );
+    /*
     this.ref = this.vcr.createComponent(PatentComponent)
-    //this.ref.instance.id = this.counter
+    this.ref.instance.id = this.counter
     this.ref.instance.patent.id = this.counter
     this.counter++
     this.ref.instance.previousPatent.subscribe(
@@ -281,9 +298,24 @@ export class AddPatentComponent {
         console.log(this.priorityPatent)
       }
     );
+    */
   }
 
   removeChild() {
+    if (this.refList.length == 0)
+      return
+    const index = this.vcr.indexOf(this.refList[this.refList.length-1].hostView)
+    if (index != -1) {
+      this.vcr.remove(index);
+      this.refList.pop()
+    }
+    //this.vcr.remove(index)
+    //if (index != -1) this.vcr.remove(index)
+    if (this.priorityPatent.length === this.counter){
+      this.priorityPatent.pop()
+    }
+    this.counter--
+    /*
     const index = this.vcr.indexOf(this.ref.hostView)
     this.vcr.remove(index)
     //if (index != -1) this.vcr.remove(index)
@@ -293,6 +325,8 @@ export class AddPatentComponent {
     }
     console.log("------------------ stanje ------------- ")
     console.log(this.priorityPatent)
+
+     */
   }
 
   isPriorityCompleted(){
@@ -331,6 +365,25 @@ export class AddPatentComponent {
       (res) => {
         console.log("```````````````````` RESULT ``````````````````````")
         console.log(res)
+        let parser = new xml2js.Parser();
+        parser.parseString(res, (err, result) => {
+          console.log("**********************")
+          console.log(result['StatusDTO']['successful'][0])
+          if (result['StatusDTO']['successful'][0] === 'true'){
+            this.messageService.add({
+              key: 'request-message',
+              severity: 'success',
+              summary: 'Uspešno ste podneli zahtev'
+            })
+          }else{
+            this.messageService.add({
+              key: 'request-message',
+              severity: 'warn',
+              summary: 'Nismo uspeli da sačuvamo zahtev',
+              detail: 'Proverite podatke koji ste dali ili pokušajte malo kasnije da podneste zahtev.'
+            })
+          }
+        });
       }
     )
   }

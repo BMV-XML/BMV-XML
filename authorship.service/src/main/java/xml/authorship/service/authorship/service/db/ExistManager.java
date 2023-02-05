@@ -16,6 +16,8 @@ import xml.authorship.service.authorship.service.util.AuthenticationUtilities;
 import javax.xml.transform.OutputKeys;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ExistManager {
@@ -101,7 +103,7 @@ public class ExistManager {
         }
     }
 
-    public String retrieve(String documentId) throws Exception {
+    public AuthorshipRequest retrieve(String documentId) throws Exception {
         createConnection();
         Collection col = null;
         XMLResource res = null;
@@ -117,48 +119,48 @@ public class ExistManager {
 
             if (res == null) {
                 System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
-                return "";
+                return null;
             } else {
 
                 System.out.println("[INFO] Showing the document as XML resource: ");
-                System.out.println(res.getContent());
+//                System.out.println(res.getContent());
 
-//                AuthorshipRequest request = loader.unmarshalling((String) res.getContent());
-                return (String) res.getContent();
+                AuthorshipRequest request = loader.unmarshalling((String) res.getContent());
+                return request;
             }
         } finally {
             closeConnection(col, res);
         }
     }
 
-//    public String retrieveString(String documentId) throws Exception {
-//        createConnection();
-//        Collection col = null;
-//        XMLResource res = null;
-//
-//        try {
-//            // get the collection
-//            System.out.println("[INFO] Retrieving the collection: " + collectionId);
-//            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
-//            col.setProperty(OutputKeys.INDENT, "yes");
-//
-//            System.out.println("[INFO] Retrieving the document: " + documentId);
-//            res = (XMLResource) col.getResource(documentId);
-//
-//            if (res == null) {
-//                System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
-//                return null;
-//            } else {
-//
-//                System.out.println("[INFO] Showing the document as XML resource: ");
-//                System.out.println(res.getContent());
-//
-//                return (String) res.getContent();
-//            }
-//        } finally {
-//            closeConnection(col, res);
-//        }
-//    }
+    public String retrieveString(String documentId) throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] Retrieving the document: " + documentId);
+            res = (XMLResource) col.getResource(documentId);
+
+            if (res == null) {
+                System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
+                return null;
+            } else {
+
+                System.out.println("[INFO] Showing the document as XML resource: ");
+                System.out.println(res.getContent());
+
+                return (String) res.getContent();
+            }
+        } finally {
+            closeConnection(col, res);
+        }
+    }
 
     public void createConnection() throws Exception {
         Class<?> cl = Class.forName(authManager.getDriver());
@@ -229,5 +231,28 @@ public class ExistManager {
         } else {
             return col;
         }
+    }
+
+    public List<AuthorshipRequest> retrieveCollection() throws Exception {
+        createConnection();
+        Collection col = null;
+        XMLResource res = null;
+
+        List<AuthorshipRequest> result = new ArrayList<>();
+        try {
+            // get the collection
+            System.out.println("[INFO] Retrieving the collection: " + collectionId);
+            col = DatabaseManager.getCollection(authManager.getUri() + collectionId);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            System.out.println("[INFO] ************** RETRIVE collection");
+            //System.out.println(col.getResourceCount());
+            for (String s : col.listResources())
+                result.add(retrieve(s));
+            return result;
+        } finally {
+            closeConnection(col, res);
+        }
+
     }
 }

@@ -15,10 +15,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlSeeAlso({Person.class, LegalEntity.class})
 public abstract class GlobalEntity {
 
-    @XmlElement(name = "Adresa", required = true)
+    @XmlElement(name = "Adresa")
     protected Address address;
 
-    @XmlElement(name = "Kontakt", required = true)
+    @XmlElement(name = "Kontakt")
     protected Contact contact;
 
+    abstract boolean contains(String s);
+
+    protected boolean basicContains(String s) {
+        if (address != null && address.contains(s))
+            return true;
+        if (contact != null && contact.contains(s))
+            return true;
+        return false;
+    }
 }

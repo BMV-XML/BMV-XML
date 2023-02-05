@@ -1,4 +1,31 @@
 <mat-stepper [linear]="isLinear" #stepper>
+  <mat-step [completed]="isAdditionalPatentCompleted">
+    <div class="step">
+      <form>
+        <ng-template matStepLabel>Dodatna prijava</ng-template>
+
+
+        <mat-radio-group class="my-2" (change)="additionalPatentOptionChanged($event)" aria-label="Select an option">
+          <mat-radio-button value="1" [checked]="true">Dodatna prijava</mat-radio-button>
+          <br/>
+          <mat-radio-button value="2">Izdvojena prijava</mat-radio-button>
+          <br/>
+          <mat-radio-button value="3">Osnovna prijava</mat-radio-button>
+        </mat-radio-group>
+
+        <br/>
+
+        <app-patent *ngIf="showAdditionalPatentForm" (previousPatent)="updatePatent($event)"></app-patent>
+
+        <div class="mt-5">
+          <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
+          <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
+        </div>
+
+      </form>
+    </div>
+  </mat-step>
+
   <!-- <mat-step [completed]="completed()"> -->
   <mat-step [completed]="completedManual()">
     <div class="step">
@@ -171,32 +198,12 @@
     </form>
     </div>
   </mat-step>
-  <mat-step [completed]="isAdditionalPatentCompleted">
-    <div class="step">
-      <form>
-        <ng-template matStepLabel>Dodatna prijava</ng-template>
 
 
-        <mat-radio-group class="my-2" (change)="additionalPatentOptionChanged($event)" aria-label="Select an option">
-          <mat-radio-button value="1" [checked]="true">Dodatna prijava</mat-radio-button>
-          <br/>
-          <mat-radio-button value="2">Izdvojena prijava</mat-radio-button>
-          <br/>
-          <mat-radio-button value="3">Osnovna prijava</mat-radio-button>
-        </mat-radio-group>
 
-        <br/>
 
-        <app-patent *ngIf="showAdditionalPatentForm" (previousPatent)="updatePatent($event)"></app-patent>
 
-        <div class="mt-5">
-          <button class="mx-2" mat-stroked-button color="primary" matStepperPrevious>Nazad</button>
-          <button mat-stroked-button color="primary" matStepperNext>Dalje</button>
-        </div>
 
-      </form>
-    </div>
-  </mat-step>
 
   <mat-step [completed]="isPriorityCompleted()">
 

@@ -16,33 +16,17 @@ public class AuthorshipRepository {
     private ExistManager existManager;
 
 
-    public void saveRequest(OutputStream outputStream) throws Exception {
-        existManager.storeInExist(generateDocumentId(), outputStream);
+    public void saveRequest(OutputStream outputStream, String id) throws Exception {
+        existManager.storeInExist(id, outputStream);
     }
 
     public void saveAuthorshipRequest(AuthorshipRequest authorshipRequest) throws Exception {
         existManager.storeFromAuthorshipRequest(authorshipRequest);
     }
 
-    public String getAuthorshipRequestById(String documentId) throws Exception {
-        return existManager.retrieve(documentId);              /*"113.xml"*/
-    }
+//    public String getAuthorshipRequestById(String documentId) throws Exception {
+//        return existManager.retrieve(documentId);              /*"113.xml"*/
+//    }
 
 
-    private String generateDocumentId() {
-        LocalDateTime now = LocalDateTime.now();
-        StringBuilder sb = new StringBuilder();
-        sb.append("A-");
-        /*sb.append(now.getDayOfMonth());
-        sb.append(now.getMonth());*/
-        sb.append(now.getDayOfYear());
-        sb.append(now.getHour());
-        sb.append(now.getMinute());
-        sb.append(now.getSecond());
-        sb.append("-");
-        String year = String.valueOf(now.getYear()).substring(2, 4);
-        sb.append(year);
-        System.out.println(sb);
-        return sb.toString();
-    }
 }

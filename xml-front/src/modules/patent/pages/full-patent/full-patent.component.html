@@ -125,8 +125,8 @@
       prijava</label>
     </h3>
     <div *ngIf="patent.additionalPatent [0]== 'true' || patent.separatedPatent[0] == 'true'"
-         class="col-3 podnosilac-okvir">
-      <label>Patent: {{patent.previousPatentId[0]}}</label><br/>
+         class="col-3 podnosilac-okvir" (click)="generateUrl(patent.previousPatentId)">
+      <label>Patent: {{patent.previousPatentId}}</label><br/>
       <label>Datum: {{patent.submissionDate | dateArrayToString}}</label><br/>
       <label>Država: {{patent.country[0]}}</label>
     </div>

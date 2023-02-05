@@ -16,7 +16,7 @@ export interface FullPatentDto {
   hasSolution: string[] //bool
   letterNotification: string[] //bool
   patentId: string[]
-  previousPatentId: string[]
+  previousPatentId: string
   priorityRights: PreviousPatentDto[]
   recipientCity: string[]
   recipientCountry: string[]
