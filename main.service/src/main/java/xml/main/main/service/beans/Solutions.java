@@ -71,6 +71,15 @@ public class Solutions {
         List<RequestSolution> res = new ArrayList<>();
         for (RequestSolution requestSolution : this.solutions){
             if (requestSolution.getRequestId().startsWith("A-"))
+            	res.add(requestSolution);
+        }
+        return res;
+    }
+
+    public List<RequestSolution> getStampList() {
+        List<RequestSolution> res = new ArrayList<>();
+        for (RequestSolution requestSolution : this.solutions){
+            if (requestSolution.getRequestId().startsWith("Ž-"))
                 res.add(requestSolution);
         }
         return res;

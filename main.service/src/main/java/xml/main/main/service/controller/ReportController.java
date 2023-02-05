@@ -25,6 +25,11 @@ public class ReportController {
         return new ResponseEntity<>(reportService.getPatentReportForRange(rangeDTO), HttpStatus.OK);
     }
 
+    @PostMapping(value = "stamp", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<ReportDTO> getStampreport(@RequestBody RangeDTO rangeDTO) throws Exception {
+        return new ResponseEntity<>(reportService.getStampReportForRange(rangeDTO), HttpStatus.OK);
+    }
+
     @PostMapping(value = "authorship", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<ReportDTO> getAuthorshipReport(@RequestBody RangeDTO rangeDTO) throws Exception {
         return new ResponseEntity<>(reportService.getAuthorshipReportForRange(rangeDTO), HttpStatus.OK);

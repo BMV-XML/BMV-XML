@@ -10,7 +10,8 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class Application {
-	public static String IMAGE_DIR;
+    public static String IMAGE_DIR;
+	public static String OFFICIAL = "ALL";
 
 	public static void main(String[] args) throws IOException {
 

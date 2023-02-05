@@ -40,6 +40,12 @@ public class ReportService {
         return new ReportDTO(approved, declined);
     }
 
+
+    public ReportDTO getStampReportForRange(RangeDTO rangeDTO) throws Exception {
+        Solutions solutionList = solutionManager.retrieve();
+        List<RequestSolution> patents = solutionList.getStampList();
+        return getApprovedAndDeclinedRequest(patents, rangeDTO.getStartDateAsDate(), rangeDTO.getEndDateAsDate());
+    }
     public ReportDTO getAuthorshipReportForRange(RangeDTO rangeDTO) throws Exception {
         Solutions solutionList = solutionManager.retrieve();
         List<RequestSolution> authorships = solutionList.getAuthorshipList();
