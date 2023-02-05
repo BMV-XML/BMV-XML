@@ -47,6 +47,7 @@ public class SolutionService {
         String[] elements = requestId.split("-");
         if (requestId.split("-").length == 3)
             requestId = elements[0]+"-"+elements[1]+"/"+elements[2];
+        if (solutions == null) return false;
         return solutions.doesRequestHaveSolution(requestId);
     }
 
