@@ -38,4 +38,10 @@ public class ReportService {
         }
         return new ReportDTO(approved, declined);
     }
+
+    public ReportDTO getAuthorshipReportForRange(RangeDTO rangeDTO) throws Exception {
+        Solutions solutionList = solutionManager.retrieve();
+        List<RequestSolution> authorships = solutionList.getPatentList();
+        return getApprovedAndDeclinedRequest(authorships, rangeDTO.getStartDateAsDate(), rangeDTO.getEndDateAsDate());
+    }
 }

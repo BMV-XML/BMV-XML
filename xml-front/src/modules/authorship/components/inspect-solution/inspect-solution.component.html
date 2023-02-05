@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-8 d-flex justify-content-end mx-2">
+      <p-badge *ngIf="solution.approved[0] === 'true'" size="large" severity="success" [value]="'Prihvaćen'"></p-badge>
+      <p-badge *ngIf="solution.approved[0] === 'false'" size="large" severity="warning" [value]="'Odbijen'"></p-badge>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-5 mx-2">
+      Zahtev
+    </div>
+    <div class="col-3">
+      {{solution.requestId[0]}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-5 mx-2">
+      Datum
+    </div>
+    <div class="col-3">
+      {{solution.date | dateArrayToString}}
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-5 mx-2">
+      Službenik
+    </div>
+    <div class="col-3">
+      {{solution.officialName}} {{solution.officialSurname}}
+    </div>
+  </div>
+  
+  <div class="row" *ngIf="solution.approved[0] === 'false'">
+    <div class="col-5 mx-2">
+      Razlog
+    </div>
+    <div class="col-3">
+      {{solution.rejectionText[0]}}
+    </div>
+  </div>
+  
+  
+  <div class="row">
+    <div class="col-10 mr-2 mt-4 d-flex justify-content-end">
+      <button pButton class="p-button-sm" mat-dialog-close=""> Zatvori</button>
+    </div>
+  </div>
+  

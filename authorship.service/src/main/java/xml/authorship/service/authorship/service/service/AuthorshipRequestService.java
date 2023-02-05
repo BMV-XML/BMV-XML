@@ -1,29 +1,31 @@
 package xml.authorship.service.authorship.service.service;
 
+import org.apache.fop.apps.*;
 import org.apache.jena.fuseki.auth.Auth;
+import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 import xml.authorship.service.authorship.service.beans.*;
 import xml.authorship.service.authorship.service.db.ExistManager;
 import xml.authorship.service.authorship.service.dto.*;
+import xml.authorship.service.authorship.service.dto.report.FullReportDTO;
 import xml.authorship.service.authorship.service.fuseki.FusekiReader;
 import xml.authorship.service.authorship.service.fuseki.FusekiWriter;
 import xml.authorship.service.authorship.service.fuseki.MetadataExtractor;
 import xml.authorship.service.authorship.service.jaxb.LoaderValidation;
+import xml.authorship.service.authorship.service.jaxb.ReportMarshaller;
 import xml.authorship.service.authorship.service.repository.AuthorshipRepository;
 import xml.authorship.service.authorship.service.util.RDFConstants;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -61,12 +63,29 @@ public class AuthorshipRequestService {
     @Autowired
     private ExistManager existManager;
 
+    @Autowired
+    private SolutionService solutionService;
+
     @Value("${main.service.url}")
     private String basicUrl;
 
     final static String EXAMPLES_PATH = "src/main/resources/static/examples/";
 
     final static String DESCRIPTIONS_PATH = "src/main/resources/static/descriptions/";
+
+    private final FopFactory fopFactory = FopFactory.newInstance(new File("src/fop.xconf"));
+
+    private final TransformerFactory transformerFactory = new TransformerFactoryImpl();
+
+    private String xsl_file = "data/xsl-fo/report.xsl";
+
+    private String output_path = "src/main/resources/static/report/";
+
+    @Autowired
+    private ReportMarshaller reportMarshaller;
+
+    public AuthorshipRequestService() throws IOException, SAXException {
+    }
 
     public String saveAuthorshipRequest(AuthorshipRequest authorshipRequest) throws Exception {
         OutputStream os = new ByteArrayOutputStream();
@@ -166,8 +185,7 @@ public class AuthorshipRequestService {
             author.setAnonymousAuthor(Checkbox.NE);
             if (a.isAlive()) {
                 author.setPerson(createPersonFromAliveAuthorDTO(a));
-            }
-            else {
+            } else {
                 author.setYearOfDeath(a.getYearOfDeath());
                 author.setPerson(createPersonFromDeadAuthorDTO(a));
             }
@@ -323,21 +341,6 @@ public class AuthorshipRequestService {
         return null;
     }
 
-    public boolean addSolution(NewSolutionDTO dto) throws Exception {
-        AuthorshipRequest request = existManager.retrieve(dto.getRequestId());
-        dto.setRequestDate(request.getAuthorshipData().getApplicationDate().getDate());
-        URI uri = new URI(basicUrl + "/solution");
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-
-        System.out.println("*************** add solution ********************");
-        ResponseEntity<Boolean> result = restTemplate.postForEntity(uri + "/save", new HttpEntity<>(dto, headers), Boolean.class);
-        System.out.println(result.getBody());
-        return Boolean.TRUE.equals(result.getBody());
-    }
-
     public SimpleAuthorshipDTO getAuthorshipRequest(String id) throws Exception {
         System.out.println(id);
         AuthorshipRequest request = existManager.retrieve(id);
@@ -346,7 +349,7 @@ public class AuthorshipRequestService {
         dto.setSubmitter(request.getSubmitter().getGlobalEntity().getContact().getEmail());
         dto.setApplicationDate(request.getAuthorshipData().getApplicationDate().getDate());
         System.out.println("\n\n------------------\n" + request.getAuthorshipData().getApplicationDate().getDate());
-        dto.setHasSolution(false); // for now
+        dto.setHasSolution(solutionService.getIfHasSolution(request.getAuthorshipId())); //
         return dto;
     }
 
@@ -362,7 +365,7 @@ public class AuthorshipRequestService {
 
     private SimpleAuthorshipDTO convertAuthorshipRequestToDTO(AuthorshipRequest request) throws URISyntaxException {
         SimpleAuthorshipDTO dto = new SimpleAuthorshipDTO();
-        dto.setHasSolution(false);      // solutionService.getIfHasSolution(request.getPatentId())
+        dto.setHasSolution(solutionService.getIfHasSolution(request.getAuthorshipId()));      //
         System.out.println("--------- AUTHORSHIP -----------");
         dto.setId(request.getAuthorshipId());
         dto.setApplicationDate(request.getAuthorshipData().getApplicationDate().getDate());
@@ -392,7 +395,13 @@ public class AuthorshipRequestService {
     }
 
     public AttachmentsDTO setExampleFile(MultipartFile[] multiPartFiles) throws IOException {
-        String path = addFile(generateFileId(), EXAMPLES_PATH, multiPartFiles, "exampleFile");
+        String filePath = addFile(generateFileId(), EXAMPLES_PATH, multiPartFiles, "exampleFile");
+        int index = filePath.indexOf("exampleFile");
+        String name = filePath.substring(index);
+//        name = name.replace("\\", "/");
+        System.out.println("name : " + name);
+        String path = "http://localhost:8086/resources/" + name;
+        System.out.println("path :" + path);
         AttachmentsDTO dto = new AttachmentsDTO();
         dto.setExamplePath(path);
         return dto;
@@ -435,5 +444,78 @@ public class AuthorshipRequestService {
                 now.getHour() +
                 now.getMinute() +
                 now.getSecond();
+    }
+
+    public String generateReportPDF(RangeDTO rangeDTO) throws Exception {
+        String report;
+        String documentName = generateReportDocumentName(rangeDTO);
+
+        ReportDTO reportDTO = getReportForRange(rangeDTO);
+        int result = getNumberOfReportsForRange(rangeDTO);
+        FullReportDTO fullReportDTO = new FullReportDTO(rangeDTO.getStartDateAsDate(), rangeDTO.getEndDateAsDate(), result, reportDTO.getApproved(), reportDTO.getDeclined());
+
+        OutputStream os = new ByteArrayOutputStream();
+        report = reportMarshaller.marshalling(fullReportDTO, os);
+        System.out.println("****************************************** REPORT ************************");
+        System.out.println(report);
+        ///*
+        StreamSource transformSource = new StreamSource(new File(xsl_file));
+        StreamSource source = new StreamSource(new StringReader(report));
+
+        FOUserAgent userAgent = fopFactory.newFOUserAgent();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
+        Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outputStream);
+
+        Result res = new SAXResult(fop.getDefaultHandler());
+        xslFoTransformer.transform(source, res);
+
+        File pdfFile = new File((output_path + documentName + ".pdf"));
+        if (!pdfFile.getParentFile().exists()) {
+            pdfFile.getParentFile().mkdir();
+        }
+
+        OutputStream out = new BufferedOutputStream(Files.newOutputStream(pdfFile.toPath()));
+        out.write(outputStream.toByteArray());
+
+        out.close();
+        return "http://localhost:8086/resources/report/" + documentName + ".pdf";
+    }
+
+    public ReportDTO getReportForRange(RangeDTO rangeDTO) throws URISyntaxException {
+
+        URI uri = new URI(basicUrl + "/report/authorship");
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        HttpEntity entity = new HttpEntity(rangeDTO, headers);
+        ResponseEntity<ReportDTO> result = restTemplate.exchange(
+                uri, HttpMethod.POST, entity, ReportDTO.class);
+        return result.getBody();
+    }
+
+    public int getNumberOfReportsForRange(RangeDTO rangeDTO) throws Exception {
+        List<AuthorshipRequest> requestList = existManager.retrieveCollection();
+        int numberOfPatents = 0;
+        for (AuthorshipRequest request : requestList){
+            if (request.getAuthorshipData().getApplicationDate().getDate().isBefore(rangeDTO.getStartDateAsDate()))
+                continue;
+            if (request.getAuthorshipData().getApplicationDate().getDate().isAfter(rangeDTO.getEndDateAsDate()))
+                continue;
+            numberOfPatents++;
+        }
+        return numberOfPatents;
+    }
+
+    private String generateReportDocumentName(RangeDTO rangeDTO) {
+        StringBuilder docName = new StringBuilder();
+        docName.append("report-");
+        docName.append(rangeDTO.getStartDateForDocumentName());
+        docName.append("-");
+        docName.append(rangeDTO.getEndDateForDocumentName());
+        return docName.toString();
     }
 }

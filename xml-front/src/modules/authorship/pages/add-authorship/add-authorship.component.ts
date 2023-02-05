@@ -70,9 +70,9 @@ export class AddAuthorshipComponent {
   }
 
   // USLOVI ZA PRELAZAK NA NAREDNO POLJE
-  isSubmitterCompleted: boolean = false  // false
+  isSubmitterCompleted: boolean = true  // false
   isCommissionerCompleted: boolean = true;
-  isAuthorsWorkCompleted: boolean = false; // false
+  isAuthorsWorkCompleted: boolean = true; // false
 
   openCommissioner: boolean = false;
   isSubmitterTheAuthor: boolean = true;
@@ -171,13 +171,10 @@ export class AddAuthorshipComponent {
   selectExample(event: any) {
     const data = new FormData()
     data.append('files', event.target.files[0])
-    this.authorshipService.setExampleFile(data).subscribe((res) => {
+    this.authorshipService.setExampleFile(data).subscribe((res: any) => {
       var parser = new xml2js.Parser();
       parser.parseString(res, (err, result) => {
-          console.log("ono sto dobijem sa backa")
-          console.log(res)
-          console.log(result['AttachmentDTO']['examplePath'][0])
-          this.attachments.examplePath = result['AttachmentDTO']['examplePath'][0]
+          this.attachments.examplePath = result['AttachmentsDTO']['examplePath'][0]
       })
     })
   }
@@ -185,10 +182,11 @@ export class AddAuthorshipComponent {
   selectDescription(event: any) {
     const data = new FormData()
     data.append('files', event.target.files[0])
-    this.authorshipService.setDescriptionFile(data).subscribe({
-      next: (res: any) => {
-        this.attachments.descriptionPath = res.descriptionPath
-      }
+    this.authorshipService.setDescriptionFile(data).subscribe((res: any) => {
+      var parser = new xml2js.Parser();
+      parser.parseString(res, (err, result) => {
+          this.attachments.descriptionPath = result['AttachmentsDTO']['descriptionPath'][0]
+      })
     })
   }
 

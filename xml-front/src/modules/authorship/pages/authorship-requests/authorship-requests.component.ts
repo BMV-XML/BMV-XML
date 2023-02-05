@@ -3,7 +3,7 @@ import { AuthorshipService } from 'modules/authorship/services/authorship.servic
 import * as xml2js from "xml2js";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {COMMA, ENTER, SPACE} from "@angular/cdk/keycodes";
 import { DateAdapter } from '@angular/material/core';
 import {MessageService} from "primeng/api";
@@ -13,6 +13,9 @@ import { SearchDTO } from 'modules/authorship/models/search-dto';
 import { SelectDto } from 'modules/patent/models/select-dto';
 import { FilterDto } from 'modules/patent/models/filter-dto';
 import { MetadataComponent } from 'modules/authorship/components/metadata/metadata.component';
+import { SolutionComponent } from 'modules/authorship/components/solution/solution.component';
+import { InspectSolutionComponent } from 'modules/authorship/components/inspect-solution/inspect-solution.component';
+import { RangeDto } from 'modules/patent/models/range-dto';
 
 
 @Component({
@@ -212,38 +215,99 @@ export class AuthorshipRequestsComponent {
   // ------------- SOLUTION --------------
 
   openAddSolutionDialog($event: MouseEvent, idElement: string): void {
-    // $event.stopPropagation();
-    // let dialogRef
-    // dialogRef = this.dialog.open(AddSolutionComponent, {
-    //   width: '30%',
-    //   height: '50%',
-    //   data: idElement
-    // })
+    $event.stopPropagation();
+    let dialogRef
+    dialogRef = this.dialog.open(SolutionComponent, {
+      width: '30%',
+      height: '50%',
+      data: idElement
+    })
 
-    // dialogRef.afterClosed().subscribe((res) => {
-    //   console.log('The dialog was closed')
-    //   if (res) {
-    //     for (let r of this.patents) {
-    //       if (r.id[0] === idElement) {
-    //         r.hasSolution[0] = 'true'
-    //       }
-    //     }
-    //   }
-    // })
+    dialogRef.afterClosed().subscribe((res) => {
+      console.log('The dialog was closed')
+      if (res) {
+        for (let r of this.authorships) {
+          if (r.id[0] === idElement) {
+            r.hasSolution[0] = 'true'
+          }
+        }
+      }
+    })
   }
 
-  openViewSolutionDialog($event: MouseEvent, idElement: string): void {
-    // $event.stopPropagation();
-    // let dialogRef
-    // dialogRef = this.dialog.open(ViewSolutionComponent, {
-    //   width: '60%',
-    //   height: '40%',
-    //   data: idElement
-    // })
+  openInspectSolutionDialog($event: MouseEvent, idElement: string): void {
+    $event.stopPropagation();
+    let dialogRef
+    dialogRef = this.dialog.open(InspectSolutionComponent, {
+      width: '60%',
+      height: '40%',
+      data: idElement
+    })
 
-    // dialogRef.afterClosed().subscribe((res) => {
-    //   console.log('The dialog was closed')
-    // })
+    dialogRef.afterClosed().subscribe((res) => {
+      console.log('The dialog was closed')
+    })
+  }
+
+  // ------------ REPORT ---------------
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  makeReport() {
+    console.log("************** report ***************")
+    console.log(this.authorshipService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()))
+    console.log(this.range.controls.end.value)
+    console.log(new Date())
+    if (this.range.controls.start.value == null){
+      console.log("START NULL")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Početni datum mora da postoji.'
+      })
+      return
+    }else if (this.range.controls.end.value == null){
+      console.log("END NULL")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Krajnji datum mora da postoji.'
+      })
+      return
+    }else if (this.range.controls.start.value > new Date || this.range.controls.end.value > new Date){
+      console.log("Ne VALJA")
+      this.messageService.add({
+        key: 'patent-list-message',
+        severity: 'warn',
+        summary: 'Neuspešna pretraga',
+        detail: 'Datumi moraju biti u prošlosti.'
+      })
+      return
+    }
+
+    let range: RangeDto = {
+      startDate: this.authorshipService.convertDateToStringInReport(this.range.controls.start.value?.toLocaleString()),
+      endDate:  this.authorshipService.convertDateToStringInReport(this.range.controls.end.value?.toLocaleString())
+    }
+
+    this.messageService.add({
+      key: 'patent-list-message',
+      severity: 'success',
+      summary: 'Uspešno',
+      detail: 'Sačekajte malo za preuzimanje.'
+    })
+
+    this.authorshipService.getReportForPeriod(range).subscribe(
+      res => {
+        window.open(res, "_blank");
+      }
+    )
+
   }
 
   getURL(id: string) {

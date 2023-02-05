@@ -1,0 +1,21 @@
+<div class="solution-dialog" [formGroup]="solutionGroup" align="center">
+    <div class="row mb-3 d-flex justify-content-center">
+      <mat-radio-group (change)="optionChanged($event)" aria-label="Select an option">
+        <mat-radio-button value="1" [checked]="true">Prihvati</mat-radio-button>
+        <mat-radio-button value="2">Odbij</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  
+  
+    <div class="row my-3 d-flex justify-content-center">
+      <mat-form-field appearance="outline">
+        <mat-label>Razlog odbijanja</mat-label>
+        <textarea [readonly]="state" matInput [formControl]="reason" formControlName="reason" (input)="handleInput()"
+                  placeholder="Ako odbijate zahtev unesite razlog"></textarea>
+      </mat-form-field>
+    </div>
+  
+    <div class="row mt-5 d-flex justify-content-center">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isDisabled" (click)="submit()">Podnesi rešenje</button>
+    </div>
+</div>

@@ -24,7 +24,7 @@ public class SolutionService {
     private UserService userService;//getUserByUsername
 
     public void addSolution(AddSolutionDTO addSolutionDTO) throws Exception {
-        System.out.println("**********");;
+        System.out.println("**********");
         System.out.println(addSolutionDTO.getRequestId());
         String[] elements = addSolutionDTO.getRequestId().split("-");
         if (addSolutionDTO.getRequestId().split("-").length == 3)
