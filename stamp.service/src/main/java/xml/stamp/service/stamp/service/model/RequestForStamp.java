@@ -55,4 +55,30 @@ public class RequestForStamp {
     public String getStampId() {
         return stampData.getStampApplicationNumber();
     }
+
+    public boolean contains(List<String> searchBy) {
+        for (String s : searchBy){
+            if (!contains(s.toLowerCase()))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean contains(String s){
+        if (stampData.contains(s))
+            return true;
+        for(GlobalEntity applicant: applicants){
+            if(applicant.contains(s))
+                return true;
+        }
+        if (lawyer.contains(s))
+            return true;
+        if (commonRepresentative.contains(s))
+            return true;
+        if (taxesData.contains(s))
+            return true;
+        if (recepient.contains(s))
+            return true;
+        return false;
+    }
 }

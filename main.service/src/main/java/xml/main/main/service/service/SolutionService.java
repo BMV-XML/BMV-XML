@@ -43,6 +43,7 @@ public class SolutionService {
     }
 
     public boolean hasSolution(String requestId) throws Exception {
+        System.out.println("  HAS SOLution " + requestId);
         Solutions solutions = solutionManager.retrieve();
         String[] elements = requestId.split("-");
         if (requestId.split("-").length == 3)

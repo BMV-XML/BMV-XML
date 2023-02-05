@@ -1,0 +1,254 @@
+<div class="all">
+    <div class="row">
+        <div class="col-4">
+
+            <button pButton class="p-button-sm" *ngIf="stamp.hasSolution[0] === 'false'"
+                    (click)="openAddSolutionDialog($event)"> Dodaj rešenje
+            </button>
+            <button pButton class="p-button-sm" *ngIf="stamp.hasSolution[0] === 'true'"
+                    (click)="openViewStampSolutionDialog($event)"> Vidi rešenje
+            </button>
+        </div>
+    </div>
+
+    <div class="row basic">
+        <div class="col-6">
+            <label>Broj prijave:</label><br/>
+            <label>Datum podnošenja: </label><br/>
+            <label>Datum prihvatanja: </label><br/>
+        </div>
+        <div class="col-6">
+            <label>{{stamp.id[0]}}</label><br/>
+            <label>{{stamp.applicationDate | dateArrayToString}}</label><br/>
+            <!--       <label>{{patent.acknowladgedDateOfSubmission | dateArrayToString}}</label><br/>   -->
+        </div>
+    </div>
+
+    <div class="row mt-4 podnosilac" *ngFor="let app of stamp.applicants[0].applicants">
+        <h3>Podnosilac</h3>
+        <div class="col-3 podnosilac-okvir">
+            <div [hidden]="app.person[0]">
+                <label>Ime: {{app.name[0]}} {{app.surname[0]}}</label><br/>
+                <label>Državljanstvo: {{app.citizenship[0]}}</label><br/>
+            </div>
+            <div [hidden]="!app.person[0]">
+                <label>{{app.businessName[0]}}</label><br/>
+            </div>
+        </div>
+        <div class="col-3 podnosilac-okvir">
+            <label>Grad: {{app.city[0]}}, {{app.number[0]}}</label><br/>
+            <label>Ulica: {{app.street[0]}} &nbsp; {{app.postalNumber[0]}}</label><br/>
+            <label>Država: {{app.country[0]}}</label><br/>
+        </div>
+        <div class="col-3 podnosilac-okvir">
+            <label>Email: {{app.email[0]}}</label><br/>
+            <label>Telefon: {{app.phone[0]}}</label><br/>
+            <label>Faks: {{app.fax[0]}}</label><br/>
+        </div>
+    </div>
+
+
+    <div class="row mt-4 podnosilac">
+        <h3>Punomoćnik</h3>
+        <div class="col-3 podnosilac-okvir">
+            <div [hidden]="stamp.lowyer[0].person[0]">
+                <label>Ime: {{stamp.lowyer[0].name[0]}} {{stamp.lowyer[0].surname[0]}}</label><br/>
+                <label>Državljanstvo: {{stamp.lowyer[0].citizenship[0]}}</label><br/>
+            </div>
+            <div [hidden]="!stamp.lowyer[0].person[0]">
+                <label>{{stamp.lowyer[0].businessName[0]}}</label><br/>
+            </div>
+        </div>
+        <div class="col-3 podnosilac-okvir">
+            <label>Grad: {{stamp.lowyer[0].city[0]}}, {{stamp.lowyer[0].postalNumber[0]}}</label><br/>
+            <label>Ulica: {{stamp.lowyer[0].street[0]}} &nbsp; {{stamp.lowyer[0].number[0]}}</label><br/>
+            <label>Država: {{stamp.lowyer[0].country[0]}}</label><br/>
+        </div>
+        <div class="col-3 podnosilac-okvir">
+            <label>Email: {{stamp.lowyer[0].email[0]}}</label><br/>
+            <label>Telefon: {{stamp.lowyer[0].phone[0]}}</label><br/>
+            <label>Faks: {{stamp.lowyer[0].fax[0]}}</label><br/>
+        </div>
+    </div>
+
+
+    <div [hidden]="false">
+
+        <div class="row mt-4 podnosilac">
+            <h3>Zajednički predstavnik</h3>
+            <div class="col-3 podnosilac-okvir">
+                <div [hidden]="stamp.commonRepresentative[0].person[0]">
+                    <label>Ime: {{stamp.commonRepresentative[0].name[0]}} {{stamp.commonRepresentative[0].surname[0]}}</label><br/>
+                    <label>Državljanstvo: {{stamp.commonRepresentative[0].citizenship[0]}}</label><br/>
+                </div>
+                <div [hidden]="!stamp.commonRepresentative[0].person[0]">
+                    <label>{{stamp.commonRepresentative[0].businessName[0]}}</label><br/>
+                </div>
+            </div>
+            <div class="col-3 podnosilac-okvir">
+                <label>Grad: {{stamp.commonRepresentative[0].city[0]}}
+                    , {{stamp.commonRepresentative[0].postalNumber[0]}}</label><br/>
+                <label>Ulica: {{stamp.commonRepresentative[0].street[0]}}
+                    &nbsp; {{stamp.commonRepresentative[0].number[0]}}</label><br/>
+                <label>Država: {{stamp.commonRepresentative[0].country[0]}}</label><br/>
+            </div>
+            <div class="col-3 podnosilac-okvir">
+                <label>Email: {{stamp.commonRepresentative[0].email[0]}}</label><br/>
+                <label>Telefon: {{stamp.commonRepresentative[0].fax[0]}}</label><br/>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <div class="row mt-4 podnosilac">
+            <h3>Podaci o žigu</h3>
+            <div class="col-4 podnosilac-okvir">
+                <label>Tip: {{stamp.stamp[0].type[0]}}</label><br/>
+                <label>Vrsta: {{stamp.stamp[0].kind[0]}}</label><br/>
+                <label>Opis: {{stamp.stamp[0].description[0]}}</label><br/>
+                <label>Boje: </label>
+                <label *ngFor="let col of stamp.stamp[0].colors[0].colors"> {{ col}}, </label><br/>
+                <label>Klase: </label>
+                <label *ngFor="let cla of stamp.stamp[0].goodsAndServicesClass[0].goodsAndServicesClass"> {{cla}}
+                    , </label><br/>
+                <label *ngIf="stamp.stamp[0].priority[0]!==''">Osnov za
+                    prvenstvo: {{stamp.stamp[0].priority[0]}} </label>
+                <label *ngIf="stamp.stamp[0].transliteration[0] !==''">Transliteracija {{stamp.stamp[0].transliteration[0]}} </label><br/>
+                <label *ngIf="stamp.stamp[0].translation[0] !==''">Translacija {{stamp.stamp[0].translation[0]}} </label><br/>
+
+            </div>
+
+            <div class="col-5 podnosilac-okvir">
+                <img [src]="stamp.stamp[0].image[0]"
+                     style="width: 400px; height: 300px; border-radius: 0%; object-fit: contain;"/>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <div class="row mt-4 podnosilac">
+            <h3>Podaci o taksama</h3>
+            <div class="col-9 podnosilac-okvir">
+                <label>Osnovna taksa: {{stamp.baseTax[0]}}</label><br/>
+                <label>Taksa za klase: {{stamp.classTax[0]}}</label><br/>
+                <label>Taksa za grafičko rešenje: {{stamp.graphicSolutionTax[0]}}</label><br/>
+                <label>Ukupno: {{stamp.totalTax[0]}}</label><br/>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-4 podnosilac">
+        <h3>Podaci o prilozima</h3>
+        <div class="col-9 podnosilac-okvir">
+
+            <label>{{stamp.attachmentData[0].exampleStamp[0].position[0]}}
+                .   {{stamp.attachmentData[0].exampleStamp[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].exampleStamp[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].exampleStamp[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].exampleStamp[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].exampleStamp[0].position[0]}} " target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].listOfGoodsAndServices[0].position[0]}}
+                .   {{stamp.attachmentData[0].listOfGoodsAndServices[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].listOfGoodsAndServices[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].listOfGoodsAndServices[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].listOfGoodsAndServices[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].listOfGoodsAndServices[0].position[0]}} " target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].authority[0].position[0]}}
+                .   {{stamp.attachmentData[0].authority[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].authority[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].authority[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].authority[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].authority[0].position[0]}} " target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].generalAuthorityAddedBefore[0].position[0]}}
+                .   {{stamp.attachmentData[0].generalAuthorityAddedBefore[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].generalAuthorityAddedBefore[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].generalAuthorityAddedBefore[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].generalAuthorityAddedBefore[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].generalAuthorityAddedBefore[0].position[0]}} " target="_blank">
+                    Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].authorityWillBeAddedAfter[0].position[0]}}
+                .   {{stamp.attachmentData[0].authorityWillBeAddedAfter[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].authorityWillBeAddedAfter[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].authorityWillBeAddedAfter[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].authorityWillBeAddedAfter[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].authorityWillBeAddedAfter[0].position[0]}} " target="_blank">
+                    Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].position[0]}}
+                .   {{stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].generalActOnCollectiveStampOrGuaranteeStamp[0].position[0]}} "
+                   target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].proofOfRightOfPriority[0].position[0]}}
+                .   {{stamp.attachmentData[0].proofOfRightOfPriority[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].proofOfRightOfPriority[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].proofOfRightOfPriority[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].proofOfRightOfPriority[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].proofOfRightOfPriority[0].position[0]}} " target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+
+
+            <label>{{stamp.attachmentData[0].proofOfTaxPayment[0].position[0]}}
+                .   {{stamp.attachmentData[0].proofOfTaxPayment[0].name[0]}}  -</label>
+            <label *ngIf="stamp.attachmentData[0].proofOfTaxPayment[0].submittedAttachment[0]==='NE'">
+                Fajl nije dodoat
+            </label>
+
+            <label *ngIf="stamp.attachmentData[0].proofOfTaxPayment[0].submittedAttachment[0]==='DA'">
+                <a [href]=" stamp.attachmentData[0].proofOfTaxPayment[0].path[0]"
+                   id="p+{{stamp.attachmentData[0].proofOfTaxPayment[0].position[0]}} " target="_blank"> Pogledaj
+                    fajl</a>
+            </label><br/>
+        </div>
+    </div>
+</div>

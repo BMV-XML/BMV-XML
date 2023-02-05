@@ -40,4 +40,17 @@ public class Address {
                 ", country='" + country + '\'' +
                 "}\n";
     }
+    public boolean contains(String s) {
+        if (street.toLowerCase().contains(s))
+            return true;
+        if (number.toLowerCase().contains(s))
+            return true;
+        if (postNumber.toLowerCase().contains(s))
+            return true;
+        if (city.toLowerCase().contains(s))
+            return true;
+        if (country.toLowerCase().contains(s))
+            return true;
+        return false;
+    }
 }

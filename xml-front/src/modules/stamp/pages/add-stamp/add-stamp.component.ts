@@ -20,9 +20,9 @@ import {GoodsAndClassesDto} from "../../models/goods-and-classes-dto";
 export interface PeriodicElement {
     name: string;
     position: number;
-    path:string;
-    submittedAttachment:string,
-   // attachmentDto: AttachmentDto;
+    path: string;
+    submittedAttachment: string,
+    // attachmentDto: AttachmentDto;
 }
 
 
@@ -37,13 +37,15 @@ export class AddStampComponent {
     isLowerCompleted: boolean = true
     isCommonRepresentativeCompleted: boolean = true
     isHiddenOtherKind: boolean = true;
+    isHiddenYesPriority: boolean = true;
     isStampCompleted: boolean = true;
-    isFilesUploaded : boolean = true;
+    isFilesUploaded: boolean = true;
     formGroup: FormGroup;
     otherKindFormControl = new FormControl('', [Validators.required, stringAndNumber])
     descriptionFormControl = new FormControl('', [Validators.required, stringAndNumber])
     transliterationFormControl = new FormControl('', [stringAndNumber])
     translationFormControl = new FormControl('', [stringAndNumber])
+    priorityFormControl = new FormControl('', [stringAndNumber])
 
 
     @ViewChild('colorInput') colorInput: ElementRef<HTMLInputElement> | undefined;
@@ -56,7 +58,8 @@ export class AddStampComponent {
             otherKind: ['', [Validators.required, stringAndNumber]],
             description: ['', [Validators.required, stringAndNumber]],
             transliteration: ['', [stringAndNumber]],
-            translation: ['', [stringAndNumber]]
+            translation: ['', [stringAndNumber]],
+            priorityText: ['', [stringAndNumber]]
         });
 
         this.filteredColors = this.colorCtrl.valueChanges.pipe(startWith(null),
@@ -96,48 +99,48 @@ export class AddStampComponent {
             colors: "",
             description: "",
             goodsAndServicesClass: "",
-            kind: "",
+            kind: "verbalni znak",
             priority: "",
-            type: "",
+            type: "INDIVIDUALNI",
             transliteration: "",
             translation: "",
-            image : ""
+            image: ""
         },
         recepient: {street: "", city: "", number: "", country: "", postalNumber: "", name: ""},
-        attachmentData:{
-            exampleStamp: {path:"", submittedAttachment:"NE"},
-            listOfGoodsAndServices:{path:"", submittedAttachment:"NE"},
-            authority:{path:"", submittedAttachment:"NE"},
-            generalAuthorityAddedBefore:{path:"", submittedAttachment:"NE"},
-            authorityWillBeAddedAfter:{path:"", submittedAttachment:"NE"},
-            generalActOnCollectiveStampOrGuaranteeStamp:{path:"", submittedAttachment:"NE"},
-            proofOfRightOfPriority:{path:"", submittedAttachment:"NE"},
+        attachmentData: {
+            exampleStamp: {path: "", submittedAttachment: "NE", name:"", position:""},
+            listOfGoodsAndServices: {path: "", submittedAttachment: "NE", name:"", position:""},
+            authority: {path: "", submittedAttachment: "NE", name:"", position:""},
+            generalAuthorityAddedBefore: {path: "", submittedAttachment: "NE", name:"", position:""},
+            authorityWillBeAddedAfter: {path: "", submittedAttachment: "NE", name:"", position:""},
+            generalActOnCollectiveStampOrGuaranteeStamp: {path: "", submittedAttachment: "NE", name:"", position:""},
+            proofOfRightOfPriority: {path: "", submittedAttachment: "NE", name:"", position:""},
 
-            proofOfTaxPayment:{path:"", submittedAttachment:"NE"},
+            proofOfTaxPayment: {path: "", submittedAttachment: "NE", name:"", position:""},
         }
     }
 
-    applicantsDto : ApplicantsDto = {
-        applicants:[]
+    applicantsDto: ApplicantsDto = {
+        applicants: []
     }
 
-    colorsDto : ColorsDto={
-        colors :[]
+    colorsDto: ColorsDto = {
+        colors: []
     }
 
-    goodsAndClasses : GoodsAndClassesDto = {
+    goodsAndClasses: GoodsAndClassesDto = {
         goodsAndServicesClass: []
     }
 
     products: PeriodicElement[] = [
-        {position: 1, name: 'Primerak znaka', path: "", submittedAttachment:"NE"},
-        {position: 2, name: 'Spisak robe i usluga', path: "", submittedAttachment:"NE"},
-        {position: 3, name: 'Punomoćje', path: "", submittedAttachment:"NE"},
-        {position: 4, name: 'Generalno punomoćje ranije priloženo', path: "", submittedAttachment:"NE"},
-        {position: 5, name: 'Punomoćje će biti naknadno dostavljeno', path: "", submittedAttachment:"NE"},
-        {position: 6, name: 'Opšti akt o kolektivnom/žigu garancije', path: "", submittedAttachment:"NE"},
-        {position: 7, name: 'Dokaz o pravu prvenstva', path: "", submittedAttachment:"NE"},
-        {position: 8, name: 'Dokaz o uplati takse', path: "", submittedAttachment:"NE"},
+        {position: 1, name: 'Primerak znaka', path: "", submittedAttachment: "NE"},
+        {position: 2, name: 'Spisak robe i usluga', path: "", submittedAttachment: "NE"},
+        {position: 3, name: 'Punomoćje', path: "", submittedAttachment: "NE"},
+        {position: 4, name: 'Generalno punomoćje ranije priloženo', path: "", submittedAttachment: "NE"},
+        {position: 5, name: 'Punomoćje će biti naknadno dostavljeno', path: "", submittedAttachment: "NE"},
+        {position: 6, name: 'Opšti akt o kolektivnom/žigu garancije', path: "", submittedAttachment: "NE"},
+        {position: 7, name: 'Dokaz o pravu prvenstva', path: "", submittedAttachment: "NE"},
+        {position: 8, name: 'Dokaz o uplati takse', path: "", submittedAttachment: "NE"},
 
     ];
 
@@ -153,9 +156,9 @@ export class AddStampComponent {
     allColors: string[] = ['crvena', 'žuta', 'zelena', 'plava', 'bela', 'crna', 'siva', 'narandžasta', 'ljubičasta', 'roze',
         'oker', 'bordo', 'tirkizna'];
 
-    goodCtrl =  new FormControl('');
-    filteredGoods:  Observable<string[]>;
-    allGoods : string[] = []
+    goodCtrl = new FormControl('');
+    filteredGoods: Observable<string[]>;
+    allGoods: string[] = []
 
     signPhoto: any
 
@@ -243,18 +246,20 @@ export class AddStampComponent {
             console.log(this.otherKindFormControl.value)
             if (this.otherKindFormControl.valid)
                 this.result.stamp.kind = this.otherKindFormControl.value
-            if (this.descriptionFormControl.value)
+            if (this.descriptionFormControl.valid)
                 this.result.stamp.description = this.descriptionFormControl.value
             if (this.transliterationFormControl.valid)
                 this.result.stamp.transliteration = this.transliterationFormControl.value
             if (this.translationFormControl.valid)
                 this.result.stamp.translation = this.translationFormControl.value
+            if (this.result.stamp.priority === "DA" && this.priorityFormControl.valid)
+                this.result.stamp.priority = this.priorityFormControl.value;
         }
     }
 
-    colorAlreadyAdded(color:string) : boolean{
-        for(let c of this.colorsDto.colors){
-            if(c===color){
+    colorAlreadyAdded(color: string): boolean {
+        for (let c of this.colorsDto.colors) {
+            if (c === color) {
                 return true
             }
         }
@@ -280,9 +285,9 @@ export class AddStampComponent {
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
-        if(!this.colorAlreadyAdded(event.option.viewValue))
+        if (!this.colorAlreadyAdded(event.option.viewValue))
             this.colorsDto.colors.push(event.option.viewValue);
-        if(this.colorInput !== undefined)
+        if (this.colorInput !== undefined)
             this.colorInput.nativeElement.value = '';
         this.colorCtrl.setValue(null);
     }
@@ -305,8 +310,8 @@ export class AddStampComponent {
     }
 
     private goodAlreadyAdded(good: string) {
-        for(let c of this.goodsAndClasses.goodsAndServicesClass){
-            if(c===good){
+        for (let c of this.goodsAndClasses.goodsAndServicesClass) {
+            if (c === good) {
                 return true
             }
         }
@@ -321,14 +326,14 @@ export class AddStampComponent {
     }
 
     selectedGood($event: MatAutocompleteSelectedEvent) {
-        if(!this.goodAlreadyAdded($event.option.viewValue))
+        if (!this.goodAlreadyAdded($event.option.viewValue))
             this.goodsAndClasses.goodsAndServicesClass.push($event.option.viewValue);
-        if(this.goodInput !== undefined)
+        if (this.goodInput !== undefined)
             this.goodInput.nativeElement.value = '';
         this.goodCtrl.setValue(null);
     }
 
-    private _filterGood(good: string):string[] {
+    private _filterGood(good: string): string[] {
         const filterValue = good.toLowerCase();
         return this.allGoods.filter(good => good.toLowerCase().includes(filterValue));
     }
@@ -336,24 +341,24 @@ export class AddStampComponent {
     selectPhoto($event: any) {
         const data = new FormData()
         data.append('files', $event.target.files[0])
-        this.stampService.addPhoto(data).subscribe((res)=>{
+        this.stampService.addPhoto(data).subscribe((res) => {
             var parser = new xml2js.Parser();
             parser.parseString(res, (err, result) => {
                 console.log("ono sto dobijem sa backa posle slanja slike")
                 console.log(res)
                 console.log(result['PhotoFileDTO']['path'][0])
-                this.signPhoto=result['PhotoFileDTO']['path'][0]
+                this.signPhoto = result['PhotoFileDTO']['path'][0]
                 this.result.stamp.image = result['PhotoFileDTO']['path'][0]
-               // this.messageService.add({ key: 'update-profile-message', severity: 'success', summary: 'Uspešna promena slike', detail: 'Profilna slika je uspešno ažurirana.' })
+                // this.messageService.add({ key: 'update-profile-message', severity: 'success', summary: 'Uspešna promena slike', detail: 'Profilna slika je uspešno ažurirana.' })
             })
         })
     }
 
-    selectFile($event: any, element:PeriodicElement) {
+    selectFile($event: any, element: PeriodicElement) {
         console.log(" SELECT FILE")
         const data = new FormData()
         data.append('files', $event.target.files[0])
-        this.stampService.addFile(data).subscribe((res)=> {
+        this.stampService.addFile(data).subscribe((res) => {
             var parser = new xml2js.Parser();
             parser.parseString(res, (err, result) => {
                 console.log("ono sto dobijem sa backa posle slanja slike")
@@ -364,43 +369,52 @@ export class AddStampComponent {
         })
     }
 
-    private setFile(element: PeriodicElement, path:string){
-        if(element.name === "Primerak znaka"){
+    private setFile(element: PeriodicElement, path: string) {
+        if (element.name === "Primerak znaka") {
             this.result.attachmentData.exampleStamp.submittedAttachment = "DA"
             this.result.attachmentData.exampleStamp.path = path
-        }
-        else if(element.name==="Spisak robe i usluga"){
-            this.result.attachmentData.listOfGoodsAndServices.submittedAttachment="DA"
+        } else if (element.name === "Spisak robe i usluga") {
+            this.result.attachmentData.listOfGoodsAndServices.submittedAttachment = "DA"
             this.result.attachmentData.listOfGoodsAndServices.path = path
-        }else if (element.name === "Punomoćje"){
-            this.result.attachmentData.authority.submittedAttachment="DA"
+        } else if (element.name === "Punomoćje") {
+            this.result.attachmentData.authority.submittedAttachment = "DA"
             this.result.attachmentData.authority.path = path
-        }else if(element.name === "Generalno punomoćje ranije priloženo"){
-            this.result.attachmentData.generalAuthorityAddedBefore.submittedAttachment="DA"
+        } else if (element.name === "Generalno punomoćje ranije priloženo") {
+            this.result.attachmentData.generalAuthorityAddedBefore.submittedAttachment = "DA"
             this.result.attachmentData.generalAuthorityAddedBefore.path = path
-        }else if(element.name === "Punomoćje će biti naknadno dostavljeno"){
-            this.result.attachmentData.authorityWillBeAddedAfter.submittedAttachment="DA"
+        } else if (element.name === "Punomoćje će biti naknadno dostavljeno") {
+            this.result.attachmentData.authorityWillBeAddedAfter.submittedAttachment = "DA"
             this.result.attachmentData.authorityWillBeAddedAfter.path = path
-        }
-        else if (element.name === "Opšti akt o kolektivnom/žigu garancije" ){
-            this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp.submittedAttachment="DA"
+        } else if (element.name === "Opšti akt o kolektivnom/žigu garancije") {
+            this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp.submittedAttachment = "DA"
             this.result.attachmentData.generalActOnCollectiveStampOrGuaranteeStamp.path = path
-        }else if(element.name === "Dokaz o pravu prvenstva"){
-            this.result.attachmentData.proofOfRightOfPriority.submittedAttachment="DA"
+        } else if (element.name === "Dokaz o pravu prvenstva") {
+            this.result.attachmentData.proofOfRightOfPriority.submittedAttachment = "DA"
             this.result.attachmentData.proofOfRightOfPriority.path = path
-        }else if(element.name === "Dokaz o uplati takse"){
-            this.result.attachmentData.proofOfTaxPayment.submittedAttachment="DA"
+        } else if (element.name === "Dokaz o uplati takse") {
+            this.result.attachmentData.proofOfTaxPayment.submittedAttachment = "DA"
             this.result.attachmentData.proofOfTaxPayment.path = path
         }
-        element.submittedAttachment="DA"
+        element.submittedAttachment = "DA"
         element.path = path
     }
 
 
     submitRequest() {
-        this.stampService.submitRequest(this.result, this.applicantsDto, this.colorsDto, this.goodsAndClasses).subscribe(res=>{
+        this.stampService.submitRequest(this.result, this.applicantsDto, this.colorsDto, this.goodsAndClasses).subscribe(res => {
             console.log(res);
         })
+    }
+
+    optionChangedPriority($event: MatRadioChange) {
+        if ($event.value === '1') {
+            console.log(" YYYYYYYYYYYYY za prioritet")
+            this.result.stamp.priority = "DA"
+            this.isHiddenYesPriority = false;
+        } else {
+            this.result.stamp.priority = ""
+            this.isHiddenYesPriority = true;
+        }
     }
 }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import * as JsonToXML from "js2xmlparser";
-import {AddSolutionDto} from "../models/add-solution-dto";
+import {AddSolutionDto} from "../../shared/models/add-solution-dto";
 import {PatentRequestDto} from "../models/patent-request-dto";
 import {TitleDto} from "../models/title-dto";
 import {PreviousPatentDto} from "../models/previous-patent-dto";

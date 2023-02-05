@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
 import xml.stamp.service.stamp.service.db.ExistManager;
+import xml.stamp.service.stamp.service.jaxb.JaxLoader;
+import xml.stamp.service.stamp.service.model.RequestForStamp;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,10 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.StringReader;
+import java.io.*;
 
 @Service
 public class XHTMLTransformer {
@@ -30,6 +29,9 @@ public class XHTMLTransformer {
 
     @Autowired
     private ExistManager existManager;
+
+    @Autowired
+    private JaxLoader loader;
 
     static {
 
@@ -67,7 +69,11 @@ public class XHTMLTransformer {
     public void generateHTML(String documentId) {
 
         try {
-            String retrieved = existManager.retrieve(documentId);
+            RequestForStamp retrievedObj = existManager.retrieve(documentId);
+
+            OutputStream os = new ByteArrayOutputStream();
+            os = loader.marshalling(retrievedObj, os);
+            String retrieved = os.toString();
 
             // Initialize Transformer instance
             StreamSource transformSource = new StreamSource(new File(xslFile));

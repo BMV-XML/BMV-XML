@@ -34,6 +34,8 @@ export class AuthService {
 
   register(registerDto: RegisterDto) {
     const log = JsonToXML.parse("root", registerDto);
+    console.log("registracija")
+    console.log(log)
     return this.httpClient.post(this.api_main + "register", log, {responseType: 'text'});
 
   }

@@ -27,4 +27,14 @@ public class LegalEntity extends GlobalEntity{
                 ", contact=" + contact +
                 "}\n";
     }
+
+    @Override
+    boolean contains(String s) {
+        if (basicContains(s))
+            return true;
+        if (businessName.getText().toLowerCase().contains(s)){
+            return true;
+        }
+        return false;
+    }
 }

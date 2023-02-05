@@ -1,12 +1,10 @@
 package xml.stamp.service.stamp.service.service;
 
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xml.stamp.service.stamp.service.dto.AddressDTO;
-import xml.stamp.service.stamp.service.dto.EntityDTO;
-import xml.stamp.service.stamp.service.dto.RequestForStampDTO;
+import xml.stamp.service.stamp.service.dto.request.AddressDTO;
+import xml.stamp.service.stamp.service.dto.request.EntityDTO;
+import xml.stamp.service.stamp.service.dto.request.RequestForStampDTO;
 import xml.stamp.service.stamp.service.exceptions.NotValidException;
 import xml.stamp.service.stamp.service.fuseki.FusekiReader;
 import xml.stamp.service.stamp.service.fuseki.FusekiWriter;
@@ -18,7 +16,6 @@ import xml.stamp.service.stamp.service.repository.RequestForStampRepository;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,7 +49,7 @@ public class RequestForStampService {
         return "nestooo";
     }
 
-    public String getRequestForStampById(String id) throws Exception {
+    public RequestForStamp getRequestForStampById(String id) throws Exception {
         return requestForStampRepository.getRequestForStampById(id);
     }
 
@@ -102,13 +99,13 @@ public class RequestForStampService {
     private TaxesData createTaxesData(RequestForStampDTO stampRequest) {
         TaxesData taxesData = new TaxesData();
         taxesData.setBaseTax(RDFConstants.baseTax);
-        taxesData.setClassTax(stampRequest.getStamp().getGoodsAndServicesClass().size());
+        taxesData.setClassTax(stampRequest.getStamp().getGoodsAndServicesClass().size() * RDFConstants.classTax );
         if(stampRequest.getStamp().getType().equals("grafički znak")){
             taxesData.setGraphicSolutionTax(RDFConstants.graphicSolutionTax);
         }else{
             taxesData.setGraphicSolutionTax(0);
         }
-        double total = taxesData.getBaseTax() + taxesData.getClassTax() * RDFConstants.classTax + taxesData.getGraphicSolutionTax();
+        double total = taxesData.getBaseTax() + taxesData.getClassTax() + taxesData.getGraphicSolutionTax();
         taxesData.setTotalTax(total);
         return taxesData;
     }
@@ -191,8 +188,12 @@ public class RequestForStampService {
         stampData.setGoodsAndServicesClass(stampRequest.getStamp().getGoodsAndServicesClass());
 
         Priority priority = new Priority();
-        //   priority.setReason();
-        //   OVDE FALI !!!
+        if(stampRequest.getStamp().getPriority().equals("")){
+            priority.setCheckbox(Checkbox.NE);
+        }else{
+            priority.setCheckbox(Checkbox.DA);
+            priority.setReason(stampRequest.getStamp().getPriority());
+        }
         stampData.setPriority(priority);
         return stampData;
     }

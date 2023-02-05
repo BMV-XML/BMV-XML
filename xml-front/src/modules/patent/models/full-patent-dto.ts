@@ -1,6 +1,6 @@
 import {TitleDto} from "./title-dto";
 import {PreviousPatentDto} from "./previous-patent-dto";
-import {SolutionDto} from "./solution-dto";
+import {SolutionDto} from "../../shared/models/solution-dto";
 
 export interface FullPatentDto {
   acknowladgedDateOfSubmission: number[]
